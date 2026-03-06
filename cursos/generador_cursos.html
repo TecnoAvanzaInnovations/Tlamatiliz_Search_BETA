@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Cursos IA</title>
+    <link rel="icon" href="/img/ICON.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tecno-dark': '#101010',
+                        'tecno-medium': '#1F1F1F',
+                        'tecno-accent': '#00F0B5',
+                        'tecno-secondary': '#7E00DE',
+                        'tecno-text': '#E5E5E5',
+                    },
+                    animation: {
+                        'logo-pulse': 'logoPulse 2s infinite',
+                        'fade-in-up': 'fadeInUp 1s ease-out',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        logoPulse: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.6', transform: 'scale(0.95)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00F0B5 0%, #7E00DE 100%);
+            --button-gradient: linear-gradient(to right, #7E00DE 0%, #00F0B5 51%, #7E00DE 100%);
+            --bg-color: #101010;
+            --card-bg: rgba(31, 31, 31, 0.95);
+            --text-color: #E5E5E5;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #101010; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-gradient); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--button-gradient); }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #101010;
+            color: var(--text-color);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            margin-top: 40px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            background: #101010;
+            padding: 10px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: #00F0B5;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        input {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            outline: none;
+            background: transparent;
+            color: #E5E5E5;
+        }
+
+        input:focus {
+            border-color: transparent;
+        }
+
+        button {
+            background-image: var(--button-gradient);
+            background-size: 200% auto;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.5s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-position: right center;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #results {
+            background: #1F1F1F;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #00F0B5;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            text-align: center;
+            color: #00F0B5;
+            font-weight: bold;
+            font-style: italic;
+            display: block !important;
+            font-size: 1.2rem;
+        }
+
+        /* Estilos del Curso */
+        #results h2 {
+            color: #00F0B5;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        #results h3 {
+            color: #E5E5E5;
+            margin-top: 25px;
+            font-size: 1.3rem;
+            background: #101010;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        #results ul {
+            padding-left: 20px;
+        }
+
+        #results li {
+            margin-bottom: 8px;
+        }
+
+        #results strong {
+            color: #7E00DE;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .btn-home {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-image: var(--button-gradient);
+            background-size: 200% auto;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .btn-home:hover {
+            background-position: right center;
+            transform: translateY(-2px);
+        }
+
+        /* Background SVG Styles */
+        .background-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .circuit-line { stroke-dasharray: 1000; stroke-dashoffset: 2000; animation: draw-line 15s linear infinite; }
+        @keyframes draw-line { to { stroke-dashoffset: 0; } }
+        .pulsing-dot { animation: pulse-dot 3s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 0.2; r: 3; } 50% { opacity: 1; transform: scale(1.05); } }
+
+        /* Mobile Warning */
+        #mobile-warning-overlay { display: none; }
+        @media (max-width: 768px) {
+            #mobile-warning-overlay {
+                display: flex !important; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.95); z-index: 9999; align-items: center; justify-content: center;
+                flex-direction: column; padding: 2rem; text-align: center; backdrop-filter: blur(10px);
+            }
+            body { overflow: hidden; }
+        }
+        .mobile-icon { font-size: 4rem; color: #00F0B5; margin-bottom: 1rem; animation: pulse-mobile 2s infinite; }
+        @keyframes pulse-mobile { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* Header Styles */
+        .glass-effect {
+            background: rgba(16, 16, 16, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #7E00DE, #00F0B5);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: #00F0B5; text-shadow: 0 0 8px rgba(0, 240, 181, 0.4); }
+
+        /* 3D Loading Screen */
+        #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #101010; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out, visibility 0.5s; }
+        .loader-3d-container { perspective: 1000px; width: 80px; height: 80px; }
+        .loader-3d { width: 100%; height: 100%; transform-style: preserve-3d; animation: spin-cube 2.5s infinite linear; }
+        .cube-face { position: absolute; width: 80px; height: 80px; border: 2px solid #00F0B5; background: rgba(126, 0, 222, 0.15); box-shadow: 0 0 20px rgba(0, 240, 181, 0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #00F0B5; }
+        .face-front { transform: translateZ(40px); }
+        .face-back { transform: rotateY(180deg) translateZ(40px); }
+        .face-right { transform: rotateY(90deg) translateZ(40px); }
+        .face-left { transform: rotateY(-90deg) translateZ(40px); }
+        .face-top { transform: rotateX(90deg) translateZ(40px); }
+        .face-bottom { transform: rotateX(-90deg) translateZ(40px); }
+        @keyframes spin-cube { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
+        .loading-text { margin-top: 40px; font-family: 'Segoe UI', sans-serif; color: #E5E5E5; font-size: 1.2rem; letter-spacing: 2px; animation: pulse-text 1.5s infinite ease-in-out; }
+        @keyframes pulse-text { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+    </style>
+</head>
+
+<body>
+    <!-- Pantalla de Carga 3D -->
+    <div id="loading-screen">
+        <div class="loader-3d-container">
+            <div class="loader-3d">
+                <div class="cube-face face-front"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="cube-face face-back"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="cube-face face-right"><i class="fa-solid fa-lightbulb"></i></div>
+                <div class="cube-face face-left"><i class="fa-solid fa-brain"></i></div>
+                <div class="cube-face face-top"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="cube-face face-bottom"><i class="fa-solid fa-book-open"></i></div>
+            </div>
+        </div>
+        <div class="loading-text">PREPARANDO GENERADOR...</div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header id="main-navbar" class="fixed top-0 left-0 w-full z-50 glass-effect">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 relative">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.location.href='..../index.html'">
+                    <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.location.href='../index.html'">
+                        <img src="/img/ICON.png" alt="Tlamatiliz Logo" class="h-10 w-10 mr-3 rounded-full shadow-lg group-hover:animate-logo-pulse transition-transform">
+                        <span class="text-white font-bold text-xl tracking-tight">Tlamatiliz<span class="text-tecno-accent">.</span></span>
+                    </div>
+                </div>
+                <!-- Nav -->
+                <nav class="hidden md:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
+                    <a href="../index.html" class="nav-link text-gray-300 hover:text-white text-sm">Inicio</a>
+                    <a href="../buscador/buscador.html" class="nav-link text-gray-300 hover:text-white text-sm">Investigar</a>
+                    <a href="../cursos/index.html" class="nav-link text-gray-300 hover:text-white text-sm">Cursos</a>
+                    <a href="generador_cursos.html" id="btn-create-course" style="display: none;" class="nav-link text-white text-sm">Crear Curso</a>
+                    <a href="../legal/about.html" class="nav-link text-gray-300 hover:text-white text-sm">Sobre Nosotros</a>
+                    <a href="../contact/contacto.html" class="nav-link text-gray-300 hover:text-white text-sm">Contacto</a>
+                    <button id="btn-donate" class="nav-link text-gray-300 hover:text-white text-sm bg-transparent border-none cursor-pointer">Donar</button>
+                </nav>
+                <!-- Right Side -->
+                <div class="flex items-center space-x-6">
+                    <button id="btn-notifications" class="relative p-2 text-gray-400 hover:text-white transition-colors">
+                        <i class="fa-solid fa-bell text-xl"></i>
+                        <span id="notif-badge" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden animate-pulse">0</span>
+                    </button>
+                    <div class="relative ml-6 border-l border-gray-800 pl-6" id="profile-dropdown-container">
+                        <button id="profile-menu-btn" class="flex items-center focus:outline-none group">
+                            <div class="hidden xl:block mr-3 text-right leading-tight">
+                                <p class="text-white text-sm font-bold group-hover:text-tecno-accent transition-colors" id="nav-user-name-display">Usuario</p>
+                                <p class="text-tecno-accent text-[10px] font-medium tracking-wider uppercase" id="nav-user-specialty-display">Estudiante</p>
+                            </div>
+                            <div class="h-10 w-10 rounded-full p-[2px] bg-gradient-to-tr from-tecno-secondary to-tecno-accent cursor-pointer hover:scale-105 transition-transform shadow-lg">
+                                <div class="h-full w-full rounded-full bg-[#101010] flex items-center justify-center overflow-hidden" id="nav-user-avatar-display">
+                                    <span class="text-xs font-bold text-white">U</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-400 ml-2 text-xs group-hover:text-white transition-colors"></i>
+                        </button>
+                        <div id="profile-dropdown" class="absolute right-0 mt-4 w-56 bg-[#1F1F1F] rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden hidden origin-top-right transition-all duration-200 z-50 backdrop-blur-xl">
+                            <div class="py-2">
+                                <button id="btn-open-community" class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-people-group w-4 text-tecno-accent"></i> Comunidad
+                                </button>
+                                <button id="btn-logout" class="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-white/5 hover:text-red-300 flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-right-from-bracket w-4"></i> Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay Mobile Warning -->
+    <div id="mobile-warning-overlay">
+        <i class="fa-solid fa-mobile-screen-button mobile-icon"></i>
+        <h2 style="font-size: 2rem; margin-bottom: 1rem; color: white;">Versión de Escritorio</h2>
+        <p style="font-size: 1.1rem; color: #cbd5e0; max-width: 500px;">
+            Este sitio todavía no está disponible para teléfonos. Por favor, discúlpanos. Pronto tendrá la función ya que está en fase beta.
+        </p>
+    </div>
+
+    <div class="background-container">
+        <svg width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                    <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#7E00DE" />
+                    <stop offset="100%" stop-color="#00F0B5" />
+                </linearGradient>
+            </defs>
+            <g opacity="0.3"><path d="M-100 400 Q 200 200 500 450 T 900 400" stroke="#4a5568" stroke-width="1" /><path d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#4a5568" stroke-width="1" /><path d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#4a5568" stroke-width="1" /></g>
+            <g filter="url(#glow)"><path class="circuit-line" d="M-100 400 Q 200 200 500 450 T 900 400" stroke="url(#line-gradient)" stroke-width="1.5" style="animation-delay: -5s;" /><path class="circuit-line" d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#00F0B5" stroke-width="1.5" style="animation-delay: -2s;" /><path class="circuit-line" d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#7E00DE" stroke-width="1.5" /></g>
+            <circle class="pulsing-dot" cx="200" cy="287" r="4" fill="#00F0B5" /><circle class="pulsing-dot" cx="500" cy="450" r="4" fill="#7E00DE" style="animation-delay: -1.5s;" /><circle class="pulsing-dot" cx="600" cy="400" r="4" fill="#00F0B5" style="animation-delay: -3s;" />
+        </svg>
+    </div>
+
+    <div class="container mt-24">
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight text-white drop-shadow-2xl">
+                <span class="inline-block hover:animate-spin text-6xl align-middle mr-2">🎓</span>Tlamatiliz <span class="text-transparent bg-clip-text bg-gradient-to-r from-tecno-accent to-tecno-secondary">Course</span>
+            </h1>
+            <div class="h-1.5 w-32 bg-gradient-to-r from-tecno-secondary to-tecno-accent mx-auto rounded-full mb-8 shadow-[0_0_15px_rgba(0,240,181,0.5)]"></div>
+            <p class="text-xl md:text-2xl text-gray-300 font-light tracking-wide max-w-2xl mx-auto leading-relaxed">Generador de planes de estudio y cursos personalizados</p>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-bold text-gray-300 mb-2 ml-2">Imagen de Portada (URL o Subir Archivo):</label>
+            <div class="flex gap-2">
+                <input type="text" id="courseImageInput" placeholder="URL de la imagen (Ej: https://imgur.com/...)" 
+                    class="flex-1 bg-[#101010] text-gray-300 border-2 border-transparent focus:border-[#00F0B5] rounded-2xl py-3 px-5 outline-none transition-all shadow-inner">
+                <input type="file" id="courseImageFile" accept="image/*" class="hidden" onchange="handleImageUpload(this)">
+                <button onclick="document.getElementById('courseImageFile').click()" class="bg-[#1F1F1F] border border-gray-600 hover:border-[#00F0B5] text-white px-5 rounded-2xl transition-colors" title="Subir imagen">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
+            </div>
+            <p id="fileNameDisplay" class="text-xs text-tecno-accent mt-2 ml-2 font-bold"></p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput"
+                placeholder="¿Qué habilidad quieres aprender hoy? (ej. Python, Fotografía, Marketing...)"
+                onkeypress="if(event.key === 'Enter') generarCurso()">
+            <button onclick="generarCurso()" id="btnBuscar">Crear Curso</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <!-- Modal Bandeja de Notificaciones -->
+    <div id="notifications-modal" class="fixed inset-0 z-[110] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-md shadow-2xl max-h-[70vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-bell"></i> Notificaciones</h3>
+                <button id="close-notif-modal" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="notif-list" class="flex-1 overflow-y-auto space-y-3 pr-2">
+                <p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Permiso Notificaciones (Popup) -->
+    <div id="notif-permission-modal" class="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 hidden backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-[#1F1F1F] p-8 rounded-2xl border border-blue-500/30 w-full max-w-md shadow-[0_0_30px_rgba(59,130,246,0.2)] text-center transform scale-100 transition-transform duration-300">
+            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-blue-900/20 mb-6 border border-blue-500/20 animate-pulse">
+                <i class="fa-solid fa-bell text-4xl text-blue-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-3">Activar Notificaciones</h3>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+                Para que no te pierdas ninguna actualización sobre tus cursos y revisiones, necesitamos tu permiso para enviarte notificaciones.
+            </p>
+            <div class="flex gap-3">
+                <button id="btn-deny-notif" class="flex-1 py-3 px-4 border border-gray-600 text-gray-300 font-bold rounded-xl hover:bg-gray-800 transition-colors">
+                    Ahora no
+                </button>
+                <button id="btn-accept-notif" class="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold rounded-xl shadow-lg transform transition hover:scale-[1.02]">
+                    Activar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Notificación -->
+    <div id="notification-detail-modal" class="fixed inset-0 z-[130] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-md shadow-2xl relative flex flex-col max-h-[80vh]">
+            <button id="close-detail-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 id="detail-title" class="text-xl font-bold text-white mb-2 pr-8"></h3>
+            <span id="detail-date" class="text-xs text-gray-400 block mb-4"></span>
+            <div id="detail-message" class="text-gray-300 text-sm leading-relaxed overflow-y-auto pr-2"></div>
+            <div class="mt-6 flex justify-end pt-4 border-t border-gray-700">
+                <button id="btn-close-detail" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-bold transition-colors">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Donaciones -->
+    <div id="donation-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[150] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-pink-500/30 p-8 rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.2)] max-w-md w-full transform scale-95 transition-all duration-300 relative" id="donation-modal-content">
+            <button id="close-donation-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-pink-900/20 mb-6 border border-pink-500/20 animate-pulse">
+                    <i class="fa-solid fa-heart text-4xl text-pink-500"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">¡Apoya el Proyecto!</h3>
+                <p class="text-gray-300 mb-6">
+                    Gracias por tu interés en ayudarnos a crecer. Tu apoyo nos permite mantener los servidores y seguir desarrollando cursos gratuitos.
+                </p>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-center pt-2">
+                        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+                        <script type='text/javascript'>kofiwidget2.init('Apoyame', '#72a4f2', 'V7V81SG0EB');kofiwidget2.draw();</script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Comunidad -->
+    <div id="community-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm transition-opacity duration-300">
+        <div class="relative w-full max-w-4xl px-4 animate-fade-in-up">
+            <div class="bg-[#1F1F1F] p-8 md:p-12 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(126,0,222,0.15)] relative overflow-hidden group text-center">
+            
+            <button id="close-community-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white z-20 transition-colors"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 -mt-20 -mr-20 w-60 h-60 bg-tecno-secondary/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow"></div>
+            <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-tecno-accent/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" style="animation-delay: 1s;"></div>
+            
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 flex items-center justify-center gap-3 relative z-10">
+                <i class="fa-solid fa-people-group text-tecno-accent animate-bounce"></i> Únete a Nuestra Comunidad
+            </h2>
+            <p class="text-gray-300 text-lg leading-relaxed mb-10 max-w-3xl mx-auto relative z-10">
+                Conecta con otros estudiantes y aprende juntos. Comparte tus dudas, experiencias y ayuda a otros a crecer en un entorno colaborativo.
+            </p>
+            
+            <button id="btn-community" 
+                class="relative z-10 px-8 py-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent rounded-full font-bold text-white shadow-[0_0_20px_rgba(126,0,222,0.4)] hover:shadow-[0_0_30px_rgba(0,240,181,0.6)] transition-all hover:-translate-y-1 active:translate-y-0 text-lg mb-8 inline-flex items-center gap-2 group/btn">
+                <i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> 
+                <span>Ir a la Comunidad</span>
+            </button>
+
+            <!-- Botones de Redes Sociales (Ocultos por defecto) -->
+            <div id="community-buttons" class="hidden mt-8 flex flex-col sm:flex-row justify-center gap-6 flex-wrap relative z-10">
+                <button id="btn-discord-community"
+                    class="px-8 py-4 bg-[#5865F2]/20 border border-[#5865F2]/50 hover:bg-[#5865F2] hover:border-[#5865F2] rounded-2xl font-bold text-white shadow-lg transition-all hover:-translate-y-2 hover:shadow-[#5865F2]/50 flex items-center justify-center gap-3 min-w-[200px] group/discord backdrop-blur-sm">
+                    <i class="fa-brands fa-discord text-3xl group-hover/discord:scale-110 transition-transform"></i>
+                    <div class="text-left">
+                        <span class="block text-xs text-gray-300 uppercase tracking-wider">Servidor de</span>
+                        <span class="text-lg">Discord</span>
+                    </div>
+                </button>
+                
+                <a href="https://whatsapp.com/channel/0029VbCoYkQJP211CDCnik3T" target="_blank"
+                    class="px-8 py-4 bg-[#25D366]/20 border border-[#25D366]/50 hover:bg-[#25D366] hover:border-[#25D366] rounded-2xl font-bold text-white shadow-lg transition-all hover:-translate-y-2 hover:shadow-[#25D366]/50 flex items-center justify-center gap-3 min-w-[200px] group/whatsapp backdrop-blur-sm">
+                    <i class="fa-brands fa-whatsapp text-3xl group-hover/whatsapp:scale-110 transition-transform"></i>
+                    <div class="text-left">
+                        <span class="block text-xs text-gray-300 uppercase tracking-wider">Grupo de</span>
+                        <span class="text-lg">WhatsApp</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico -->
+    <div id="custom-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300" id="custom-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-800/50 mb-6 border border-gray-700" id="custom-modal-icon"></div>
+                <h3 class="text-xl font-bold text-white mb-2" id="custom-modal-title"></h3>
+                <p class="text-gray-400 mb-6" id="custom-modal-message"></p>
+                <div class="flex gap-3 justify-center" id="custom-modal-actions">
+                    <!-- Botones se inyectan aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Recorte -->
+    <div id="crop-modal" class="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-4xl shadow-2xl flex flex-col h-[90vh]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">Ajustar Imagen</h3>
+                <button onclick="cancelCrop()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="flex-1 overflow-hidden bg-black relative rounded-lg border border-gray-800">
+                <img id="image-to-crop" src="" class="max-w-full max-h-full block" style="display: block; max-width: 100%;">
+            </div>
+            <div class="flex justify-between items-center mt-4 gap-4">
+                <div class="text-gray-400 text-sm"><i class="fa-solid fa-crop-simple"></i> Selecciona el área visible.</div>
+                <div class="flex gap-3">
+                    <button onclick="if(cropper) cropper.reset()" class="px-4 py-2 border border-gray-600 text-gray-300 hover:text-white rounded-lg transition-colors">Imagen Completa</button>
+                    <button onclick="confirmCrop()" class="px-6 py-2 bg-tecno-accent text-black font-bold rounded-lg hover:bg-[#00c49a] transition-colors shadow-lg">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxwrLJ36YMOUEO5W0q446w4gm4pfOJBsA",
+            authDomain: "nexus-search-tecnoavanza.firebaseapp.com",
+            projectId: "nexus-search-tecnoavanza",
+            storageBucket: "nexus-search-tecnoavanza.firebasestorage.app",
+            messagingSenderId: "245306089981",
+            appId: "1:245306089981:web:7cf008880accb2ad4e3994",
+            measurementId: "G-MCR7H1CP19"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Ocultar pantalla de carga
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
+        });
+
+        // --- Sistema de Modales Personalizados ---
+        window.showModal = (message, title = "Aviso", type = "info", onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            const titleEl = document.getElementById('custom-modal-title');
+            const msgEl = document.getElementById('custom-modal-message');
+            const iconEl = document.getElementById('custom-modal-icon');
+            const actionsEl = document.getElementById('custom-modal-actions');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            let iconHtml = '';
+            if (type === 'error') iconHtml = '<i class="fa-solid fa-circle-exclamation text-3xl text-red-500"></i>';
+            else if (type === 'success') iconHtml = '<i class="fa-solid fa-circle-check text-3xl text-green-500"></i>';
+            else if (type === 'confirm') iconHtml = '<i class="fa-solid fa-circle-question text-3xl text-yellow-500"></i>';
+            else iconHtml = '<i class="fa-solid fa-circle-info text-3xl text-blue-500"></i>';
+            iconEl.innerHTML = iconHtml;
+
+            actionsEl.innerHTML = '';
+            if (type === 'confirm') {
+                const btnCancel = document.createElement('button');
+                btnCancel.className = "px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold";
+                btnCancel.textContent = "Cancelar";
+                btnCancel.onclick = closeModal;
+                
+                const btnConfirm = document.createElement('button');
+                btnConfirm.className = "px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold shadow-lg";
+                btnConfirm.textContent = "Confirmar";
+                btnConfirm.onclick = () => {
+                    if (onConfirm) onConfirm();
+                    closeModal();
+                };
+                actionsEl.appendChild(btnCancel);
+                actionsEl.appendChild(btnConfirm);
+            } else {
+                const btnOk = document.createElement('button');
+                btnOk.className = "w-full py-2 px-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold rounded-xl shadow-lg";
+                btnOk.textContent = "Entendido";
+                btnOk.onclick = closeModal;
+                actionsEl.appendChild(btnOk);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        window.closeModal = () => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        import { API_KEY_GROQ } from '../IA/config.js';
+
+        let uploadedImageBase64 = "";
+        let cropper = null;
+        let currentFile = null;
+
+        window.handleImageUpload = (input) => {
+            const file = input.files[0];
+            if (!file) return;
+            currentFile = file;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageElement = document.getElementById('image-to-crop');
+                imageElement.src = e.target.result;
+                
+                const modal = document.getElementById('crop-modal');
+                modal.classList.remove('hidden');
+
+                if (cropper) {
+                    cropper.destroy();
+                }
+                
+                cropper = new Cropper(imageElement, {
+                    viewMode: 1,
+                    autoCropArea: 1, // Seleccionar todo por defecto
+                    responsive: true,
+                    background: false,
+                });
+            };
+            reader.readAsDataURL(file);
+            input.value = ""; // Reset input
+        };
+
+        window.cancelCrop = () => {
+            document.getElementById('crop-modal').classList.add('hidden');
+            if (cropper) cropper.destroy();
+            cropper = null;
+            currentFile = null;
+        };
+
+        window.confirmCrop = () => {
+            if (!cropper) return;
+            
+            // Obtener canvas recortado y redimensionado automáticamente a 800px
+            const canvas = cropper.getCroppedCanvas({
+                maxWidth: 800,
+                maxHeight: 800,
+                fillColor: '#fff'
+            });
+
+            // Comprimir a JPEG 0.7
+            uploadedImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            
+            document.getElementById('fileNameDisplay').innerText = "✅ Imagen lista: " + (currentFile ? currentFile.name : "Recorte");
+            document.getElementById('courseImageInput').value = "";
+            document.getElementById('courseImageInput').disabled = true;
+            document.getElementById('courseImageInput').placeholder = "Imagen local seleccionada";
+            
+            cancelCrop(); // Cerrar modal
+        };
+
+        window.generarCurso = async function() {
+            const query = document.getElementById('searchInput').value.trim();
+            const urlImage = document.getElementById('courseImageInput').value.trim();
+            const finalImage = uploadedImageBase64 || urlImage;
+            const resultsDiv = document.getElementById('results');
+            const btn = document.getElementById('btnBuscar');
+
+            if (!query) return;
+
+            // Verificar si el usuario está autenticado antes de intentar guardar
+            if (!auth.currentUser) {
+                showModal("Error: No has iniciado sesión. Por favor vuelve al inicio e ingresa a tu cuenta para crear cursos.", "Error de Sesión", "error");
+                return;
+            }
+
+            // UI Loading state
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = '<div class="loading">🧠 Diseñando estructura del curso interactivo...</div>';
+            btn.disabled = true;
+            btn.textContent = 'Diseñando...';
+
+            try {
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${API_KEY_GROQ}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": "llama-3.3-70b-versatile",
+                        "response_format": { "type": "json_object" },
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "Eres un arquitecto de cursos online. Tu trabajo es crear la ESTRUCTURA de un curso interactivo. \n\nResponde ÚNICAMENTE con un objeto JSON válido con este formato:\n{\n  \"title\": \"Título Atractivo del Curso\",\n  \"category\": \"Categoría General (Ej: Tecnología, Negocios, Arte, Salud, Idiomas, Otros)\",\n  \"modules\": [\"Nombre Módulo 1\", \"Nombre Módulo 2\", \"Nombre Módulo 3\", \"Nombre Módulo 4\", \"Nombre Módulo 5\", \"Nombre Módulo 6\"]\n}"
+                            },
+                            {
+                                "role": "user",
+                                "content": `Crea la estructura de un curso para aprender: ${query}`
+                            }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'Error en la conexión');
+                }
+
+                const data = await response.json();
+                const aiContent = data.choices[0].message.content;
+
+                // Limpiar y parsear JSON
+                let cleanContent = aiContent.replace(/```json/g, '').replace(/```/g, '');
+                
+                // Asegurar que solo tomamos el objeto JSON (eliminar texto extra)
+                const startIndex = cleanContent.indexOf('{');
+                const endIndex = cleanContent.lastIndexOf('}');
+                if (startIndex !== -1 && endIndex !== -1) {
+                    cleanContent = cleanContent.substring(startIndex, endIndex + 1);
+                }
+                
+                const courseObj = JSON.parse(cleanContent);
+                
+                // Agregar ID y guardar
+                courseObj.id = Date.now();
+                courseObj.image = finalImage || null;
+                
+                // Guardar en Firestore en la colección 'cursos'
+                await setDoc(doc(db, "cursos", courseObj.id.toString()), courseObj);
+
+                // Redirigir al index para ver el nuevo curso
+                showModal(`¡Curso "${courseObj.title}" creado con éxito!`, "Curso Creado", "success");
+                window.location.href = 'index.html';
+
+            } catch (error) {
+                console.error(error);
+                resultsDiv.innerHTML = `<p style="color: red; text-align: center;">❌ Ocurrió un error</p>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Crear Curso';
+            }
+        }
+
+        // Lógica Modal Comunidad
+        const communityModal = document.getElementById('community-modal');
+        const closeCommunityBtn = document.getElementById('close-community-modal');
+        const openCommunityBtn = document.getElementById('btn-open-community');
+
+        if (!localStorage.getItem('nexus_community_seen_v1')) {
+            setTimeout(() => { if(communityModal) communityModal.classList.remove('hidden'); }, 1500);
+        }
+
+        if (closeCommunityBtn) {
+            closeCommunityBtn.addEventListener('click', () => {
+                communityModal.classList.add('hidden');
+                localStorage.setItem('nexus_community_seen_v1', 'true');
+            });
+        }
+
+        if (openCommunityBtn) {
+            openCommunityBtn.addEventListener('click', () => communityModal.classList.remove('hidden'));
+        }
+
+        const btnDiscordCommunity = document.getElementById('btn-discord-community');
+        if (btnDiscordCommunity) {
+            btnDiscordCommunity.addEventListener('click', () => {
+                showModal("Actualmente nuestro servidor de Discord está en desarrollo. Pronto estará disponible.", "Próximamente", "info");
+            });
+        }
+
+        const btnCommunity = document.getElementById('btn-community');
+        const communityButtons = document.getElementById('community-buttons');
+        if (btnCommunity) {
+            btnCommunity.addEventListener('click', () => {
+                if (communityButtons.classList.contains('hidden')) {
+                    communityButtons.classList.remove('hidden'); communityButtons.classList.add('flex');
+                    btnCommunity.innerHTML = '<i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> <span>Cerrar</span>';
+                } else {
+                    communityButtons.classList.add('hidden'); communityButtons.classList.remove('flex');
+                    btnCommunity.innerHTML = '<i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> <span>Ir a la Comunidad</span>';
+                }
+            });
+        }
+
+        // Lógica Modal Donaciones
+        const donationModal = document.getElementById('donation-modal');
+        const donationContent = document.getElementById('donation-modal-content');
+        
+        document.getElementById('btn-donate').addEventListener('click', () => {
+            donationModal.classList.remove('hidden');
+            setTimeout(() => {
+                donationModal.classList.remove('opacity-0');
+                donationContent.classList.remove('scale-95');
+                donationContent.classList.add('scale-100');
+            }, 10);
+        });
+
+        const closeDonation = () => {
+            donationModal.classList.add('opacity-0');
+            donationContent.classList.remove('scale-100');
+            donationContent.classList.add('scale-95');
+            setTimeout(() => donationModal.classList.add('hidden'), 300);
+        };
+
+        document.getElementById('close-donation-modal').addEventListener('click', closeDonation);
+        donationModal.addEventListener('click', (e) => {
+            if (e.target === donationModal) closeDonation();
+        });
+
+        // Lógica de Notificaciones
+        const notifModal = document.getElementById('notifications-modal');
+        const btnNotif = document.getElementById('btn-notifications');
+        const badge = document.getElementById('notif-badge');
+        const notifList = document.getElementById('notif-list');
+        const notifPermissionModal = document.getElementById('notif-permission-modal');
+        const btnAcceptNotif = document.getElementById('btn-accept-notif');
+        const btnDenyNotif = document.getElementById('btn-deny-notif');
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) return;
+            try {
+                await Notification.requestPermission();
+            } catch (error) { console.error(error); }
+        }
+
+        btnNotif.addEventListener('click', () => {
+            if ('Notification' in window && Notification.permission !== 'granted') {
+                notifPermissionModal.classList.remove('hidden');
+            } else {
+                notifModal.classList.remove('hidden');
+                badge.classList.add('hidden');
+            }
+        });
+
+        btnAcceptNotif.addEventListener('click', async () => {
+            notifPermissionModal.classList.add('hidden');
+            await requestNotificationPermission();
+            notifModal.classList.remove('hidden');
+            badge.classList.add('hidden');
+        });
+
+        btnDenyNotif.addEventListener('click', () => {
+            notifPermissionModal.classList.add('hidden');
+            notifModal.classList.remove('hidden');
+            badge.classList.add('hidden');
+        });
+
+        document.getElementById('close-notif-modal').addEventListener('click', () => {
+            notifModal.classList.add('hidden');
+        });
+
+        let currentNotifications = [];
+
+        function renderNotifications(notifs) {
+            currentNotifications = notifs;
+            notifList.innerHTML = '';
+            if (notifs.length === 0) {
+                notifList.innerHTML = '<p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>';
+                badge.classList.add('hidden');
+                return;
+            }
+            let unreadCount = 0;
+            notifs.forEach(n => {
+                if (!n.read) unreadCount++;
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border ${n.read ? 'bg-black/20 border-gray-800' : 'bg-blue-900/20 border-blue-500/50'} relative group transition-all hover:bg-white/5`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-start pr-14">
+                        <h4 class="font-bold text-sm text-white line-clamp-1">${n.title}</h4>
+                    </div>
+                    <span class="text-[10px] text-gray-400 block mb-1">${new Date(n.timestamp).toLocaleDateString()}</span>
+                    <p class="text-xs text-gray-300 line-clamp-2 mt-1">${n.message}</p>
+                    
+                    <div class="absolute top-3 right-3 flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                        <button onclick="window.viewNotification('${n.id}')" class="text-blue-400 hover:text-blue-300 p-1" title="Ver"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="window.deleteNotification('${n.id}')" class="text-red-400 hover:text-red-300 p-1" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                notifList.appendChild(item);
+            });
+            if (unreadCount > 0) {
+                badge.innerText = unreadCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        window.viewNotification = async (id) => {
+            const notif = currentNotifications.find(n => n.id === id);
+            if (!notif) return;
+
+            document.getElementById('detail-title').textContent = notif.title;
+            document.getElementById('detail-date').textContent = new Date(notif.timestamp).toLocaleString();
+            document.getElementById('detail-message').textContent = notif.message;
+            
+            document.getElementById('notification-detail-modal').classList.remove('hidden');
+
+            if (!notif.read) {
+                try {
+                    await updateDoc(doc(db, "notifications", id), { read: true });
+                } catch (e) { console.error("Error marking read:", e); }
+            }
+        };
+
+        window.deleteNotification = (id) => {
+            showModal("¿Estás seguro de que quieres eliminar esta notificación?", "Confirmar Eliminación", "confirm", async () => {
+                try {
+                    await deleteDoc(doc(db, "notifications", id));
+                } catch (e) { console.error("Error deleting:", e); }
+            });
+        };
+
+        const closeDetailBtn = document.getElementById('btn-close-detail');
+        const closeDetailX = document.getElementById('close-detail-modal');
+        const detailModal = document.getElementById('notification-detail-modal');
+        const closeDetail = () => detailModal.classList.add('hidden');
+        if(closeDetailBtn) closeDetailBtn.addEventListener('click', closeDetail);
+        if(closeDetailX) closeDetailX.addEventListener('click', closeDetail);
+        if(detailModal) detailModal.addEventListener('click', (e) => { if(e.target === detailModal) closeDetail(); });
+
+        // Auth Logic for Header
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                let displayUsername = user.displayName || 'Usuario';
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid, "informacion", "datos"));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+
+                        // Verificación de seguridad: Solo administradores pueden acceder
+                        if (userData.role !== 'admin') {
+                            showModal("Acceso denegado: Solo administradores pueden crear cursos.", "Permiso Denegado", "error");
+                            window.location.href = 'index.html';
+                            return;
+                        }
+
+                        if (userData.username) displayUsername = userData.username;
+                        if (userData.specialty) {
+                            document.getElementById('nav-user-specialty-display').textContent = userData.specialty;
+                        }
+                        
+                        const btnCreate = document.getElementById('btn-create-course');
+                        if (btnCreate) btnCreate.style.display = 'block';
+                    }
+                } catch (e) { console.error(e); }
+
+                document.getElementById('nav-user-name-display').textContent = displayUsername;
+                if (user.photoURL) {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<img src="${user.photoURL}" class="w-full h-full object-cover">`;
+                } else {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<span class="text-xs font-bold text-white">${displayUsername.charAt(0).toUpperCase()}</span>`;
+                }
+
+                // Listener de Notificaciones Personales
+                const notifQuery = query(collection(db, "notifications"), where("userId", "==", user.uid));
+                onSnapshot(notifQuery, (snapshot) => {
+                    const notifs = [];
+                    snapshot.forEach(doc => notifs.push({id: doc.id, ...doc.data()}));
+                    
+                    // Detectar nuevas notificaciones para mostrar alerta del navegador
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added") {
+                            const data = change.doc.data();
+                            const notifTime = new Date(data.timestamp).getTime();
+                            if (Date.now() - notifTime < 30000 && !data.read) {
+                                if (window.Notification && Notification.permission === "granted") {
+                                    const notification = new Notification(data.title, { body: data.message, icon: '/img/ICON.png' });
+                                    notification.onclick = () => { window.focus(); notification.close(); };
+                                }
+                            }
+                        }
+                    });
+
+                    notifs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                    renderNotifications(notifs);
+                });
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        const profileBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) profileDropdown.classList.add('hidden');
+            });
+        }
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+    </script>
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+    <script>
+      kofiWidgetOverlay.draw('tecnoavanzainovate', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Apoyame',
+        'floating-chat.donateButton.background-color': '#00b9fe',
+        'floating-chat.donateButton.text-color': '#fff'
+      });
+    </script>
+</body>
+
+</html>

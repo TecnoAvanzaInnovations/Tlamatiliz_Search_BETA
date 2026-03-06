@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - Tlamatiliz Course</title>
+    <link rel="icon" href="../img/ICON.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Preconexiones para acelerar carga de recursos externos -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tecno-dark': '#101010',
+                        'tecno-medium': '#1F1F1F',
+                        'tecno-accent': '#00F0B5',
+                        'tecno-secondary': '#7E00DE',
+                        'tecno-text': '#E5E5E5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'logo-pulse': 'logoPulse 2s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        logoPulse: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.6', transform: 'scale(0.95)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        body { font-family: 'Inter', sans-serif; background-color: #101010; color: #E5E5E5; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #101010; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7E00DE, #00F0B5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #00F0B5, #7E00DE); }
+
+        .glass-effect {
+            background: rgba(16, 16, 16, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #7E00DE, #00F0B5);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #00F0B5;
+            text-shadow: 0 0 8px rgba(0, 240, 181, 0.4);
+        }
+
+        .circuit-line { stroke-dasharray: 1000; stroke-dashoffset: 2000; animation: draw-line 15s linear infinite; }
+        @keyframes draw-line { to { stroke-dashoffset: 0; } }
+        .pulsing-dot { animation: pulse-dot 3s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 0.2; r: 3; } 50% { opacity: 1; transform: scale(1.05); } }
+
+        /* 3D Loading Screen */
+        #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #101010; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out, visibility 0.5s; }
+        .loader-3d-container { perspective: 1000px; width: 80px; height: 80px; }
+        .loader-3d { width: 100%; height: 100%; transform-style: preserve-3d; animation: spin-cube 2.5s infinite linear; }
+        .cube-face { position: absolute; width: 80px; height: 80px; border: 2px solid #00F0B5; background: rgba(126, 0, 222, 0.15); box-shadow: 0 0 20px rgba(0, 240, 181, 0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #00F0B5; }
+        .face-front { transform: translateZ(40px); }
+        .face-back { transform: rotateY(180deg) translateZ(40px); }
+        .face-right { transform: rotateY(90deg) translateZ(40px); }
+        .face-left { transform: rotateY(-90deg) translateZ(40px); }
+        .face-top { transform: rotateX(90deg) translateZ(40px); }
+        .face-bottom { transform: rotateX(-90deg) translateZ(40px); }
+        @keyframes spin-cube { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
+        .loading-text { margin-top: 40px; font-family: 'Inter', sans-serif; color: #E5E5E5; font-size: 1.2rem; letter-spacing: 2px; animation: pulse-text 1.5s infinite ease-in-out; }
+        @keyframes pulse-text { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-tecno-dark text-tecno-text min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Pantalla de Carga 3D -->
+    <div id="loading-screen">
+        <div class="loader-3d-container">
+            <div class="loader-3d">
+                <div class="cube-face face-front"><i class="fa-solid fa-microchip"></i></div>
+                <div class="cube-face face-back"><i class="fa-solid fa-code"></i></div>
+                <div class="cube-face face-right"><i class="fa-solid fa-rocket"></i></div>
+                <div class="cube-face face-left"><i class="fa-solid fa-brain"></i></div>
+                <div class="cube-face face-top"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="cube-face face-bottom"><i class="fa-solid fa-database"></i></div>
+            </div>
+        </div>
+        <div class="loading-text">CARGANDO...</div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-effect">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 relative">
+                
+                <!-- Lado Izquierdo: Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.location.href='../index.html'">
+                        <img src="/img/ICON.png" alt="Tlamatiliz Logo" class="h-10 w-10 mr-3 rounded-full shadow-lg group-hover:animate-logo-pulse transition-transform">
+                        <span class="text-white font-bold text-xl tracking-tight">Tlamatiliz<span class="text-tecno-accent">.</span></span>
+                    </div>
+                </div>
+
+                <!-- Navegación Principal (Centrada) -->
+                <nav class="hidden md:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
+                    <a href="../index.html" class="nav-link text-gray-300 hover:text-white text-sm">Inicio</a>
+                    <a href="../buscador/buscador.html" class="nav-link text-gray-300 hover:text-white text-sm">Investigar</a>
+                    <a href="index.html" class="nav-link text-white text-sm">Cursos</a>
+                    <a href="../legal/about.html" class="nav-link text-gray-300 hover:text-white text-sm">Sobre Nosotros</a>
+                    <a href="../contact/contacto.html" class="nav-link text-gray-300 hover:text-white text-sm">Contacto</a>
+                    <button id="btn-donate" class="nav-link text-gray-300 hover:text-white text-sm bg-transparent border-none cursor-pointer">Donar</button>
+                </nav>
+
+                <!-- Lado Derecho: Buscador y Usuario -->
+                <div class="flex items-center space-x-6">
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+
+                    <!-- Perfil de Usuario con Dropdown -->
+                    <div class="relative" id="profile-dropdown-container">
+                        <button id="profile-menu-btn" class="flex items-center focus:outline-none group">
+                            <div class="hidden xl:block mr-3 text-right leading-tight">
+                                <p class="text-white text-sm font-bold group-hover:text-tecno-accent transition-colors" id="nav-user-name-display">Usuario</p>
+                                <p class="text-tecno-accent text-[10px] font-medium tracking-wider uppercase" id="nav-user-specialty-display">Estudiante</p>
+                            </div>
+                            <div class="h-10 w-10 rounded-full p-[2px] bg-gradient-to-tr from-tecno-secondary to-tecno-accent cursor-pointer hover:scale-105 transition-transform shadow-lg">
+                                <div class="h-full w-full rounded-full bg-[#101010] flex items-center justify-center overflow-hidden" id="nav-user-avatar-display">
+                                    <span class="text-xs font-bold text-white">U</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-400 ml-2 text-xs group-hover:text-white transition-colors"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown" class="absolute right-0 mt-4 w-56 bg-[#1F1F1F] rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden hidden origin-top-right transition-all duration-200 z-50 backdrop-blur-xl">
+                            <div class="py-2">
+                                <button id="btn-notifications" class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-bell w-4"></i> Notificaciones
+                                    <span id="notif-badge" class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                                </button>
+                                <button id="btn-open-community" class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-people-group w-4 text-tecno-accent"></i> Comunidad
+                                </button>
+                                <button id="btn-logout" class="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-white/5 hover:text-red-300 flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-right-from-bracket w-4"></i> Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#101010]/95 border-b border-gray-800 absolute top-20 left-0 w-full z-40 flex flex-col p-4 space-y-4 shadow-2xl backdrop-blur-xl">
+            <a href="../index.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Inicio</a>
+            <a href="../buscador/buscador.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Investigar</a>
+            <a href="index.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Cursos</a>
+            <a href="../legal/about.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Sobre Nosotros</a>
+            <a href="../contact/contacto.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Contacto</a>
+            <button id="mobile-btn-donate" class="text-left text-tecno-accent font-bold py-2">Donar ❤️</button>
+        </div>
+    </header>
+
+    <!-- Background SVG -->
+    <div class="fixed inset-0 z-0 opacity-30 pointer-events-none">
+        <svg class="w-full h-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                    <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#7E00DE" />
+                    <stop offset="100%" stop-color="#00F0B5" />
+                </linearGradient>
+            </defs>
+            <g opacity="0.3">
+                <path d="M-100 400 Q 200 200 500 450 T 900 400" stroke="#4a5568" stroke-width="1" />
+                <path d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#4a5568" stroke-width="1" />
+                <path d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#4a5568" stroke-width="1" />
+            </g>
+            <g filter="url(#glow)">
+                <path class="circuit-line" d="M-100 400 Q 200 200 500 450 T 900 400" stroke="url(#line-gradient)" stroke-width="1.5" style="animation-delay: -5s;" />
+                <path class="circuit-line" d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#00F0B5" stroke-width="1.5" style="animation-delay: -2s;" />
+                <path class="circuit-line" d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#7E00DE" stroke-width="1.5" />
+            </g>
+            <circle class="pulsing-dot" cx="200" cy="287" r="4" fill="#00F0B5" />
+            <circle class="pulsing-dot" cx="500" cy="450" r="4" fill="#7E00DE" style="animation-delay: -1.5s;" />
+            <circle class="pulsing-dot" cx="600" cy="400" r="4" fill="#00F0B5" style="animation-delay: -3s;" />
+        </svg>
+    </div>
+
+    <!-- Main Content -->
+    <main class="relative z-10 w-full max-w-7xl px-4 mx-auto pt-28 pb-10 animate-fade-in-up">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+                Tlamatiliz <span class="text-transparent bg-clip-text bg-gradient-to-r from-tecno-accent to-tecno-secondary">Course</span>
+            </h1>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                Descubre los mejores cursos para impulsar tu carrera con el estilo Tlamatiliz.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap gap-4 justify-center" id="courses-container">
+            <!-- Aquí se agregarán los cursos generados -->
+        </div>
+    </main>
+
+    <!-- Modal Bandeja de Notificaciones -->
+    <div id="notifications-modal" class="fixed inset-0 z-[110] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-md shadow-2xl max-h-[70vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-bell"></i> Notificaciones</h3>
+                <button id="close-notif-modal" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="notif-list" class="flex-1 overflow-y-auto space-y-3 pr-2">
+                <p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Notificación -->
+    <div id="notification-detail-modal" class="fixed inset-0 z-[130] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-md shadow-2xl relative flex flex-col max-h-[80vh]">
+            <button id="close-detail-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 id="detail-title" class="text-xl font-bold text-white mb-2 pr-8"></h3>
+            <span id="detail-date" class="text-xs text-gray-400 block mb-4"></span>
+            <div id="detail-message" class="text-gray-300 text-sm leading-relaxed overflow-y-auto pr-2"></div>
+            <div class="mt-6 flex justify-end pt-4 border-t border-gray-700">
+                <button id="btn-close-detail" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-bold transition-colors">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Permiso Notificaciones (Popup) -->
+    <div id="notif-permission-modal" class="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 hidden backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-[#1F1F1F] p-8 rounded-2xl border border-blue-500/30 w-full max-w-md shadow-[0_0_30px_rgba(59,130,246,0.2)] text-center transform scale-100 transition-transform duration-300">
+            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-blue-900/20 mb-6 border border-blue-500/20 animate-pulse">
+                <i class="fa-solid fa-bell text-4xl text-blue-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-3">Activar Notificaciones</h3>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+                Para que no te pierdas ninguna actualización sobre tus cursos y revisiones, necesitamos tu permiso para enviarte notificaciones.
+            </p>
+            <div class="flex gap-3">
+                <button id="btn-deny-notif" class="flex-1 py-3 px-4 border border-gray-600 text-gray-300 font-bold rounded-xl hover:bg-gray-800 transition-colors">
+                    Ahora no
+                </button>
+                <button id="btn-accept-notif" class="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold rounded-xl shadow-lg transform transition hover:scale-[1.02]">
+                    Activar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Donaciones -->
+    <div id="donation-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[150] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-pink-500/30 p-8 rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.2)] max-w-md w-full transform scale-95 transition-all duration-300 relative" id="donation-modal-content">
+            <button id="close-donation-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-pink-900/20 mb-6 border border-pink-500/20 animate-pulse">
+                    <i class="fa-solid fa-heart text-4xl text-pink-500"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">¡Apoya el Proyecto!</h3>
+                <p class="text-gray-300 mb-6">
+                    Gracias por tu interés en ayudarnos a crecer. Tu apoyo nos permite mantener los servidores y seguir desarrollando cursos gratuitos.
+                </p>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-center pt-2">
+                        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+                        <script type='text/javascript'>kofiwidget2.init('Apoyame', '#72a4f2', 'V7V81SG0EB');kofiwidget2.draw();</script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Comunidad -->
+    <div id="community-modal" class="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm transition-opacity duration-300">
+        <div class="relative w-full max-w-4xl px-4 animate-fade-in-up">
+            <div class="bg-[#1F1F1F] p-8 md:p-12 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(126,0,222,0.15)] relative overflow-hidden group text-center">
+            
+            <button id="close-community-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white z-20 transition-colors"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 -mt-20 -mr-20 w-60 h-60 bg-tecno-secondary/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow"></div>
+            <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-tecno-accent/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" style="animation-delay: 1s;"></div>
+            
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 flex items-center justify-center gap-3 relative z-10">
+                <i class="fa-solid fa-people-group text-tecno-accent animate-bounce"></i> Únete a Nuestra Comunidad
+            </h2>
+            <p class="text-gray-300 text-lg leading-relaxed mb-10 max-w-3xl mx-auto relative z-10">
+                Conecta con otros estudiantes y aprende juntos. Comparte tus dudas, experiencias y ayuda a otros a crecer en un entorno colaborativo.
+            </p>
+            
+            <button id="btn-community" 
+                class="relative z-10 px-8 py-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent rounded-full font-bold text-white shadow-[0_0_20px_rgba(126,0,222,0.4)] hover:shadow-[0_0_30px_rgba(0,240,181,0.6)] transition-all hover:-translate-y-1 active:translate-y-0 text-lg mb-8 inline-flex items-center gap-2 group/btn">
+                <i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> 
+                <span>Ir a la Comunidad</span>
+            </button>
+
+            <!-- Botones de Redes Sociales (Ocultos por defecto) -->
+            <div id="community-buttons" class="hidden mt-8 flex flex-col sm:flex-row justify-center gap-6 flex-wrap relative z-10">
+                <button id="btn-discord-community"
+                    class="px-8 py-4 bg-[#5865F2]/20 border border-[#5865F2]/50 hover:bg-[#5865F2] hover:border-[#5865F2] rounded-2xl font-bold text-white shadow-lg transition-all hover:-translate-y-2 hover:shadow-[#5865F2]/50 flex items-center justify-center gap-3 min-w-[200px] group/discord backdrop-blur-sm">
+                    <i class="fa-brands fa-discord text-3xl group-hover/discord:scale-110 transition-transform"></i>
+                    <div class="text-left">
+                        <span class="block text-xs text-gray-300 uppercase tracking-wider">Servidor de</span>
+                        <span class="text-lg">Discord</span>
+                    </div>
+                </button>
+                
+                <a href="https://whatsapp.com/channel/0029VbCoYkQJP211CDCnik3T" target="_blank"
+                    class="px-8 py-4 bg-[#25D366]/20 border border-[#25D366]/50 hover:bg-[#25D366] hover:border-[#25D366] rounded-2xl font-bold text-white shadow-lg transition-all hover:-translate-y-2 hover:shadow-[#25D366]/50 flex items-center justify-center gap-3 min-w-[200px] group/whatsapp backdrop-blur-sm">
+                    <i class="fa-brands fa-whatsapp text-3xl group-hover/whatsapp:scale-110 transition-transform"></i>
+                    <div class="text-left">
+                        <span class="block text-xs text-gray-300 uppercase tracking-wider">Grupo de</span>
+                        <span class="text-lg">WhatsApp</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Curso -->
+    <div id="edit-course-modal" class="fixed inset-0 z-[140] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-8 rounded-2xl border border-tecno-accent/30 w-full max-w-md shadow-2xl">
+            <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-to-square"></i> Editar Curso</h3>
+            
+            <input type="hidden" id="edit-course-id">
+            
+            <label class="block text-sm font-bold text-gray-300 mb-2">Título:</label>
+            <input type="text" id="edit-course-title" class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-tecno-accent outline-none transition-colors">
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Descripción:</label>
+            <textarea id="edit-course-desc" class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-tecno-accent outline-none transition-colors" rows="3"></textarea>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Categoría:</label>
+            <input type="text" id="edit-course-category" class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-tecno-accent outline-none transition-colors" placeholder="Ej: Tecnología">
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Imagen (URL o Subir):</label>
+            <div class="flex gap-2 mb-1">
+                <input type="text" id="edit-course-image" class="flex-1 bg-black/50 text-white p-3 rounded-lg border border-gray-700 focus:border-tecno-accent outline-none transition-colors" placeholder="URL...">
+                <input type="file" id="edit-course-file" accept="image/*" class="hidden" onchange="handleEditImageUpload(this)">
+                <button onclick="document.getElementById('edit-course-file').click()" class="bg-gray-800 border border-gray-600 hover:border-tecno-accent text-white px-4 rounded-lg transition-colors" title="Subir nueva imagen">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
+            </div>
+            <p id="editFileNameDisplay" class="text-xs text-tecno-accent mb-4 font-bold"></p>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Precio:</label>
+            <select id="edit-course-price" class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-6 focus:border-tecno-accent outline-none transition-colors">
+                <option value="free">Gratis</option>
+                <option value="paid">De Pago</option>
+            </select>
+
+            <div class="flex justify-end gap-3">
+                <button id="btn-cancel-edit-course" class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
+                <button id="btn-save-edit-course" class="px-4 py-2 bg-gradient-to-r from-tecno-secondary to-tecno-accent hover:from-purple-600 hover:to-teal-500 text-white rounded-lg font-bold shadow-lg transition-transform hover:scale-105">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico -->
+    <div id="custom-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300" id="custom-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-800/50 mb-6 border border-gray-700" id="custom-modal-icon"></div>
+                <h3 class="text-xl font-bold text-white mb-2" id="custom-modal-title"></h3>
+                <p class="text-gray-400 mb-6" id="custom-modal-message"></p>
+                <div class="flex gap-3 justify-center" id="custom-modal-actions">
+                    <!-- Botones se inyectan aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Recorte (Edición) -->
+    <div id="edit-crop-modal" class="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-4xl shadow-2xl flex flex-col h-[90vh]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">Ajustar Imagen</h3>
+                <button onclick="cancelEditCrop()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="flex-1 overflow-hidden bg-black relative rounded-lg border border-gray-800">
+                <img id="edit-image-to-crop" src="" class="max-w-full max-h-full block" style="display: block; max-width: 100%;">
+            </div>
+            <div class="flex justify-between items-center mt-4 gap-4">
+                <div class="text-gray-400 text-sm"><i class="fa-solid fa-crop-simple"></i> Selecciona el área visible.</div>
+                <div class="flex gap-3">
+                    <button onclick="if(editCropper) editCropper.reset()" class="px-4 py-2 border border-gray-600 text-gray-300 hover:text-white rounded-lg transition-colors">Imagen Completa</button>
+                    <button onclick="confirmEditCrop()" class="px-6 py-2 bg-tecno-accent text-black font-bold rounded-lg hover:bg-[#00c49a] transition-colors shadow-lg">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, query, where, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxwrLJ36YMOUEO5W0q446w4gm4pfOJBsA",
+            authDomain: "nexus-search-tecnoavanza.firebaseapp.com",
+            projectId: "nexus-search-tecnoavanza",
+            storageBucket: "nexus-search-tecnoavanza.firebasestorage.app",
+            messagingSenderId: "245306089981",
+            appId: "1:245306089981:web:7cf008880accb2ad4e3994",
+            measurementId: "G-MCR7H1CP19"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let currentCourses = [];
+        let isAdmin = false;
+        
+        // Ocultar pantalla de carga optimizado
+        const hideLoader = () => {
+            const loader = document.getElementById('loading-screen');
+            if (loader && loader.style.opacity !== '0') {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
+        };
+
+        // Usar DOMContentLoaded para una respuesta más rápida, con fallback a load
+        window.addEventListener('DOMContentLoaded', hideLoader);
+        window.addEventListener('load', hideLoader);
+
+        lucide.createIcons();
+
+        const container = document.getElementById('courses-container');
+
+        function renderCourses() {
+            container.innerHTML = ''; // Limpiar contenedor
+            
+            // Agrupar cursos por categoría
+            const categories = {};
+            currentCourses.forEach((course) => {
+                const cat = course.category || 'General';
+                if (!categories[cat]) categories[cat] = [];
+                categories[cat].push(course);
+            });
+
+            // Renderizar secciones por categoría ordenadas alfabéticamente
+            Object.keys(categories).sort().forEach(cat => {
+                const section = document.createElement('div');
+                section.className = 'w-full mb-12';
+                
+                const title = document.createElement('h2');
+                title.className = 'text-2xl font-bold text-white mb-6 border-l-4 border-tecno-accent pl-4 flex items-center';
+                title.innerHTML = `${cat} <span class="text-sm text-gray-500 ml-3 font-normal">(${categories[cat].length})</span>`;
+                section.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'flex flex-wrap gap-6 justify-center sm:justify-start';
+                
+                categories[cat].forEach(course => {
+                    const priceBadge = course.priceStatus === 'paid' 
+                        ? '<span class="absolute top-2 left-2 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-full z-10">PREMIUM</span>'
+                        : '<span class="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">GRATIS</span>';
+                    
+                    const imageHtml = course.image 
+                        ? `<img src="${course.image}" alt="${course.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">`
+                        : `<div class="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center">
+                                <i class="fa-solid fa-code text-6xl text-white/20 group-hover:scale-110 transition-transform duration-500"></i>
+                           </div>`;
+
+                    let adminBtn = '';
+                    if (isAdmin) {
+                        adminBtn = `<button onclick="window.openEditCourse('${course.id}')" class="absolute top-2 right-2 bg-black/60 hover:bg-white text-white hover:text-black p-2 rounded-full z-20 transition-all shadow-lg"><i class="fa-solid fa-pen"></i></button>`;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'dynamic-course-card flex flex-col bg-[#1F1F1F] rounded-2xl overflow-hidden border border-gray-800 hover:border-tecno-accent transition-all hover:-translate-y-2 shadow-xl w-full max-w-sm group';
+                    card.innerHTML = `
+                        <div class="h-48 w-full bg-gray-800 overflow-hidden relative">
+                            ${priceBadge}
+                            ${adminBtn}
+                            ${imageHtml}
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#1F1F1F] to-transparent"></div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2 line-clamp-2">${course.title}</h3>
+                            <p class="text-gray-400 text-sm mb-6 flex-1 line-clamp-3">${course.description || 'Curso generado por IA. Aprende sobre ' + course.title + ' con nuestro tutor interactivo personalizado.'}</p>
+                            <a href="/cursos/curso_dinamico.html?id=${course.id}" class="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-tecno-secondary to-tecno-accent hover:shadow-[0_0_20px_rgba(0,240,181,0.4)] transition-all text-center">Comenzar Curso</a>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+        }
+
+        // Escuchar colección 'cursos' en tiempo real
+        onSnapshot(collection(db, "cursos"), (snapshot) => {
+            currentCourses = [];
+            snapshot.forEach((doc) => {
+                currentCourses.push({id: doc.id, ...doc.data()});
+            });
+            renderCourses();
+        });
+
+        // Lógica Modal Comunidad
+        const communityModal = document.getElementById('community-modal');
+        const closeCommunityBtn = document.getElementById('close-community-modal');
+        const openCommunityBtn = document.getElementById('btn-open-community');
+
+        if (!localStorage.getItem('nexus_community_seen_v1')) {
+            setTimeout(() => { if(communityModal) communityModal.classList.remove('hidden'); }, 1500);
+        }
+
+        if (closeCommunityBtn) {
+            closeCommunityBtn.addEventListener('click', () => {
+                communityModal.classList.add('hidden');
+                localStorage.setItem('nexus_community_seen_v1', 'true');
+            });
+        }
+
+        if (openCommunityBtn) {
+            openCommunityBtn.addEventListener('click', () => communityModal.classList.remove('hidden'));
+        }
+
+        const btnDiscordCommunity = document.getElementById('btn-discord-community');
+        if (btnDiscordCommunity) {
+            btnDiscordCommunity.addEventListener('click', () => {
+                showModal("Actualmente nuestro servidor de Discord está en desarrollo. Pronto estará disponible.", "Próximamente", "info");
+            });
+        }
+
+        const btnCommunity = document.getElementById('btn-community');
+        const communityButtons = document.getElementById('community-buttons');
+        if (btnCommunity) {
+            btnCommunity.addEventListener('click', () => {
+                if (communityButtons.classList.contains('hidden')) {
+                    communityButtons.classList.remove('hidden'); communityButtons.classList.add('flex');
+                    btnCommunity.innerHTML = '<i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> <span>Cerrar</span>';
+                } else {
+                    communityButtons.classList.add('hidden'); communityButtons.classList.remove('flex');
+                    btnCommunity.innerHTML = '<i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> <span>Ir a la Comunidad</span>';
+                }
+            });
+        }
+
+        // Lógica Modal Donaciones
+        const donationModal = document.getElementById('donation-modal');
+        const donationContent = document.getElementById('donation-modal-content');
+        
+        document.getElementById('btn-donate').addEventListener('click', () => {
+            donationModal.classList.remove('hidden');
+            setTimeout(() => {
+                donationModal.classList.remove('opacity-0');
+                donationContent.classList.remove('scale-95');
+                donationContent.classList.add('scale-100');
+            }, 10);
+        });
+
+        const closeDonation = () => {
+            donationModal.classList.add('opacity-0');
+            donationContent.classList.remove('scale-100');
+            donationContent.classList.add('scale-95');
+            setTimeout(() => donationModal.classList.add('hidden'), 300);
+        };
+
+        document.getElementById('close-donation-modal').addEventListener('click', closeDonation);
+        donationModal.addEventListener('click', (e) => {
+            if (e.target === donationModal) closeDonation();
+        });
+
+        // Lógica de Notificaciones
+        const notifModal = document.getElementById('notifications-modal');
+        const btnNotif = document.getElementById('btn-notifications');
+        const badge = document.getElementById('notif-badge');
+        const notifList = document.getElementById('notif-list');
+        const notifPermissionModal = document.getElementById('notif-permission-modal');
+        const btnAcceptNotif = document.getElementById('btn-accept-notif');
+        const btnDenyNotif = document.getElementById('btn-deny-notif');
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) return;
+            try {
+                await Notification.requestPermission();
+            } catch (error) { console.error(error); }
+        }
+
+        btnNotif.addEventListener('click', () => {
+            if ('Notification' in window && Notification.permission !== 'granted') {
+                notifPermissionModal.classList.remove('hidden');
+            } else {
+                notifModal.classList.remove('hidden');
+                badge.classList.add('hidden');
+            }
+        });
+
+        btnAcceptNotif.addEventListener('click', async () => {
+            notifPermissionModal.classList.add('hidden');
+            await requestNotificationPermission();
+            notifModal.classList.remove('hidden');
+            badge.classList.add('hidden');
+        });
+
+        btnDenyNotif.addEventListener('click', () => {
+            notifPermissionModal.classList.add('hidden');
+            notifModal.classList.remove('hidden');
+            badge.classList.add('hidden');
+        });
+
+        document.getElementById('close-notif-modal').addEventListener('click', () => {
+            notifModal.classList.add('hidden');
+        });
+
+        // --- Sistema de Modales Personalizados ---
+        window.showModal = (message, title = "Aviso", type = "info", onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            const titleEl = document.getElementById('custom-modal-title');
+            const msgEl = document.getElementById('custom-modal-message');
+            const iconEl = document.getElementById('custom-modal-icon');
+            const actionsEl = document.getElementById('custom-modal-actions');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            let iconHtml = '';
+            if (type === 'error') iconHtml = '<i class="fa-solid fa-circle-exclamation text-3xl text-red-500"></i>';
+            else if (type === 'success') iconHtml = '<i class="fa-solid fa-circle-check text-3xl text-green-500"></i>';
+            else if (type === 'confirm') iconHtml = '<i class="fa-solid fa-circle-question text-3xl text-yellow-500"></i>';
+            else iconHtml = '<i class="fa-solid fa-circle-info text-3xl text-blue-500"></i>';
+            iconEl.innerHTML = iconHtml;
+
+            actionsEl.innerHTML = '';
+            if (type === 'confirm') {
+                const btnCancel = document.createElement('button');
+                btnCancel.className = "px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold";
+                btnCancel.textContent = "Cancelar";
+                btnCancel.onclick = closeModal;
+                
+                const btnConfirm = document.createElement('button');
+                btnConfirm.className = "px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold shadow-lg";
+                btnConfirm.textContent = "Confirmar";
+                btnConfirm.onclick = () => {
+                    if (onConfirm) onConfirm();
+                    closeModal();
+                };
+                actionsEl.appendChild(btnCancel);
+                actionsEl.appendChild(btnConfirm);
+            } else {
+                const btnOk = document.createElement('button');
+                btnOk.className = "w-full py-2 px-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold rounded-xl shadow-lg";
+                btnOk.textContent = "Entendido";
+                btnOk.onclick = closeModal;
+                actionsEl.appendChild(btnOk);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        window.closeModal = () => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        let currentNotifications = [];
+
+        function renderNotifications(notifs) {
+            currentNotifications = notifs;
+            notifList.innerHTML = '';
+            if (notifs.length === 0) {
+                notifList.innerHTML = '<p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>';
+                badge.classList.add('hidden');
+                return;
+            }
+            let unreadCount = 0;
+            notifs.forEach(n => {
+                if (!n.read) unreadCount++;
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border ${n.read ? 'bg-black/20 border-gray-800' : 'bg-blue-900/20 border-blue-500/50'} relative group transition-all hover:bg-white/5`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-start pr-14">
+                        <h4 class="font-bold text-sm text-white line-clamp-1">${n.title}</h4>
+                    </div>
+                    <span class="text-[10px] text-gray-400 block mb-1">${new Date(n.timestamp).toLocaleDateString()}</span>
+                    <p class="text-xs text-gray-300 line-clamp-2 mt-1">${n.message}</p>
+                    
+                    <div class="absolute top-3 right-3 flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                        <button onclick="window.viewNotification('${n.id}')" class="text-blue-400 hover:text-blue-300 p-1" title="Ver"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="window.deleteNotification('${n.id}')" class="text-red-400 hover:text-red-300 p-1" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                notifList.appendChild(item);
+            });
+            if (unreadCount > 0) {
+                badge.innerText = unreadCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        window.viewNotification = async (id) => {
+            const notif = currentNotifications.find(n => n.id === id);
+            if (!notif) return;
+
+            document.getElementById('detail-title').textContent = notif.title;
+            document.getElementById('detail-date').textContent = new Date(notif.timestamp).toLocaleString();
+            document.getElementById('detail-message').textContent = notif.message;
+            
+            document.getElementById('notification-detail-modal').classList.remove('hidden');
+
+            if (!notif.read) {
+                try {
+                    await updateDoc(doc(db, "notifications", id), { read: true });
+                } catch (e) { console.error("Error marking read:", e); }
+            }
+        };
+
+        window.deleteNotification = (id) => {
+            showModal("¿Estás seguro de que quieres eliminar esta notificación?", "Confirmar Eliminación", "confirm", async () => {
+                try {
+                    await deleteDoc(doc(db, "notifications", id));
+                } catch (e) { console.error("Error deleting:", e); }
+            });
+        };
+
+        const closeDetailBtn = document.getElementById('btn-close-detail');
+        const closeDetailX = document.getElementById('close-detail-modal');
+        const detailModal = document.getElementById('notification-detail-modal');
+        const closeDetail = () => detailModal.classList.add('hidden');
+        if(closeDetailBtn) closeDetailBtn.addEventListener('click', closeDetail);
+        if(closeDetailX) closeDetailX.addEventListener('click', closeDetail);
+        if(detailModal) detailModal.addEventListener('click', (e) => { if(e.target === detailModal) closeDetail(); });
+
+        // --- Lógica Editar Curso ---
+        const editModal = document.getElementById('edit-course-modal');
+        const btnCancelEdit = document.getElementById('btn-cancel-edit-course');
+        const btnSaveEdit = document.getElementById('btn-save-edit-course');
+        let editImageBase64 = "";
+        let editCropper = null;
+        let currentEditFile = null;
+
+        window.handleEditImageUpload = (input) => {
+            const file = input.files[0];
+            if (!file) return;
+            currentEditFile = file;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageElement = document.getElementById('edit-image-to-crop');
+                imageElement.src = e.target.result;
+                
+                const modal = document.getElementById('edit-crop-modal');
+                modal.classList.remove('hidden');
+
+                if (editCropper) {
+                    editCropper.destroy();
+                }
+                
+                editCropper = new Cropper(imageElement, {
+                    viewMode: 1,
+                    autoCropArea: 1,
+                    responsive: true,
+                    background: false,
+                });
+            };
+            reader.readAsDataURL(file);
+            input.value = "";
+        };
+
+        window.cancelEditCrop = () => {
+            document.getElementById('edit-crop-modal').classList.add('hidden');
+            if (editCropper) editCropper.destroy();
+            editCropper = null;
+            currentEditFile = null;
+        };
+
+        window.confirmEditCrop = () => {
+            if (!editCropper) return;
+            
+            const canvas = editCropper.getCroppedCanvas({
+                maxWidth: 800,
+                maxHeight: 800,
+                fillColor: '#fff'
+            });
+
+            editImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            
+            document.getElementById('editFileNameDisplay').innerText = "✅ Imagen lista: " + (currentEditFile ? currentEditFile.name : "Recorte");
+            document.getElementById('edit-course-image').value = "";
+            document.getElementById('edit-course-image').disabled = true;
+            document.getElementById('edit-course-image').placeholder = "Imagen local seleccionada";
+            
+            cancelEditCrop();
+        };
+
+        window.openEditCourse = (id) => {
+            const course = currentCourses.find(c => c.id.toString() === id.toString());
+            
+            if (!course) return;
+
+            document.getElementById('edit-course-id').value = id;
+            document.getElementById('edit-course-title').value = course.title || '';
+            document.getElementById('edit-course-desc').value = course.description || '';
+            document.getElementById('edit-course-category').value = course.category || '';
+            document.getElementById('edit-course-image').value = course.image || '';
+            document.getElementById('edit-course-image').disabled = false;
+            document.getElementById('edit-course-image').placeholder = "URL...";
+            document.getElementById('editFileNameDisplay').innerText = "";
+            editImageBase64 = ""; // Resetear imagen subida
+            document.getElementById('edit-course-price').value = course.priceStatus || 'free';
+
+            editModal.classList.remove('hidden');
+        };
+
+        if (btnCancelEdit) btnCancelEdit.addEventListener('click', () => editModal.classList.add('hidden'));
+
+        if (btnSaveEdit) btnSaveEdit.addEventListener('click', async () => {
+            const id = document.getElementById('edit-course-id').value;
+            const title = document.getElementById('edit-course-title').value;
+            const desc = document.getElementById('edit-course-desc').value;
+            const category = document.getElementById('edit-course-category').value;
+            const urlImage = document.getElementById('edit-course-image').value;
+            const price = document.getElementById('edit-course-price').value;
+            
+            const finalImage = editImageBase64 || urlImage;
+
+            try {
+                // Usamos setDoc con merge: true para soportar tanto actualización como creación (caso PSeInt inicial)
+                await setDoc(doc(db, "cursos", id), {
+                    title: title,
+                    description: desc,
+                    category: category,
+                    image: finalImage,
+                    priceStatus: price
+                }, { merge: true });
+                editModal.classList.add('hidden');
+                showModal("Curso actualizado correctamente.", "Éxito", "success");
+            } catch (e) {
+                console.error(e);
+                showModal("Error al actualizar: " + e.message, "Error", "error");
+            }
+        });
+
+        // Auth Logic for Header
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                let displayUsername = user.displayName || 'Usuario';
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid, "informacion", "datos"));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        if (userData.username) displayUsername = userData.username;
+                        if (userData.specialty) {
+                            document.getElementById('nav-user-specialty-display').textContent = userData.specialty;
+                        }
+                        if (userData.role === 'admin') {
+                            isAdmin = true;
+                            renderCourses();
+                        }
+                    }
+                } catch (e) { console.error(e); }
+
+                document.getElementById('nav-user-name-display').textContent = displayUsername;
+                if (user.photoURL) {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<img src="${user.photoURL}" class="w-full h-full object-cover">`;
+                } else {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<span class="text-xs font-bold text-white">${displayUsername.charAt(0).toUpperCase()}</span>`;
+                }
+
+                // Listener de Notificaciones Personales
+                const notifQuery = query(collection(db, "notifications"), where("userId", "==", user.uid));
+                onSnapshot(notifQuery, (snapshot) => {
+                    const notifs = [];
+                    snapshot.forEach(doc => notifs.push({id: doc.id, ...doc.data()}));
+                    
+                    // Detectar nuevas notificaciones para mostrar alerta del navegador
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added") {
+                            const data = change.doc.data();
+                            const notifTime = new Date(data.timestamp).getTime();
+                            if (Date.now() - notifTime < 30000 && !data.read) {
+                                if (window.Notification && Notification.permission === "granted") {
+                                    const notification = new Notification(data.title, { body: data.message, icon: '/img/ICON.png' });
+                                    notification.onclick = () => { window.focus(); notification.close(); };
+                                }
+                            }
+                        }
+                    });
+
+                    notifs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                    renderNotifications(notifs);
+                });
+            } else {
+                window.location.href = '../index.html';
+            }
+        });
+
+        const profileBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) profileDropdown.classList.add('hidden');
+            });
+        }
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        const mobileDonate = document.getElementById('mobile-btn-donate');
+        if(mobileDonate) mobileDonate.addEventListener('click', () => document.getElementById('btn-donate').click());
+    </script>
+</body>
+</html>

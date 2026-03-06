@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat IA - Tlamatiliz</title>
+    <link rel="icon" href="../img/AILogo.webp">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tecno-dark': '#101010',
+                        'tecno-medium': '#1F1F1F',
+                        'tecno-accent': '#00F0B5',
+                        'tecno-secondary': '#7E00DE',
+                        'tecno-text': '#E5E5E5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'logo-pulse': 'logoPulse 2s infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        logoPulse: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.6', transform: 'scale(0.95)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        body { font-family: 'Inter', sans-serif; background-color: #101010; color: #E5E5E5; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #101010; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7E00DE, #00F0B5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #00F0B5, #7E00DE); }
+
+        .glass-effect {
+            background: rgba(16, 16, 16, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #7E00DE, #00F0B5);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: #00F0B5; text-shadow: 0 0 8px rgba(0, 240, 181, 0.4); }
+
+        .circuit-line { stroke-dasharray: 1000; stroke-dashoffset: 2000; animation: draw-line 15s linear infinite; }
+        @keyframes draw-line { to { stroke-dashoffset: 0; } }
+        .pulsing-dot { animation: pulse-dot 3s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 0.2; r: 3; } 50% { opacity: 1; transform: scale(1.05); } }
+
+        /* Chat Specific Styles */
+        .chat-bubble-user {
+            background: linear-gradient(135deg, #2f2f2f 0%, #1a1a1a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-bubble-ai {
+            background: rgba(126, 0, 222, 0.1);
+            border: 1px solid rgba(126, 0, 222, 0.2);
+        }
+
+        #chat-interface {
+            position: fixed;
+            top: 80px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .zen-mode #main-navbar, .zen-mode #history-sidebar { display: none !important; }
+        .zen-mode #chat-interface { top: 0; }
+        .zen-mode .bg-tecno-dark { background: #000; }
+        
+        #chat-container .h-full {
+            height: 80%;
+        }
+
+        /* Sidebar transition */
+        #history-sidebar {
+            transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+        }
+
+        /* Code Block Styles */
+        .code-block-wrapper { margin: 10px 0; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #1e1e1e; }
+        .code-header { display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.05); font-size: 0.75rem; color: #aaa; }
+        .code-content { padding: 15px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.9rem; color: #d4d4d4; margin: 0; }
+        .code-keyword { color: #c586c0; } .code-string { color: #ce9178; } .code-function { color: #dcdcaa; }
+    </style>
+    <style>
+        /* --- PDF Export Styles --- */
+        .pdf-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 8rem;
+            color: rgba(126, 0, 222, 0.15) !important; /* Aumentada opacidad para más color */
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 0; /* Behind content */
+            text-align: center;
+            white-space: nowrap;
+            width: 200%;
+        }
+
+        .print-mode .chat-message-wrapper {
+            page-break-inside: avoid; /* Evita que los mensajes se corten entre páginas */
+        }
+
+        .print-mode .chat-bubble-user,
+        .print-mode .chat-bubble-ai {
+            border: 1px solid #7E00DE !important; /* Purple outline */
+            background: #ffffff !important;
+            box-shadow: none !important;
+            page-break-inside: avoid;
+        }
+
+        .print-mode .text-content,
+        .print-mode .text-content *,
+        .print-mode .fas,
+        .print-mode .text-xs,
+        .print-mode .font-bold {
+            color: #000000 !important; /* Black text for everything inside */
+        }
+        .print-mode .text-tecno-accent {
+             color: #7E00DE !important; /* Make accent color purple for contrast */
+        }
+        .print-mode .code-block-wrapper,
+        .print-mode .code-block-wrapper * {
+            color: #ffffff !important; /* White text for code blocks in PDF */
+            page-break-inside: avoid;
+        }
+
+    </style>
+</head>
+
+<body class="bg-tecno-dark text-tecno-text h-screen flex flex-col relative overflow-hidden">
+
+    <!-- Header / Navbar -->
+    <header id="main-navbar" class="fixed top-0 left-0 w-full z-50 glass-effect">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 relative">
+                
+                <!-- Lado Izquierdo: Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.location.href='chat.html'">
+                        <img src="../img/AILogo.webp" alt="Tlamatiliz Logo" class="h-10 w-10 mr-3 rounded-full shadow-lg group-hover:animate-logo-pulse transition-transform">
+                        <span class="text-white font-bold text-xl tracking-tight">Tlamatiliz<span class="text-tecno-accent"> IA</span></span>
+                    </div>
+                </div>
+
+                <!-- Navegación Principal (Centrada) -->
+                <nav class="hidden md:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
+                    <a href="../index.html" class="nav-link text-gray-300 hover:text-white text-sm">Inicio</a>
+                    <a href="../buscador/buscador.html" class="nav-link text-gray-300 hover:text-white text-sm">Investigar</a>
+                    <a href="../cursos/index.html" class="nav-link text-gray-300 hover:text-white text-sm">Cursos</a>
+                    <a href="../legal/about.html" class="nav-link text-gray-300 hover:text-white text-sm">Sobre Nosotros</a>
+                    <a href="chat.html" class="nav-link text-white text-sm">Chat IA</a>
+                </nav>
+                
+                <!-- Lado Derecho: Usuario -->
+                <div class="flex items-center space-x-6">
+                    <!-- Mobile Menu Toggle -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+
+                    <!-- Perfil de Usuario con Dropdown -->
+                    <div class="relative ml-6 border-l border-gray-800 pl-6" id="profile-dropdown-container">
+                        <button id="profile-menu-btn" class="flex items-center focus:outline-none group">
+                            <div class="hidden xl:block mr-3 text-right leading-tight">
+                                <p class="text-white text-sm font-bold group-hover:text-tecno-accent transition-colors" id="nav-user-name-display">Invitado</p>
+                                <p class="text-tecno-accent text-[10px] font-medium tracking-wider uppercase" id="nav-user-specialty-display">Explorador</p>
+                            </div>
+                            <div class="h-10 w-10 rounded-full p-[2px] bg-gradient-to-tr from-tecno-secondary to-tecno-accent cursor-pointer hover:scale-105 transition-transform shadow-lg">
+                                <div class="h-full w-full rounded-full bg-[#101010] flex items-center justify-center overflow-hidden" id="nav-user-avatar-display">
+                                    <span class="text-xs font-bold text-white">I</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-400 ml-2 text-xs group-hover:text-white transition-colors"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown" class="absolute right-0 mt-4 w-56 bg-[#1F1F1F] rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden hidden origin-top-right transition-all duration-200 z-50 backdrop-blur-xl">
+                            <div class="py-1">
+                                <button id="btn-login-nav" class="w-full text-left px-4 py-3 text-sm text-tecno-accent hover:bg-white/5 flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-right-to-bracket w-4"></i> Iniciar Sesión
+                                </button>
+                                <button id="btn-logout" class="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-white/5 hover:text-red-300 flex items-center gap-3 transition-colors hidden">
+                                    <i class="fa-solid fa-right-from-bracket w-4"></i> Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#101010]/95 border-b border-gray-800 absolute top-20 left-0 w-full z-40 flex flex-col p-4 space-y-4 shadow-2xl backdrop-blur-xl">
+            <a href="../index.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Inicio</a>
+            <a href="../buscador/buscador.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Investigar</a>
+            <a href="../cursos/index.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Cursos</a>
+            <a href="chat.html" class="text-white font-medium py-2 border-b border-gray-800">Chat IA</a>
+        </div>
+    </header>
+
+    <!-- Background SVG -->
+    <div class="fixed inset-0 z-0 opacity-30 pointer-events-none">
+        <svg class="w-full h-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                    <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                </filter>
+                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#7E00DE" />
+                    <stop offset="100%" stop-color="#00F0B5" />
+                </linearGradient>
+            </defs>
+            <g opacity="0.3">
+                <path d="M-100 400 Q 200 200 500 450 T 900 400" stroke="#4a5568" stroke-width="1" />
+                <path d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#4a5568" stroke-width="1" />
+                <path d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#4a5568" stroke-width="1" />
+            </g>
+            <g filter="url(#glow)">
+                <path class="circuit-line" d="M-100 400 Q 200 200 500 450 T 900 400" stroke="url(#line-gradient)" stroke-width="1.5" style="animation-delay: -5s;" />
+                <path class="circuit-line" d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#00F0B5" stroke-width="1.5" style="animation-delay: -2s;" />
+                <path class="circuit-line" d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#7E00DE" stroke-width="1.5" />
+            </g>
+            <circle class="pulsing-dot" cx="200" cy="287" r="4" fill="#00F0B5" />
+            <circle class="pulsing-dot" cx="500" cy="450" r="4" fill="#7E00DE" style="animation-delay: -1.5s;" />
+            <circle class="pulsing-dot" cx="600" cy="400" r="4" fill="#00F0B5" style="animation-delay: -3s;" />
+        </svg>
+    </div>
+
+    <!-- Main Chat Interface -->
+    <main id="chat-interface" class="w-full flex animate-fade-in-up">
+        
+        <!-- Sidebar (Historial Local) -->
+        <aside id="history-sidebar" class="fixed inset-y-0 left-0 z-30 w-72 bg-[#101010] border-r border-white/10 transform -translate-x-full md:relative md:translate-x-0 flex flex-col h-full shadow-2xl md:shadow-none">
+            <div class="p-4 border-b border-white/10 flex justify-between items-center h-[73px]">
+                <h2 class="text-sm font-bold text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-tecno-accent"></i> Historial Local
+                </h2>
+                <button id="close-sidebar" class="md:hidden text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="p-3">
+                <button onclick="startNewChat()" class="w-full py-3 px-3 bg-gradient-to-r from-tecno-secondary/20 to-tecno-accent/20 border border-white/10 hover:border-tecno-accent/50 rounded-xl text-sm text-white flex items-center justify-center gap-2 transition-all group shadow-lg">
+                    <i class="fa-solid fa-plus group-hover:rotate-90 transition-transform"></i> Nuevo Chat
+                </button>
+            </div>
+
+            <div id="history-list" class="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
+                <!-- Items injected by JS -->
+            </div>
+
+            <div class="p-4 border-t border-white/10 bg-[#0a0a0a]">
+                <div class="text-[10px] text-gray-500 mb-3 flex items-start gap-2">
+                    <i class="fa-solid fa-shield-halved mt-0.5 text-tecno-accent"></i>
+                    <span>Privacidad: El historial se guarda solo en tu navegador (Local Storage).</span>
+                </div>
+                <button onclick="clearHistory()" class="w-full py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-900/10 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-trash-can"></i> Borrar Historial
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 flex flex-col relative w-full h-full min-w-0">
+            
+            <!-- Chat Header -->
+            <div class="flex justify-between items-center p-4 border-b border-white/10 bg-[#101010]/50 backdrop-blur-sm z-20 h-[73px]">
+                <div class="flex items-center gap-3">
+                    <!-- Mobile Toggle -->
+                    <button id="toggle-sidebar-mobile" class="p-2 -ml-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/5 md:hidden">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <!-- Desktop Toggle -->
+                    <button id="toggle-sidebar-desktop" class="hidden md:block p-2 -ml-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/5 mr-2" title="Ocultar/Mostrar Historial">
+                        <i class="fa-solid fa-table-columns"></i>
+                    </button>
+
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-tecno-accent to-tecno-secondary bg-clip-text text-transparent">
+                            Tlamatiliz IA
+                        </h1>
+                        <p class="text-[10px] md:text-xs text-gray-500">Modelo Tlamatiliz IA</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="startNewChat()" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors" title="Nuevo Chat">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <button onclick="toggleZenMode()" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-tecno-accent hover:text-white transition-colors" title="Modo Zen">
+                        <i class="fa-solid fa-expand"></i>
+                    </button>
+                    <button onclick="exportChatPDF()" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-red-400 hover:text-white transition-colors" title="Exportar PDF">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="flex-1 bg-[#1F1F1F]/40 backdrop-blur-xl overflow-hidden flex flex-col relative">
+                
+                <!-- Messages Area -->
+                <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar scroll-smooth">
+                    <div class="flex flex-col items-center justify-center h-full text-center opacity-60" id="welcome-screen">
+                        <img src="../img/AILogo.png" alt="Tlamatiliz AI" class="h-32 w-32 mb-6 animate-pulse-slow drop-shadow-[0_0_20px_rgba(126,0,222,0.4)]">
+                        <h2 class="text-2xl font-bold text-white mb-2">¿En qué puedo ayudarte hoy?</h2>
+                        <p class="text-gray-400 max-w-md">Soy tu asistente virtual. Pregúntame sobre tus cursos, ayuda con tareas o cualquier tema de investigación.</p>
+                    </div>
+                </div>
+
+                <!-- Input Area (Fixed at bottom) -->
+                <div class="p-4 bg-[#131314]/90 border-t border-white/5 backdrop-blur-md z-20">
+                    <!-- Quick Prompts -->
+                    <div id="quick-prompts" class="max-w-4xl mx-auto mb-2 flex gap-2 overflow-x-auto pb-2 custom-scrollbar transition-all duration-300"></div>
+                    <div class="relative max-w-4xl mx-auto">
+                        <textarea id="user-input" rows="1" 
+                            class="w-full bg-[#1e1f20] border border-gray-700 rounded-2xl py-4 pl-6 pr-14 text-white focus:border-tecno-accent focus:ring-1 focus:ring-tecno-accent outline-none resize-none overflow-hidden shadow-inner transition-all placeholder-gray-500"
+                            placeholder="Escribe tu mensaje aquí..."></textarea>
+                        <button id="mic-btn" onclick="toggleVoiceInput()" class="absolute right-14 bottom-3 p-2.5 text-gray-400 hover:text-tecno-accent transition-colors" title="Hablar">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                        <button id="send-btn" class="absolute right-3 bottom-3 p-2.5 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white rounded-xl hover:shadow-[0_0_15px_rgba(0,240,181,0.4)] transition-all transform hover:scale-105 active:scale-95">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-center mt-3 text-gray-500">La IA puede cometer errores. Verifica la información importante.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Genérico (Alertas y Confirmaciones) -->
+    <div id="custom-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300" id="custom-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-800/50 mb-6 border border-gray-700" id="custom-modal-icon"></div>
+                <h3 class="text-xl font-bold text-white mb-2" id="custom-modal-title"></h3>
+                <p class="text-gray-400 mb-6" id="custom-modal-message"></p>
+                <div class="flex gap-3 justify-center" id="custom-modal-actions"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Input (Renombrar) -->
+    <div id="input-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300" id="input-modal-content">
+            <div class="text-center">
+                <h3 class="text-xl font-bold text-white mb-4" id="input-modal-title">Renombrar Chat</h3>
+                <input type="text" id="input-modal-field" class="w-full bg-[#101010] border border-gray-600 rounded-xl px-4 py-2 text-white mb-6 focus:border-tecno-accent outline-none" autofocus>
+                <div class="flex gap-3 justify-center">
+                    <button onclick="window.closeInputModal()" class="px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold">Cancelar</button>
+                    <button id="input-modal-confirm" class="px-4 py-2 rounded-xl bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold shadow-lg">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Crear Prompt -->
+    <div id="create-prompt-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300" id="create-prompt-content">
+            <h3 class="text-xl font-bold text-white mb-4">Nuevo Prompt Rápido</h3>
+            <input type="text" id="new-prompt-title" placeholder="Título (ej: Resumir)" class="w-full bg-[#101010] border border-gray-600 rounded-xl px-4 py-2 text-white mb-3 focus:border-tecno-accent outline-none text-sm">
+            <textarea id="new-prompt-content" placeholder="Contenido del prompt..." rows="3" class="w-full bg-[#101010] border border-gray-600 rounded-xl px-4 py-2 text-white mb-6 focus:border-tecno-accent outline-none text-sm resize-none"></textarea>
+            <div class="flex gap-3 justify-center">
+                <button onclick="window.closeCreatePromptModal()" class="px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold text-sm">Cancelar</button>
+                <button onclick="window.saveCustomPrompt()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold shadow-lg text-sm">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Preview de Código -->
+    <div id="code-preview-modal" class="fixed inset-0 z-[100] hidden bg-black/90 backdrop-blur-md flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b border-white/10 bg-[#101010]">
+            <h3 class="text-white font-bold"><i class="fa-solid fa-play text-green-500 mr-2"></i> Vista Previa</h3>
+            <button onclick="closeCodePreview()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <div class="flex-1 bg-white relative">
+            <iframe id="preview-frame" class="w-full h-full border-none"></iframe>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+        // --- FIREBASE CONFIG (Misma que index.html) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxwrLJ36YMOUEO5W0q446w4gm4pfOJBsA",
+            authDomain: "nexus-search-tecnoavanza.firebaseapp.com",
+            projectId: "nexus-search-tecnoavanza",
+            storageBucket: "nexus-search-tecnoavanza.firebasestorage.app",
+            messagingSenderId: "245306089981",
+            appId: "1:245306089981:web:7cf008880accb2ad4e3994",
+            measurementId: "G-MCR7H1CP19"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- CONFIGURACIÓN ---
+        const API_KEY = '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';
+        const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const welcomeScreen = document.getElementById('welcome-screen');
+
+        // --- AUTH LOGIC (Navbar) ---
+        const profileBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const btnLoginNav = document.getElementById('btn-login-nav');
+        const btnLogout = document.getElementById('btn-logout');
+
+        // Dropdown Toggle
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        // Auth State Observer
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Usuario Logueado
+                let displayUsername = user.displayName || 'Usuario';
+                let specialty = 'Estudiante';
+                
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid, "informacion", "datos"));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        if (userData.username) displayUsername = userData.username;
+                        if (userData.specialty) specialty = userData.specialty;
+                    }
+                } catch (e) { console.error(e); }
+
+                document.getElementById('nav-user-name-display').textContent = displayUsername;
+                document.getElementById('nav-user-specialty-display').textContent = specialty;
+                
+                if (user.photoURL) {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<img src="${user.photoURL}" class="w-full h-full object-cover">`;
+                } else {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<span class="text-xs font-bold text-white">${displayUsername.charAt(0).toUpperCase()}</span>`;
+                }
+
+                if(btnLoginNav) btnLoginNav.classList.add('hidden');
+                if(btnLogout) btnLogout.classList.remove('hidden');
+            } else {
+                // Usuario No Logueado
+                document.getElementById('nav-user-name-display').textContent = 'Invitado';
+                document.getElementById('nav-user-specialty-display').textContent = 'Explorador';
+                document.getElementById('nav-user-avatar-display').innerHTML = `<span class="text-xs font-bold text-white">I</span>`;
+                
+                if(btnLoginNav) btnLoginNav.classList.remove('hidden');
+                if(btnLogout) btnLogout.classList.add('hidden');
+            }
+        });
+
+        if(btnLogout) btnLogout.addEventListener('click', () => signOut(auth));
+        if(btnLoginNav) btnLoginNav.addEventListener('click', () => window.location.href = '../index.html'); // Redirigir al login del index
+
+        // --- SIDEBAR LOGIC ---
+        const sidebar = document.getElementById('history-sidebar');
+        const toggleMobile = document.getElementById('toggle-sidebar-mobile');
+        const toggleDesktop = document.getElementById('toggle-sidebar-desktop');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+        // --- MODAL SYSTEM ---
+        window.showModal = (message, title = "Aviso", type = "info", onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            const titleEl = document.getElementById('custom-modal-title');
+            const msgEl = document.getElementById('custom-modal-message');
+            const iconEl = document.getElementById('custom-modal-icon');
+            const actionsEl = document.getElementById('custom-modal-actions');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            let iconHtml = '';
+            if (type === 'error') iconHtml = '<i class="fa-solid fa-circle-exclamation text-3xl text-red-500"></i>';
+            else if (type === 'success') iconHtml = '<i class="fa-solid fa-circle-check text-3xl text-green-500"></i>';
+            else if (type === 'confirm') iconHtml = '<i class="fa-solid fa-circle-question text-3xl text-yellow-500"></i>';
+            else iconHtml = '<i class="fa-solid fa-circle-info text-3xl text-blue-500"></i>';
+            iconEl.innerHTML = iconHtml;
+
+            actionsEl.innerHTML = '';
+            if (type === 'confirm') {
+                const btnCancel = document.createElement('button');
+                btnCancel.className = "px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold";
+                btnCancel.textContent = "Cancelar";
+                btnCancel.onclick = window.closeModal;
+
+                const btnConfirm = document.createElement('button');
+                btnConfirm.className = "px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold shadow-lg";
+                btnConfirm.textContent = "Confirmar";
+                btnConfirm.onclick = () => {
+                    if (onConfirm) onConfirm();
+                    window.closeModal();
+                };
+                actionsEl.appendChild(btnCancel);
+                actionsEl.appendChild(btnConfirm);
+            } else {
+                const btnOk = document.createElement('button');
+                btnOk.className = "w-full py-2 px-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold rounded-xl shadow-lg";
+                btnOk.textContent = "Entendido";
+                btnOk.onclick = window.closeModal;
+                actionsEl.appendChild(btnOk);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        window.closeModal = () => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        // --- INPUT MODAL SYSTEM ---
+        window.showInputModal = (title, currentValue, onConfirm) => {
+            const modal = document.getElementById('input-modal');
+            const content = document.getElementById('input-modal-content');
+            const titleEl = document.getElementById('input-modal-title');
+            const inputEl = document.getElementById('input-modal-field');
+            const confirmBtn = document.getElementById('input-modal-confirm');
+
+            titleEl.textContent = title;
+            inputEl.value = currentValue;
+            
+            // Remove old event listeners to prevent multiple firings if reused
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            
+            newConfirmBtn.onclick = () => {
+                if (onConfirm) onConfirm(inputEl.value);
+                window.closeInputModal();
+            };
+            
+            inputEl.onkeydown = (e) => {
+                if(e.key === 'Enter') {
+                    if (onConfirm) onConfirm(inputEl.value);
+                    window.closeInputModal();
+                }
+            };
+
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); inputEl.focus(); }, 10);
+        };
+
+        window.closeInputModal = () => {
+            const modal = document.getElementById('input-modal');
+            const content = document.getElementById('input-modal-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        // Sidebar Toggles
+        if(toggleMobile) toggleMobile.addEventListener('click', () => sidebar.classList.remove('-translate-x-full'));
+        if(closeSidebar) closeSidebar.addEventListener('click', () => sidebar.classList.add('-translate-x-full'));
+        
+        if(toggleDesktop) {
+            toggleDesktop.addEventListener('click', () => {
+                if(sidebar.classList.contains('md:w-0')) {
+                    sidebar.classList.remove('md:w-0', 'md:overflow-hidden');
+                    sidebar.classList.add('md:w-72');
+                } else {
+                    sidebar.classList.add('md:w-0', 'md:overflow-hidden');
+                    sidebar.classList.remove('md:w-72');
+                }
+            });
+        }
+
+        // --- HISTORY LOGIC (Local Storage) ---
+        const HISTORY_KEY = 'tlamatiliz_chat_history';
+        let currentChatId = null;
+
+        window.getHistory = () => JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+        
+        window.saveHistory = (history) => {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+            renderHistoryList();
+        };
+
+        window.startNewChat = () => {
+            currentChatId = Date.now().toString();
+            conversationHistory = [];
+            document.getElementById('chat-container').innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full text-center opacity-60" id="welcome-screen">
+                    <img src="../img/AILogo.png" alt="Tlamatiliz AI" class="h-32 w-32 mb-6 animate-pulse-slow drop-shadow-[0_0_20px_rgba(126,0,222,0.4)]">
+                    <h2 class="text-2xl font-bold text-white mb-2">¿En qué puedo ayudarte hoy?</h2>
+                    <p class="text-gray-400 max-w-md">Soy tu asistente virtual. Pregúntame sobre tus cursos, ayuda con tareas o cualquier tema de investigación.</p>
+                </div>
+            `;
+            // Close sidebar on mobile
+            if(window.innerWidth < 768) sidebar.classList.add('-translate-x-full');
+            const prompts = document.getElementById('quick-prompts');
+            if(prompts) prompts.classList.remove('hidden');
+            renderHistoryList();
+        };
+
+        window.saveCurrentChat = () => {
+            if (!currentChatId) currentChatId = Date.now().toString();
+            
+            const history = window.getHistory();
+            const existingIndex = history.findIndex(c => c.id === currentChatId);
+            
+            // Generate title from first user message
+            let title = "Nuevo Chat";
+            const firstUserMsg = conversationHistory.find(m => m.role === 'user');
+            if (firstUserMsg) {
+                title = firstUserMsg.content.substring(0, 30) + (firstUserMsg.content.length > 30 ? '...' : '');
+            }
+
+            const chatData = {
+                id: currentChatId,
+                title: title,
+                messages: conversationHistory,
+                timestamp: Date.now()
+            };
+
+            if (existingIndex >= 0) {
+                history[existingIndex] = chatData;
+            } else {
+                history.unshift(chatData);
+            }
+            
+            window.saveHistory(history);
+        };
+
+        window.loadChat = (id) => {
+            const history = window.getHistory();
+            const chat = history.find(c => c.id === id);
+            if (!chat) return;
+
+            currentChatId = chat.id;
+            conversationHistory = chat.messages || [];
+            
+            const container = document.getElementById('chat-container');
+            container.innerHTML = '';
+            
+            conversationHistory.forEach(msg => {
+                if (msg.role !== 'system') {
+                    const role = msg.role === 'assistant' ? 'ai' : 'user';
+                    appendMessage(role, msg.content);
+                }
+            });
+            
+            // Close sidebar on mobile
+            if(window.innerWidth < 768) sidebar.classList.add('-translate-x-full');
+            const prompts = document.getElementById('quick-prompts');
+            if(prompts) prompts.classList.add('hidden');
+        };
+
+        window.editChatTitle = (id, event) => {
+            event.stopPropagation();
+            const history = window.getHistory();
+            const chat = history.find(c => c.id === id);
+            if (!chat) return;
+
+            window.showInputModal("Renombrar Chat", chat.title, (newTitle) => {
+                if (newTitle && newTitle.trim() !== "") {
+                    chat.title = newTitle.trim();
+                    window.saveHistory(history);
+                }
+            });
+        };
+
+        window.deleteChat = (id, event) => {
+            event.stopPropagation();
+            window.showModal("¿Estás seguro de que quieres eliminar este chat?", "Confirmar Eliminación", "confirm", () => {
+                let history = window.getHistory();
+                history = history.filter(c => c.id !== id);
+                window.saveHistory(history);
+                
+                if (currentChatId === id) window.startNewChat();
+            });
+        };
+
+        window.clearHistory = () => {
+            window.showModal("¿Estás seguro de borrar todo el historial local? Esta acción no se puede deshacer.", "Borrar Historial", "confirm", () => {
+                localStorage.removeItem(HISTORY_KEY);
+                renderHistoryList();
+                window.startNewChat();
+            });
+        };
+
+        function renderHistoryList() {
+            const list = document.getElementById('history-list');
+            const history = window.getHistory();
+            list.innerHTML = '';
+            
+            if(history.length === 0) {
+                list.innerHTML = '<p class="text-center text-gray-600 text-xs mt-4">Sin historial reciente</p>';
+                return;
+            }
+
+            history.forEach(chat => {
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-xl cursor-pointer flex justify-between items-center group transition-all ${chat.id === currentChatId ? 'bg-white/10 text-white border border-white/10' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200 border border-transparent'}`;
+                div.onclick = () => window.loadChat(chat.id);
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden flex-1">
+                        <i class="fa-regular fa-message text-xs"></i>
+                        <span class="text-sm truncate font-medium">${chat.title}</span>
+                    </div>
+                    <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="window.editChatTitle('${chat.id}', event)" class="text-gray-500 hover:text-blue-400 transition-all p-1 rounded hover:bg-white/10" title="Renombrar">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                        <button onclick="window.deleteChat('${chat.id}', event)" class="text-gray-500 hover:text-red-400 transition-all p-1 rounded hover:bg-white/10" title="Borrar">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // Init History
+        renderHistoryList();
+        if(!currentChatId) currentChatId = Date.now().toString();
+
+        // --- CHAT LOGIC ---
+        // Historial de mensajes para mantener contexto (como ChatGPT)
+        let conversationHistory = [];
+
+        // Ajuste automático de altura del textarea
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 150) + 'px'; // Max height limit
+        });
+
+        function formatText(text) {
+            if (!text) return "";
+            // Escapar HTML para seguridad
+            let safeText = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+            // Detectar bloques de código ```lenguaje ... ```
+            safeText = safeText.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                const language = lang || 'texto';
+                const rawCode = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"'); // Decode for raw use
+                const encodedCode = encodeURIComponent(rawCode);
+                
+                let runButton = '';
+                if (language.toLowerCase() === 'html' || language.toLowerCase() === 'javascript') {
+                    runButton = `<button onclick="runCode('${encodedCode}')" class="text-xs flex items-center gap-1 text-green-400 hover:text-green-300 transition-colors mr-3"><i class="fa-solid fa-play"></i> Ejecutar</button>`;
+                }
+
+                return `
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="uppercase font-bold text-tecno-accent">${language}</span>
+                            <div class="flex">
+                                ${runButton}
+                                <button onclick="copyCode(this)" class="text-xs flex items-center gap-1 hover:text-white transition-colors"><i class="fa-regular fa-copy"></i> Copiar</button>
+                            </div>
+                        </div>
+                        <pre class="code-content"><code>${code}</code></pre>
+                        <div class="hidden raw-code">${rawCode}</div>
+                    </div>
+                `;
+            });
+            
+            // Parsear **negritas**
+            return safeText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+        }
+
+        // --- UTILS FOR MESSAGES ---
+        window.copyToClipboard = (btn) => {
+            const container = btn.closest('.chat-bubble-ai');
+            const text = container.querySelector('.text-content').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado';
+                setTimeout(() => btn.innerHTML = originalHtml, 2000);
+            });
+        };
+
+        window.copyCode = (btn) => {
+            const wrapper = btn.closest('.code-block-wrapper');
+            const code = wrapper.querySelector('.raw-code').textContent;
+            navigator.clipboard.writeText(code);
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado';
+            setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copiar', 2000);
+        };
+
+        window.shareWhatsApp = (btn) => {
+            const container = btn.closest('.chat-bubble-ai');
+            const text = container.querySelector('.text-content').innerText;
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        };
+
+        window.shareEmail = (btn) => {
+            const container = btn.closest('.chat-bubble-ai');
+            const text = container.querySelector('.text-content').innerText;
+            const subject = encodeURIComponent("Respuesta de Tlamatiliz IA");
+            const body = encodeURIComponent(text);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        };
+
+        // --- NEW CRAZY FEATURES ---
+        
+        // 1. Voice Input
+        window.toggleVoiceInput = () => {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert("Tu navegador no soporta entrada de voz.");
+                return;
+            }
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'es-ES';
+            recognition.start();
+            
+            const micBtn = document.getElementById('mic-btn');
+            micBtn.classList.add('text-red-500', 'animate-pulse');
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value += transcript;
+                micBtn.classList.remove('text-red-500', 'animate-pulse');
+            };
+            
+            recognition.onerror = () => micBtn.classList.remove('text-red-500', 'animate-pulse');
+            recognition.onend = () => micBtn.classList.remove('text-red-500', 'animate-pulse');
+        };
+
+        // 2. Text to Speech
+        window.speakMessage = (btn) => {
+            const container = btn.closest('.chat-bubble-ai');
+            const text = container.querySelector('.text-content').innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES';
+            window.speechSynthesis.speak(utterance);
+        };
+
+        // 3. Code Runner
+        window.runCode = (encodedCode) => {
+            const code = decodeURIComponent(encodedCode);
+            const modal = document.getElementById('code-preview-modal');
+            const iframe = document.getElementById('preview-frame');
+            modal.classList.remove('hidden');
+            
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(code);
+            doc.close();
+        };
+        window.closeCodePreview = () => document.getElementById('code-preview-modal').classList.add('hidden');
+
+        // 4. Export PDF
+        window.exportChatPDF = () => {
+            const chatContainer = document.getElementById('chat-container');
+            
+            // 1. Add watermark
+            const watermark = document.createElement('div');
+            watermark.className = 'pdf-watermark';
+            watermark.innerText = 'Tlamatiliz IA';
+            chatContainer.appendChild(watermark);
+
+            // 2. Add print-mode class
+            document.body.classList.add('print-mode');
+
+            const opt = {
+                margin: 10,
+                filename: 'Tlamatiliz_Chat.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff' // Set a white background for the canvas
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // 3. Generate PDF and then cleanup
+            html2pdf().set(opt).from(chatContainer).save().then(() => {
+                document.body.classList.remove('print-mode');
+                chatContainer.removeChild(watermark);
+            });
+        };
+        // 5. Zen Mode
+        window.toggleZenMode = () => document.body.classList.toggle('zen-mode');
+
+        // 6. Quick Prompts
+        window.usePrompt = (text) => {
+            userInput.value = text;
+            sendMessage();
+        };
+
+        // --- CUSTOM PROMPTS LOGIC ---
+        const defaultPrompts = [
+            { title: "Computación Cuántica", content: "Explícame la computación cuántica como si tuviera 5 años", icon: "fa-atom", color: "text-purple-400" },
+            { title: "Idea de Proyecto", content: "Genera una idea para un proyecto de programación web", icon: "fa-lightbulb", color: "text-yellow-400" },
+            { title: "Redactar Correo", content: "Ayúdame a redactar un correo formal para solicitar una beca", icon: "fa-envelope", color: "text-blue-400" },
+            { title: "Aprender Inglés", content: "¿Cuáles son las mejores prácticas para aprender inglés?", icon: "fa-language", color: "text-green-400" }
+        ];
+
+        window.renderQuickPrompts = () => {
+            const container = document.getElementById('quick-prompts');
+            if (!container) return;
+            
+            const customPrompts = JSON.parse(localStorage.getItem('tlamatiliz_custom_prompts') || '[]');
+            container.innerHTML = '';
+
+            // Add Button
+            const addBtn = document.createElement('button');
+            addBtn.onclick = window.openCreatePromptModal;
+            addBtn.className = "whitespace-nowrap px-3 py-2 bg-[#1F1F1F] hover:bg-[#2d2d2d] border border-white/10 rounded-full text-xs text-gray-300 hover:text-white transition-colors flex items-center gap-2";
+            addBtn.innerHTML = '<i class="fa-solid fa-plus text-gray-400"></i>';
+            container.appendChild(addBtn);
+
+            // Render Defaults
+            defaultPrompts.forEach(p => {
+                const btn = document.createElement('button');
+                btn.onclick = () => window.usePrompt(p.content);
+                btn.className = "whitespace-nowrap px-4 py-2 bg-[#1F1F1F] hover:bg-[#2d2d2d] border border-white/10 rounded-full text-xs text-gray-300 hover:text-white transition-colors flex items-center gap-2";
+                btn.innerHTML = `<i class="fa-solid ${p.icon} ${p.color}"></i> ${p.title}`;
+                container.appendChild(btn);
+            });
+
+            // Render Customs
+            customPrompts.forEach((p, index) => {
+                const btn = document.createElement('button');
+                btn.className = "whitespace-nowrap px-4 py-2 bg-[#1F1F1F] hover:bg-[#2d2d2d] border border-white/10 rounded-full text-xs text-gray-300 hover:text-white transition-colors flex items-center gap-2 group relative pr-8";
+                btn.innerHTML = `<i class="fa-solid fa-star text-tecno-accent"></i> ${p.title} 
+                    <span onclick="window.deleteCustomPrompt(${index}, event)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-400 p-1"><i class="fa-solid fa-xmark"></i></span>`;
+                btn.onclick = (e) => {
+                    if(!e.target.closest('span')) window.usePrompt(p.content);
+                };
+                container.appendChild(btn);
+            });
+        };
+
+        window.openCreatePromptModal = () => {
+            const modal = document.getElementById('create-prompt-modal');
+            const content = document.getElementById('create-prompt-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        window.closeCreatePromptModal = () => {
+            const modal = document.getElementById('create-prompt-modal');
+            const content = document.getElementById('create-prompt-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        window.saveCustomPrompt = () => {
+            const title = document.getElementById('new-prompt-title').value.trim();
+            const content = document.getElementById('new-prompt-content').value.trim();
+            if (!title || !content) return window.showModal("Por favor completa el título y el contenido.", "Faltan Datos", "error");
+
+            const customPrompts = JSON.parse(localStorage.getItem('tlamatiliz_custom_prompts') || '[]');
+            customPrompts.push({ title, content });
+            localStorage.setItem('tlamatiliz_custom_prompts', JSON.stringify(customPrompts));
+            
+            document.getElementById('new-prompt-title').value = '';
+            document.getElementById('new-prompt-content').value = '';
+            window.closeCreatePromptModal();
+            window.renderQuickPrompts();
+        };
+
+        window.deleteCustomPrompt = (index, event) => {
+            event.stopPropagation();
+            window.showModal("¿Estás seguro de que quieres eliminar este prompt personalizado?", "Confirmar Eliminación", "confirm", () => {
+                const customPrompts = JSON.parse(localStorage.getItem('tlamatiliz_custom_prompts') || '[]');
+                customPrompts.splice(index, 1);
+                localStorage.setItem('tlamatiliz_custom_prompts', JSON.stringify(customPrompts));
+                window.renderQuickPrompts();
+            });
+        };
+
+        // Init Prompts
+        window.renderQuickPrompts();
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            if (welcomeScreen) welcomeScreen.remove();
+
+            appendMessage('user', text);
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            
+            // Ocultar prompts rápidos
+            const prompts = document.getElementById('quick-prompts');
+            if(prompts) prompts.classList.add('hidden');
+            
+            // Disable button while sending
+            sendBtn.disabled = true;
+            sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            const aiMsgDiv = appendMessage('ai', 'Escribiendo...');
+
+            // Agregar el mensaje del usuario al historial
+            conversationHistory.push({
+                role: 'user',
+                content: text
+            });
+
+            try {
+                // Enviar todo el historial para mantener contexto
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama-3.3-70b-versatile',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'Rol y Objetivo: Eres un asistente de IA amable, útil e inteligente. Tu propósito es proporcionar respuestas claras, precisas y directas que ayuden al usuario a resolver problemas, aprender conceptos nuevos y obtener información confiable. Contexto: Interactúas con usuarios de diversos orígenes y niveles de conocimiento. Debes adaptarte a sus necesidades específicas mientras mantienes un tono profesional pero accesible. Tu objetivo es ser una herramienta confiable y eficiente. Principios Fundamentales: Claridad: Explica conceptos de manera sencilla y organizada, usando ejemplos cuando sea necesario. Concisión: Sé directo; evita información superflua pero completa tu respuesta. Idioma del usuario: Responde siempre en el mismo idioma en que te escriben. Honestidad intelectual: Si no conoces algo, admítelo claramente en lugar de inventar información. Utilidad práctica: Enfócate en soluciones y respuestas que el usuario pueda usar inmediatamente. Estilo y Tono: Profesional pero amable. Directo y sin rodeos innecesarios. Respetuoso y sin condescendencia. Adaptable según el contexto (formal, casual, técnico, etc.). Restricciones: No proporciones información falsa o especulativa como si fuera un hecho. No hagas suposiciones sobre información que no tengas. Mantén límites claros: si una tarea está fuera de tu capacidad, comunícalo. Prioriza la seguridad y legalidad en todas tus respuestas. Verificación Final: Antes de responder, pregúntate: ¿Mi respuesta es clara y fácil de entender? ¿Incluyo solo información que puedo verificar o asumir razonablemente? ¿Respondo en el idioma correcto? ¿Soy honesto sobre los límites de mi conocimiento?'
+                            },
+                            ...conversationHistory
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 2048
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    aiMsgDiv.querySelector('.text-content').innerHTML = formatText("Error: " + data.error.message);
+                    sendBtn.disabled = false;
+                    sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    return;
+                }
+
+                // Extraer respuesta de Groq
+                const aiResponse = data.choices[0].message.content;
+                
+                // Agregar la respuesta de la IA al historial
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: aiResponse
+                });
+
+                aiMsgDiv.querySelector('.text-content').innerHTML = formatText(aiResponse);
+                window.saveCurrentChat(); // Save after AI response
+
+            } catch (error) {
+                aiMsgDiv.querySelector('.text-content').innerHTML = formatText("Error de conexión.");
+                console.error(error);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function appendMessage(role, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in mb-4 chat-message-wrapper`;
+            
+            const isUser = role === 'user';
+            let actionsHtml = '';
+
+            if (!isUser) {
+                actionsHtml = `
+                    <div class="flex gap-3 mt-3 pt-3 border-t border-white/5">
+                        <button onclick="window.speakMessage(this)" class="text-gray-400 hover:text-tecno-accent text-xs flex items-center gap-1 transition-colors" title="Escuchar">
+                            <i class="fa-solid fa-volume-high"></i> Escuchar
+                        </button>
+                        <button onclick="window.copyToClipboard(this)" class="text-gray-400 hover:text-white text-xs flex items-center gap-1 transition-colors" title="Copiar">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                        <button onclick="window.shareWhatsApp(this)" class="text-gray-400 hover:text-[#25D366] text-xs flex items-center gap-1 transition-colors" title="WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <button onclick="window.shareEmail(this)" class="text-gray-400 hover:text-blue-400 text-xs flex items-center gap-1 transition-colors" title="Email">
+                            <i class="fa-regular fa-envelope"></i> Email
+                        </button>
+                    </div>
+                `;
+            }
+            
+            const innerHTML = `
+                <div class="max-w-[85%] p-4 rounded-2xl ${isUser ? 'chat-bubble-user text-gray-100' : 'chat-bubble-ai text-gray-200'} shadow-md">
+                    <div class="flex items-center gap-2 mb-1">
+                        <i class="fas ${isUser ? 'fa-user-circle text-gray-400' : 'fa-wand-magic-sparkles text-tecno-accent'}"></i>
+                        <span class="text-xs font-bold uppercase ${isUser ? 'text-gray-400' : 'text-tecno-accent'}">${isUser ? 'Tú' : 'Tlamatiliz IA'}</span>
+                    </div>
+                    <div class="text-content whitespace-pre-wrap leading-relaxed">${formatText(text)}</div>
+                    ${actionsHtml}
+                </div>
+            `;
+            
+            msgDiv.innerHTML = innerHTML;
+            chatContainer.appendChild(msgDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return msgDiv;
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

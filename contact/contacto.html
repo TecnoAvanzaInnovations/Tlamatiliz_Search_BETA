@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Tlamatiliz</title>
+    <link rel="icon" href="/img/ICON.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tecno-dark': '#101010',
+                        'tecno-medium': '#1F1F1F',
+                        'tecno-accent': '#00F0B5',
+                        'tecno-secondary': '#7E00DE',
+                        'tecno-text': '#E5E5E5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'logo-pulse': 'logoPulse 2s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        logoPulse: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.6', transform: 'scale(0.95)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+        body { font-family: 'Inter', sans-serif; background-color: #101010; color: #E5E5E5; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #101010; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7E00DE, #00F0B5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #00F0B5, #7E00DE); }
+
+        /* --- Estilos Barra de Navegación Premium --- */
+        .glass-effect {
+            background: rgba(16, 16, 16, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #7E00DE, #00F0B5);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #00F0B5;
+            text-shadow: 0 0 8px rgba(0, 240, 181, 0.4);
+        }
+
+        /* 3D Loading Screen */
+        #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #101010; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out, visibility 0.5s; }
+        .loading-cube-wrapper { perspective: 1000px; width: 80px; height: 80px; }
+        .loading-cube { width: 100%; height: 100%; transform-style: preserve-3d; animation: spin-cube 2.5s infinite linear; }
+        .cube-side { position: absolute; width: 80px; height: 80px; border: 2px solid #00F0B5; background: rgba(126, 0, 222, 0.15); box-shadow: 0 0 20px rgba(0, 240, 181, 0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #00F0B5; }
+        .side-front { transform: translateZ(40px); }
+        .side-back { transform: rotateY(180deg) translateZ(40px); }
+        .side-right { transform: rotateY(90deg) translateZ(40px); }
+        .side-left { transform: rotateY(-90deg) translateZ(40px); }
+        .side-top { transform: rotateX(90deg) translateZ(40px); }
+        .side-bottom { transform: rotateX(-90deg) translateZ(40px); }
+        @keyframes spin-cube { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
+        .loading-text { margin-top: 40px; font-family: 'Inter', sans-serif; color: #E5E5E5; font-size: 1.2rem; letter-spacing: 2px; animation: pulse-text 1.5s infinite ease-in-out; }
+        @keyframes pulse-text { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+    </style>
+</head>
+
+<body class="bg-tecno-dark text-tecno-text min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Pantalla de Carga 3D -->
+    <div id="loading-screen">
+        <div class="loading-cube-wrapper">
+            <div class="loading-cube">
+                <div class="cube-side side-front"><i class="fa-solid fa-envelope"></i></div>
+                <div class="cube-side side-back"><i class="fa-solid fa-at"></i></div>
+                <div class="cube-side side-right"><i class="fa-solid fa-paper-plane"></i></div>
+                <div class="cube-side side-left"><i class="fa-solid fa-comment-dots"></i></div>
+                <div class="cube-side side-top"><i class="fa-solid fa-address-card"></i></div>
+                <div class="cube-side side-bottom"><i class="fa-solid fa-inbox"></i></div>
+            </div>
+        </div>
+        <div class="loading-text">CARGANDO CONTACTO...</div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header id="main-navbar" class="fixed top-0 left-0 w-full z-50 glass-effect">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 relative">
+                
+                <!-- Lado Izquierdo: Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.location.href='../index.html'">
+                        <img src="/img/ICON.png" alt="Tlamatiliz Logo" class="h-10 w-10 mr-3 rounded-full shadow-lg group-hover:animate-logo-pulse transition-transform">
+                        <span class="text-white font-bold text-xl tracking-tight">Tlamatiliz<span class="text-tecno-accent">.</span></span>
+                    </div>
+                </div>
+
+                <!-- Navegación Principal (Centrada) -->
+                <nav class="hidden md:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
+                    <a href="../index.html" class="nav-link text-gray-300 hover:text-white text-sm">Inicio</a>
+                    <a href="../buscador/buscador.html" class="nav-link text-gray-300 hover:text-white text-sm">Investigar</a>
+                    <a href="../cursos/index.html" class="nav-link text-gray-300 hover:text-white text-sm">Cursos</a>
+                    <a href="../cursos/generador_cursos.html" id="btn-create-course" style="display: none;" class="nav-link text-gray-300 hover:text-white text-sm">Crear Curso</a>
+                    <a href="../legal/about.html" class="nav-link text-gray-300 hover:text-white text-sm">Sobre Nosotros</a>
+                    <a href="contacto.html" class="nav-link text-white text-sm">Contacto</a>
+                    <button id="btn-donate" class="nav-link text-gray-300 hover:text-white text-sm bg-transparent border-none cursor-pointer">Donar</button>
+                </nav>
+                
+                <!-- Lado Derecho: Buscador y Usuario -->
+                <div class="flex items-center space-x-6">
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+
+                    <!-- Perfil de Usuario con Dropdown -->
+                    <div class="relative ml-6 border-l border-gray-800 pl-6" id="profile-dropdown-container">
+                        <button id="profile-menu-btn" class="flex items-center focus:outline-none group">
+                            <div class="hidden xl:block mr-3 text-right leading-tight">
+                                <p class="text-white text-sm font-bold group-hover:text-tecno-accent transition-colors" id="nav-user-name-display">Usuario</p>
+                                <p class="text-tecno-accent text-[10px] font-medium tracking-wider uppercase" id="nav-user-specialty-display">Estudiante</p>
+                            </div>
+                            <div class="h-10 w-10 rounded-full p-[2px] bg-gradient-to-tr from-tecno-secondary to-tecno-accent cursor-pointer hover:scale-105 transition-transform shadow-lg">
+                                <div class="h-full w-full rounded-full bg-[#101010] flex items-center justify-center overflow-hidden" id="nav-user-avatar-display">
+                                    <span class="text-xs font-bold text-white">U</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-400 ml-2 text-xs group-hover:text-white transition-colors"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown" class="absolute right-0 mt-4 w-56 bg-[#1F1F1F] rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden hidden origin-top-right transition-all duration-200 z-50 backdrop-blur-xl">
+                            <div class="py-1">
+                                <button id="btn-notifications-dropdown" class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-tecno-accent flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-bell w-4"></i> 
+                                    <span>Notificaciones</span>
+                                    <span id="notif-badge-dropdown" class="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full hidden">0</span>
+                                </button>
+                            </div>
+                            <div class="px-2"><div class="border-t border-gray-700/50"></div></div>
+                            <div class="py-1">
+                                <button id="btn-logout" class="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-white/5 hover:text-red-300 flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-right-from-bracket w-4"></i> Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#101010]/95 border-b border-gray-800 absolute top-20 left-0 w-full z-40 flex flex-col p-4 space-y-4 shadow-2xl">
+            <a href="../index.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Inicio</a>
+            <a href="../buscador/buscador.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Investigar</a>
+            <a href="../cursos/index.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Cursos</a>
+            <a href="../cursos/generador_cursos.html" id="mobile-btn-create-course" style="display: none;" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Crear Curso</a>
+            <a href="../legal/about.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Sobre Nosotros</a>
+            <a href="contacto.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Contacto</a>
+            <button id="mobile-btn-donate" class="text-left text-tecno-accent font-bold py-2">Donar ❤️</button>
+        </div>
+    </header>
+
+    <!-- Main Content Placeholder -->
+    <main class="pt-28 px-4 pb-12 animate-fade-in-up flex-grow">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
+                    Contáctanos
+                </h1>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                    ¿Tienes alguna duda o sugerencia? Envíanos un mensaje y te responderemos lo antes posible.
+                </p>
+            </div>
+
+            <div class="bg-[#1F1F1F]/60 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(126,0,222,0.15)] relative overflow-hidden group">
+                <!-- Decorative elements -->
+                <div class="absolute top-0 right-0 -mt-20 -mr-20 w-60 h-60 bg-tecno-secondary/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow"></div>
+                <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-tecno-accent/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" style="animation-delay: 1s;"></div>
+                
+                <!-- Cyber lines -->
+                <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+                <form id="contact-form" class="relative z-10 space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2 group/input">
+                            <label for="name" class="text-xs font-bold text-tecno-accent uppercase tracking-widest ml-1 mb-1 block transition-colors group-focus-within/input:text-white">Nombre</label>
+                            <div class="relative">
+                                <input type="text" id="name" required class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-tecno-accent focus:shadow-[0_0_15px_rgba(0,240,181,0.3)] outline-none transition-all placeholder-gray-600 backdrop-blur-sm pl-10" placeholder="Tu nombre">
+                                <i class="fa-solid fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 group-focus-within/input:text-tecno-accent transition-colors"></i>
+                            </div>
+                        </div>
+                        <div class="space-y-2 group/input">
+                            <label for="email" class="text-xs font-bold text-tecno-accent uppercase tracking-widest ml-1 mb-1 block transition-colors group-focus-within/input:text-white">Correo Electrónico</label>
+                            <div class="relative">
+                                <input type="email" id="email" required class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-tecno-accent focus:shadow-[0_0_15px_rgba(0,240,181,0.3)] outline-none transition-all placeholder-gray-600 backdrop-blur-sm pl-10" placeholder="tu@email.com">
+                                <i class="fa-solid fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 group-focus-within/input:text-tecno-accent transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 group/input">
+                        <label for="subject" class="text-xs font-bold text-tecno-accent uppercase tracking-widest ml-1 mb-1 block transition-colors group-focus-within/input:text-white">Asunto</label>
+                        <div class="relative">
+                            <input type="text" id="subject" required class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-tecno-accent focus:shadow-[0_0_15px_rgba(0,240,181,0.3)] outline-none transition-all placeholder-gray-600 backdrop-blur-sm pl-10" placeholder="¿Sobre qué quieres hablar?">
+                            <i class="fa-solid fa-tag absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 group-focus-within/input:text-tecno-accent transition-colors"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 group/input">
+                        <label for="message" class="text-xs font-bold text-tecno-accent uppercase tracking-widest ml-1 mb-1 block transition-colors group-focus-within/input:text-white">Mensaje</label>
+                        <div class="relative">
+                            <textarea id="message" rows="5" required class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-tecno-accent focus:shadow-[0_0_15px_rgba(0,240,181,0.3)] outline-none transition-all placeholder-gray-600 resize-none backdrop-blur-sm pl-10 pt-3" placeholder="Escribe tu mensaje aquí..."></textarea>
+                            <i class="fa-solid fa-comment-dots absolute left-3 top-4 text-gray-500 group-focus-within/input:text-tecno-accent transition-colors"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-send-contact" class="w-full py-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold rounded-xl shadow-[0_0_20px_rgba(126,0,222,0.4)] hover:shadow-[0_0_30px_rgba(0,240,181,0.6)] transform transition hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-2 group border border-white/20 relative overflow-hidden">
+                        <span class="relative z-10">Enviar Transmisión</span>
+                        <i class="fa-solid fa-paper-plane group-hover:translate-x-1 transition-transform relative z-10"></i>
+                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Bandeja de Notificaciones -->
+    <div id="notifications-modal" class="fixed inset-0 z-[110] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-md shadow-2xl max-h-[70vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-bell"></i> Notificaciones</h3>
+                <button id="close-notif-modal" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="notif-list" class="flex-1 overflow-y-auto space-y-3 pr-2">
+                <p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Donaciones -->
+    <div id="donation-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[150] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-pink-500/30 p-8 rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.2)] max-w-md w-full transform scale-95 transition-all duration-300 relative" id="donation-modal-content">
+            <button id="close-donation-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-pink-900/20 mb-6 border border-pink-500/20 animate-pulse">
+                    <i class="fa-solid fa-heart text-4xl text-pink-500"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">¡Apoya el Proyecto!</h3>
+                <p class="text-gray-300 mb-6">
+                    Gracias por tu interés en ayudarnos a crecer. Tu apoyo nos permite mantener los servidores y seguir desarrollando cursos gratuitos.
+                </p>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-center pt-2">
+                        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+                        <script type='text/javascript'>kofiwidget2.init('Apoyame', '#72a4f2', 'V7V81SG0EB');kofiwidget2.draw();</script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico -->
+    <div id="custom-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300" id="custom-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-800/50 mb-6 border border-gray-700" id="custom-modal-icon"></div>
+                <h3 class="text-xl font-bold text-white mb-2" id="custom-modal-title"></h3>
+                <p class="text-gray-400 mb-6" id="custom-modal-message"></p>
+                <div class="flex gap-3 justify-center" id="custom-modal-actions">
+                    <!-- Botones se inyectan aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner de Cookies -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1F1F1F] border-t border-gray-800 p-4 z-[200] hidden flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
+        <p class="text-gray-300 text-sm text-center md:text-left">
+            Utilizamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas nuestras <a href="../legal/condiciones.html" class="text-tecno-accent hover:underline">Condiciones del Servicio</a>.
+        </p>
+        <button id="btn-accept-cookies" class="px-6 py-2 bg-tecno-secondary hover:bg-purple-700 text-white text-sm font-bold rounded-lg transition-colors">Aceptar</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxwrLJ36YMOUEO5W0q446w4gm4pfOJBsA",
+            authDomain: "nexus-search-tecnoavanza.firebaseapp.com",
+            projectId: "nexus-search-tecnoavanza",
+            storageBucket: "nexus-search-tecnoavanza.firebasestorage.app",
+            messagingSenderId: "245306089981",
+            appId: "1:245306089981:web:7cf008880accb2ad4e3994",
+            measurementId: "G-MCR7H1CP19"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- Sistema de Modales Personalizados ---
+        window.showModal = (message, title = "Aviso", type = "info", onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            const titleEl = document.getElementById('custom-modal-title');
+            const msgEl = document.getElementById('custom-modal-message');
+            const iconEl = document.getElementById('custom-modal-icon');
+            const actionsEl = document.getElementById('custom-modal-actions');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            let iconHtml = '';
+            if (type === 'error') iconHtml = '<i class="fa-solid fa-circle-exclamation text-3xl text-red-500"></i>';
+            else if (type === 'success') iconHtml = '<i class="fa-solid fa-circle-check text-3xl text-green-500"></i>';
+            else if (type === 'confirm') iconHtml = '<i class="fa-solid fa-circle-question text-3xl text-yellow-500"></i>';
+            else iconHtml = '<i class="fa-solid fa-circle-info text-3xl text-blue-500"></i>';
+            iconEl.innerHTML = iconHtml;
+
+            actionsEl.innerHTML = '';
+            if (type === 'confirm') {
+                const btnCancel = document.createElement('button');
+                btnCancel.className = "px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold";
+                btnCancel.textContent = "Cancelar";
+                btnCancel.onclick = closeModal;
+                
+                const btnConfirm = document.createElement('button');
+                btnConfirm.className = "px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold shadow-lg";
+                btnConfirm.textContent = "Confirmar";
+                btnConfirm.onclick = () => {
+                    if (onConfirm) onConfirm();
+                    closeModal();
+                };
+                actionsEl.appendChild(btnCancel);
+                actionsEl.appendChild(btnConfirm);
+            } else {
+                const btnOk = document.createElement('button');
+                btnOk.className = "w-full py-2 px-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold rounded-xl shadow-lg";
+                btnOk.textContent = "Entendido";
+                btnOk.onclick = closeModal;
+                actionsEl.appendChild(btnOk);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        window.closeModal = () => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        // Contact Form Logic
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const btn = document.getElementById('btn-send-contact');
+                const originalContent = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...';
+
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+
+                try {
+                    await addDoc(collection(db, "contact_messages"), {
+                        name,
+                        email,
+                        subject,
+                        message,
+                        timestamp: new Date().toISOString(),
+                        status: 'unread'
+                    });
+
+                    showModal("¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.", "Enviado", "success");
+                    contactForm.reset();
+                } catch (error) {
+                    console.error("Error enviando mensaje:", error);
+                    showModal("Hubo un error al enviar el mensaje. Por favor intenta de nuevo.", "Error", "error");
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                }
+            });
+        }
+
+        // Ocultar pantalla de carga
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
+
+            // Lógica Banner Cookies
+            if (!localStorage.getItem('nexus_cookies_accepted')) {
+                const banner = document.getElementById('cookie-banner');
+                if (banner) {
+                    banner.classList.remove('hidden');
+                    banner.classList.add('flex');
+                    document.getElementById('btn-accept-cookies').addEventListener('click', () => {
+                        localStorage.setItem('nexus_cookies_accepted', 'true');
+                        banner.classList.add('hidden');
+                    });
+                }
+            }
+        });
+
+        // Lógica Modal Donaciones
+        const donationModal = document.getElementById('donation-modal');
+        const donationContent = document.getElementById('donation-modal-content');
+        
+        document.getElementById('btn-donate').addEventListener('click', () => {
+            donationModal.classList.remove('hidden');
+            setTimeout(() => {
+                donationModal.classList.remove('opacity-0');
+                donationContent.classList.remove('scale-95');
+                donationContent.classList.add('scale-100');
+            }, 10);
+        });
+
+        const closeDonation = () => {
+            donationModal.classList.add('opacity-0');
+            donationContent.classList.remove('scale-100');
+            donationContent.classList.add('scale-95');
+            setTimeout(() => donationModal.classList.add('hidden'), 300);
+        };
+
+        document.getElementById('close-donation-modal').addEventListener('click', closeDonation);
+        donationModal.addEventListener('click', (e) => {
+            if (e.target === donationModal) closeDonation();
+        });
+
+        // Lógica de Notificaciones
+        const notifModal = document.getElementById('notifications-modal');
+        const btnNotif = document.getElementById('btn-notifications-dropdown');
+        const badge = document.getElementById('notif-badge-dropdown');
+        const notifList = document.getElementById('notif-list');
+
+        btnNotif.addEventListener('click', () => {
+            notifModal.classList.remove('hidden');
+            badge.classList.add('hidden');
+        });
+
+        document.getElementById('close-notif-modal').addEventListener('click', () => {
+            notifModal.classList.add('hidden');
+        });
+
+        function renderNotifications(notifs) {
+            notifList.innerHTML = '';
+            if (notifs.length === 0) {
+                notifList.innerHTML = '<p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>';
+                badge.classList.add('hidden');
+                return;
+            }
+
+            let unreadCount = 0;
+            notifs.forEach(n => {
+                if (!n.read) unreadCount++;
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border ${n.read ? 'bg-black/20 border-gray-800' : 'bg-blue-900/20 border-blue-500/50'} relative group transition-all hover:bg-white/5`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-start pr-14">
+                        <h4 class="font-bold text-sm text-white line-clamp-1">${n.title}</h4>
+                    </div>
+                    <span class="text-[10px] text-gray-400 block mb-1">${new Date(n.timestamp).toLocaleDateString()}</span>
+                    <p class="text-xs text-gray-300 line-clamp-2 mt-1">${n.message}</p>
+                `;
+                notifList.appendChild(item);
+            });
+
+            if (unreadCount > 0) {
+                badge.innerText = unreadCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // Auth Logic
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                let displayUsername = user.displayName || 'Usuario';
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid, "informacion", "datos"));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        if (userData.username) displayUsername = userData.username;
+                        if (userData.specialty) {
+                            document.getElementById('nav-user-specialty-display').textContent = userData.specialty;
+                        }
+                        if (userData.role === 'admin') {
+                            const btnCreate = document.getElementById('btn-create-course');
+                            if (btnCreate) btnCreate.style.display = 'block';
+                            const mobileBtnCreate = document.getElementById('mobile-btn-create-course');
+                            if (mobileBtnCreate) mobileBtnCreate.style.display = 'block';
+                        }
+                    }
+                } catch (e) { console.error(e); }
+
+                document.getElementById('nav-user-name-display').textContent = displayUsername;
+                if (user.photoURL) {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<img src="${user.photoURL}" class="w-full h-full object-cover">`;
+                } else {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<span class="text-xs font-bold text-white">${displayUsername.charAt(0).toUpperCase()}</span>`;
+                }
+
+                // Listener de Notificaciones
+                const notifQuery = query(collection(db, "notifications"), where("userId", "==", user.uid));
+                onSnapshot(notifQuery, (snapshot) => {
+                    const notifs = [];
+                    snapshot.forEach(doc => notifs.push({id: doc.id, ...doc.data()}));
+                    notifs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                    renderNotifications(notifs);
+                });
+            } else {
+                window.location.href = '../index.html';
+            }
+        });
+
+        // Dropdown Logic
+        const profileBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        // Logout Logic
+        const logoutBtn = document.getElementById('btn-logout');
+        if(logoutBtn) logoutBtn.addEventListener('click', () => signOut(auth));
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.getElementById('mobile-btn-donate').addEventListener('click', () => document.getElementById('btn-donate').click());
+    </script>
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+    <script>
+      kofiWidgetOverlay.draw('tecnoavanzainovate', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Apoyame',
+        'floating-chat.donateButton.background-color': '#00b9fe',
+        'floating-chat.donateButton.text-color': '#fff'
+      });
+    </script>
+</body>
+</html>

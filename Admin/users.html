@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Usuarios - Tlamatiliz</title>
+    <link rel="icon" href="/img/ICON.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tecno-dark': '#101010',
+                        'tecno-medium': '#1F1F1F',
+                        'tecno-accent': '#00F0B5',
+                        'tecno-secondary': '#7E00DE',
+                        'tecno-text': '#E5E5E5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        body { font-family: 'Inter', sans-serif; background-color: #101010; color: #E5E5E5; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #101010; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7E00DE, #00F0B5); border-radius: 4px; }
+
+        .glass-effect {
+            background: rgba(16, 16, 16, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #101010; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+    </style>
+</head>
+
+<body class="bg-tecno-dark text-tecno-text min-h-screen flex flex-col">
+
+    <div id="loading-screen">
+        <i class="fa-solid fa-spinner fa-spin text-4xl text-tecno-accent"></i>
+    </div>
+
+    <!-- Header -->
+    <header id="main-navbar" class="sticky top-0 w-full z-50 glass-effect">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="window.location.href='../index.html'">
+                        <img src="/img/ICON.png" alt="Tlamatiliz Logo" class="h-10 w-10 mr-3 rounded-full">
+                        <span class="text-white font-bold text-xl tracking-tight">Tlamatiliz<span class="text-tecno-accent">.</span></span>
+                    </div>
+                </div>
+                <a href="../index.html" class="px-4 py-2 text-sm font-bold bg-white/10 hover:bg-white/20 rounded-lg transition-colors">Volver al Inicio</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-12 px-4 pb-12 animate-fade-in-up flex-grow">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-8">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight">
+                    Administración de Usuarios
+                </h1>
+                <p class="text-gray-400">Gestiona los roles y perfiles de los usuarios de la plataforma.</p>
+            </div>
+
+            <div class="bg-[#1F1F1F]/60 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-lg">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-300">
+                        <thead class="text-xs text-tecno-accent uppercase bg-black/30">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 rounded-l-lg">Usuario</th>
+                                <th scope="col" class="px-6 py-3">Email</th>
+                                <th scope="col" class="px-6 py-3">Rol</th>
+                                <th scope="col" class="px-6 py-3 rounded-r-lg">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Loading state -->
+                            <tr>
+                                <td colspan="4" class="text-center p-8">
+                                    <i class="fa-solid fa-spinner fa-spin text-2xl text-gray-500"></i>
+                                    <p class="text-gray-500 mt-2">Cargando usuarios...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Editar Rol -->
+    <div id="edit-role-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-8 rounded-2xl border border-tecno-accent/30 w-full max-w-sm shadow-2xl animate-fade-in-up">
+            <h3 class="text-xl font-bold text-white mb-2">Editar Rol</h3>
+            <p class="text-sm text-gray-400 mb-6">Usuario: <span id="modal-username" class="font-bold"></span></p>
+            
+            <input type="hidden" id="modal-userid">
+
+            <label for="role-select" class="block text-sm font-bold text-gray-300 mb-2">Seleccionar Rol:</label>
+            <select id="role-select" class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-6 focus:border-tecno-accent outline-none transition-colors">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <div class="flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
+                <button id="btn-save-role" class="px-4 py-2 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white rounded-lg font-bold shadow-lg transition-transform hover:scale-105">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico (Alertas) -->
+    <div id="custom-modal" class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300" id="custom-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-800/50 mb-6 border border-gray-700" id="custom-modal-icon"></div>
+                <h3 class="text-xl font-bold text-white mb-2" id="custom-modal-title"></h3>
+                <p class="text-gray-400 mb-6" id="custom-modal-message"></p>
+                <div class="flex gap-3 justify-center" id="custom-modal-actions"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+        import { loadEnv } from '../Config/config_loader.js';
+
+        let db, auth;
+        let allUsersData = [];
+
+        // --- INICIALIZACIÓN ---
+        async function initialize() {
+            const env = await loadEnv();
+            const firebaseConfig = {
+                apiKey: env.FIREBASE_API_KEY,
+                authDomain: env.FIREBASE_AUTH_DOMAIN,
+                projectId: env.FIREBASE_PROJECT_ID,
+                storageBucket: env.FIREBASE_STORAGE_BUCKET,
+                messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
+                appId: env.FIREBASE_APP_ID,
+            };
+
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            handleAuth();
+        }
+
+        // --- AUTENTICACIÓN Y CARGA DE DATOS ---
+        function handleAuth() {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const userDoc = await getDoc(doc(db, "users", user.uid, "informacion", "datos"));
+                    if (userDoc.exists() && userDoc.data().role === 'admin') {
+                        document.getElementById('loading-screen').style.opacity = '0';
+                        setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 500);
+                        await loadAllUsers();
+                    } else {
+                        showModal("Acceso denegado. Debes ser administrador para ver esta página.", "No Autorizado", "error");
+                        setTimeout(() => window.location.href = '../index.html', 2000);
+                    }
+                } else {
+                    showModal("Debes iniciar sesión como administrador.", "No Autorizado", "error");
+                    setTimeout(() => window.location.href = '../index.html', 2000);
+                }
+            });
+        }
+
+        async function loadAllUsers() {
+            const tableBody = document.getElementById('users-table-body');
+            try {
+                // 1. Obtener todos los documentos de la colección 'users' para sacar los UIDs
+                const usersCollectionSnap = await getDocs(collection(db, "users"));
+                const userIds = usersCollectionSnap.docs.map(d => d.id);
+
+                // 2. Para cada UID, obtener el documento de perfil
+                const userPromises = userIds.map(uid => 
+                    getDoc(doc(db, "users", uid, "informacion", "datos")).then(docSnap => ({
+                        uid: uid,
+                        ...docSnap.data()
+                    }))
+                );
+                
+                allUsersData = await Promise.all(userPromises);
+                
+                renderTable();
+
+            } catch (error) {
+                console.error("Error cargando usuarios:", error);
+                tableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-500">Error al cargar usuarios. Verifica las reglas de seguridad de Firestore.</td></tr>`;
+            }
+        }
+
+        function renderTable() {
+            const tableBody = document.getElementById('users-table-body');
+            tableBody.innerHTML = '';
+
+            if (allUsersData.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-gray-500">No se encontraron usuarios.</td></tr>`;
+                return;
+            }
+
+            allUsersData.forEach(userData => {
+                if (!userData.username) return; // Skip if data is incomplete
+
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-gray-800 hover:bg-white/5';
+                
+                const roleBadge = userData.role === 'admin' 
+                    ? `<span class="bg-purple-900 text-purple-300 text-xs font-medium px-2.5 py-0.5 rounded-full border border-purple-500">${userData.role}</span>`
+                    : `<span class="bg-gray-700 text-gray-300 text-xs font-medium px-2.5 py-0.5 rounded-full border border-gray-600">${userData.role}</span>`;
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-white">${userData.username}</td>
+                    <td class="px-6 py-4">${userData.email}</td>
+                    <td class="px-6 py-4">${roleBadge}</td>
+                    <td class="px-6 py-4 flex gap-3">
+                        <button onclick="openEditModal('${userData.uid}')" class="font-medium text-blue-500 hover:underline">Editar Rol</button>
+                        <button onclick="resetPassword('${userData.uid}')" class="font-medium text-yellow-500 hover:underline">Reset Pass</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // --- ACCIONES ---
+        window.openEditModal = (uid) => {
+            const user = allUsersData.find(u => u.uid === uid);
+            if (!user) return;
+
+            document.getElementById('modal-userid').value = uid;
+            document.getElementById('modal-username').textContent = user.username;
+            document.getElementById('role-select').value = user.role;
+            document.getElementById('edit-role-modal').classList.remove('hidden');
+        };
+
+        window.closeModal = () => {
+            document.getElementById('edit-role-modal').classList.add('hidden');
+        };
+
+        document.getElementById('btn-save-role').addEventListener('click', async () => {
+            const uid = document.getElementById('modal-userid').value;
+            const newRole = document.getElementById('role-select').value;
+            const btn = document.getElementById('btn-save-role');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            try {
+                const userRef = doc(db, "users", uid, "informacion", "datos");
+                await updateDoc(userRef, { role: newRole });
+                
+                // Actualizar datos locales y volver a renderizar
+                const userIndex = allUsersData.findIndex(u => u.uid === uid);
+                if(userIndex > -1) allUsersData[userIndex].role = newRole;
+                renderTable();
+
+                closeModal();
+                showModal("Rol actualizado correctamente.", "Éxito", "success");
+            } catch (error) {
+                console.error("Error actualizando rol:", error);
+                showModal("No se pudo actualizar el rol.", "Error", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Guardar';
+            }
+        });
+
+        window.resetPassword = (uid) => {
+            const user = allUsersData.find(u => u.uid === uid);
+            if (!user) return;
+
+            const onConfirm = async () => {
+                try {
+                    await sendPasswordResetEmail(auth, user.email);
+                    showModal(`Se ha enviado un correo para restablecer la contraseña a ${user.email}.`, "Correo Enviado", "success");
+                } catch (error) {
+                    console.error("Error enviando correo:", error);
+                    showModal("No se pudo enviar el correo de restablecimiento.", "Error", "error");
+                }
+            };
+
+            showModal(`¿Estás seguro de que quieres enviar un correo de restablecimiento de contraseña a ${user.username}?`, "Confirmar Acción", "confirm", onConfirm);
+        };
+
+        // --- MODAL GENÉRICO ---
+        window.showModal = (message, title = "Aviso", type = "info", onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            const titleEl = document.getElementById('custom-modal-title');
+            const msgEl = document.getElementById('custom-modal-message');
+            const iconEl = document.getElementById('custom-modal-icon');
+            const actionsEl = document.getElementById('custom-modal-actions');
+
+            titleEl.textContent = title;
+            msgEl.innerHTML = message; // Usar innerHTML para posibles saltos de línea
+
+            let iconHtml = '';
+            if (type === 'error') iconHtml = '<i class="fa-solid fa-circle-exclamation text-3xl text-red-500"></i>';
+            else if (type === 'success') iconHtml = '<i class="fa-solid fa-circle-check text-3xl text-green-500"></i>';
+            else if (type === 'confirm') iconHtml = '<i class="fa-solid fa-circle-question text-3xl text-yellow-500"></i>';
+            else iconHtml = '<i class="fa-solid fa-circle-info text-3xl text-blue-500"></i>';
+            iconEl.innerHTML = iconHtml;
+
+            actionsEl.innerHTML = '';
+            if (type === 'confirm') {
+                const btnCancel = document.createElement('button');
+                btnCancel.className = "px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold";
+                btnCancel.textContent = "Cancelar";
+                btnCancel.onclick = closeGenericModal;
+                
+                const btnConfirm = document.createElement('button');
+                btnConfirm.className = "px-4 py-2 rounded-xl bg-gradient-to-r from-yellow-600 to-orange-500 text-white font-bold shadow-lg";
+                btnConfirm.textContent = "Confirmar";
+                btnConfirm.onclick = () => {
+                    if (onConfirm) onConfirm();
+                    closeGenericModal();
+                };
+                actionsEl.appendChild(btnCancel);
+                actionsEl.appendChild(btnConfirm);
+            } else {
+                const btnOk = document.createElement('button');
+                btnOk.className = "w-full py-2 px-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold rounded-xl shadow-lg";
+                btnOk.textContent = "Entendido";
+                btnOk.onclick = closeGenericModal;
+                actionsEl.appendChild(btnOk);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        function closeGenericModal() {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        // Iniciar la aplicación
+        initialize();
+
+    </script>
+</body>
+
+</html>
