@@ -1,0 +1,2597 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:site_name" content="Tlamatiliz Search" />
+    <meta property="og:title" content="Tlamatiliz Search" />
+    <title>Tlamatiliz</title>
+    <meta name="description"
+        content="Tlamatiliz Search es tu centro de conocimiento. Democratizando el acceso al aprendizaje personalizado mediante el uso de modelos de lenguaje avanzados.">
+    <meta name="google-site-verification" content="6VaA_HbNf5k0FBMBTn_6KWF1LGv1BGtJKXpqLr90GSA" />
+    <link rel="canonical" href="https://tlamatiliz-search.vercel.app/" />
+    <link rel="icon" href="/img/ICON.webp">
+
+    <!-- Preconexión para fuentes y CDNs de alta prioridad -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Carga de fuentes optimizada y asíncrona -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Montserrat:wght@300..700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Scripts diferidos para no bloquear el renderizado de la página -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js" defer></script>
+
+    <!-- Tailwind JIT - NOTA: Para un rendimiento óptimo en producción, es crucial pre-compilar este CSS en un único archivo. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js?onload=renderRecaptcha&render=explicit" async
+        defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tecno-dark': '#101010',
+                        'tecno-medium': '#1F1F1F',
+                        'tecno-accent': '#00F0B5',
+                        'tecno-secondary': '#7E00DE',
+                        'tecno-text': '#E5E5E5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'logo-pulse': 'logoPulse 2s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        logoPulse: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.6', transform: 'scale(0.95)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #101010;
+        color: #E5E5E5;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #101010;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #7E00DE, #00F0B5);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #00F0B5, #7E00DE);
+    }
+
+    .glow-shadow {
+        box-shadow: 0 0 15px rgba(0, 240, 181, 0.6);
+    }
+
+    .circuit-line {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 2000;
+        animation: draw-line 15s linear infinite;
+    }
+
+    @keyframes draw-line {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    .pulsing-dot {
+        animation: pulse-dot 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+
+        0%,
+        100% {
+            opacity: 0.2;
+            r: 3;
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+    }
+
+    /* Estilos Modern Login (Scoped) */
+    #modern-login-container {
+        background-color: #1F1F1F;
+        border-radius: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+        position: relative;
+        overflow: hidden;
+        width: 768px;
+        max-width: 100%;
+        min-height: 480px;
+        margin: 0 auto;
+        color: #E5E5E5;
+    }
+
+    #modern-login-container * {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    #modern-login-container p {
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.3px;
+        margin: 20px 0;
+        color: #E5E5E5;
+    }
+
+    #modern-login-container span {
+        font-size: 12px;
+        color: #a0aec0;
+    }
+
+    #modern-login-container a {
+        color: #E5E5E5;
+        font-size: 13px;
+        text-decoration: none;
+        margin: 15px 0 10px;
+    }
+
+    #modern-login-container button {
+        background-color: #7E00DE;
+        color: #fff;
+        font-size: 12px;
+        padding: 10px 45px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    #modern-login-container button.hidden-btn {
+        background-color: transparent;
+        border-color: #fff;
+    }
+
+    #modern-login-container form {
+        background-color: #1F1F1F;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        height: 100%;
+    }
+
+    #modern-login-container input {
+        background-color: #101010;
+        border: none;
+        margin: 8px 0;
+        padding: 10px 15px;
+        font-size: 13px;
+        border-radius: 8px;
+        width: 100%;
+        outline: none;
+        color: #E5E5E5;
+    }
+
+    .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-in-out;
+    }
+
+    .sign-in {
+        left: 0;
+        width: 50%;
+        z-index: 2;
+    }
+
+    #modern-login-container.active .sign-in {
+        transform: translateX(100%);
+    }
+
+    .sign-up {
+        left: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+    }
+
+    #modern-login-container.active .sign-up {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
+        animation: move 0.6s;
+    }
+
+    @keyframes move {
+
+        0%,
+        49.99% {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        50%,
+        100% {
+            opacity: 1;
+            z-index: 5;
+        }
+    }
+
+    .social-icons {
+        margin: 20px 0;
+    }
+
+    .social-icons a {
+        border: 1px solid #4a5568;
+        border-radius: 20%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 3px;
+        width: 40px;
+        height: 40px;
+        color: #E5E5E5;
+    }
+
+    .toggle-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: all 0.6s ease-in-out;
+        border-radius: 150px 0 0 100px;
+        z-index: 1000;
+    }
+
+    #modern-login-container.active .toggle-container {
+        transform: translateX(-100%);
+        border-radius: 0 150px 100px 0;
+    }
+
+    .toggle {
+        background-color: #7E00DE;
+        height: 100%;
+        background: #7E00DE;
+        color: #E5E5E5;
+        position: relative;
+        left: -100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+    }
+
+    #modern-login-container.active .toggle {
+        transform: translateX(50%);
+    }
+
+    .toggle-panel {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 30px;
+        text-align: center;
+        top: 0;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+    }
+
+    .toggle-left {
+        transform: translateX(-200%);
+    }
+
+    #modern-login-container.active .toggle-left {
+        transform: translateX(0);
+    }
+
+    .toggle-right {
+        right: 0;
+        transform: translateX(0);
+    }
+
+    #modern-login-container.active .toggle-right {
+        transform: translateX(200%);
+    }
+
+    .toggle-password {
+        font-family: "Font Awesome 6 Free" !important;
+        font-weight: 900 !important;
+    }
+
+    /* Corrección de contraste para los paneles deslizantes */
+    #modern-login-container .toggle-left h1,
+    #modern-login-container .toggle-left p {
+        color: #FFFFFF;
+    }
+
+    #modern-login-container .toggle-right h1,
+    #modern-login-container .toggle-right p {
+        color: #FFFFFF;
+    }
+
+    /* --- Estilos Barra de Navegación Premium --- */
+    .glass-effect {
+        background: rgba(16, 16, 16, 0.85);
+        /* Fondo oscuro semi-transparente */
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-link {
+        position: relative;
+        transition: color 0.3s ease;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background: linear-gradient(90deg, #7E00DE, #00F0B5);
+        transition: width 0.3s ease;
+        border-radius: 2px;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .nav-link:hover {
+        color: #00F0B5;
+        text-shadow: 0 0 8px rgba(0, 240, 181, 0.4);
+    }
+
+    .search-input:focus {
+        box-shadow: 0 0 0 2px rgba(126, 0, 222, 0.5);
+        border-color: #7E00DE;
+    }
+
+    .search-hidden {
+        display: none !important;
+    }
+
+    /* 3D Loading Screen */
+    #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #101010;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease-out, visibility 0.5s;
+    }
+
+    .loader-3d-container {
+        perspective: 1000px;
+        width: 80px;
+        height: 80px;
+    }
+
+    .loader-3d {
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: spin-cube 2.5s infinite linear;
+    }
+
+    .cube-face {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border: 2px solid #00F0B5;
+        background: rgba(126, 0, 222, 0.15);
+        box-shadow: 0 0 20px rgba(0, 240, 181, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #00F0B5;
+    }
+
+    .face-front {
+        transform: translateZ(40px);
+    }
+
+    .face-back {
+        transform: rotateY(180deg) translateZ(40px);
+    }
+
+    .face-right {
+        transform: rotateY(90deg) translateZ(40px);
+    }
+
+    .face-left {
+        transform: rotateY(-90deg) translateZ(40px);
+    }
+
+    .face-top {
+        transform: rotateX(90deg) translateZ(40px);
+    }
+
+    .face-bottom {
+        transform: rotateX(-90deg) translateZ(40px);
+    }
+
+    @keyframes spin-cube {
+        0% {
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+
+        100% {
+            transform: rotateX(360deg) rotateY(360deg);
+        }
+    }
+
+    .loading-text {
+        margin-top: 40px;
+        font-family: 'Inter', sans-serif;
+        color: #E5E5E5;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        animation: pulse-text 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse-text {
+
+        0%,
+        100% {
+            opacity: 0.5;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+    /* Ajuste de margen cuando hay sesión iniciada (Navbar visible) */
+    .hero-container.logged-in {
+        margin-top: 160px !important;
+    }
+
+    @media (max-width: 768px) {
+        .hero-container.logged-in {
+            margin-top: 120px !important;
+        }
+
+        /* Mobile Login Styles */
+        #modern-login-container {
+            width: 100%;
+            min-height: 550px;
+            border-radius: 20px;
+        }
+
+        .form-container {
+            width: 100%;
+            left: 0;
+        }
+
+        .toggle-container {
+            display: none;
+        }
+
+        /* Default State (Login) */
+        .sign-in {
+            transform: translateX(0);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        .sign-up {
+            transform: translateX(100%);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* Active State (Register) */
+        #modern-login-container.active .sign-in {
+            transform: translateX(-100%);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        #modern-login-container.active .sign-up {
+            transform: translateX(0);
+            opacity: 1;
+            z-index: 5;
+            animation: none;
+        }
+    }
+</style>
+
+<body
+    class="bg-tecno-dark text-tecno-text min-h-screen flex flex-col items-center relative overflow-x-hidden overflow-y-auto">
+
+    <!-- Pantalla de Carga 3D -->
+    <div id="loading-screen">
+        <div class="loader-3d-container">
+            <div class="loader-3d">
+                <div class="cube-face face-front"><i class="fa-solid fa-microchip"></i></div>
+                <div class="cube-face face-back"><i class="fa-solid fa-code"></i></div>
+                <div class="cube-face face-right"><i class="fa-solid fa-rocket"></i></div>
+                <div class="cube-face face-left"><i class="fa-solid fa-brain"></i></div>
+                <div class="cube-face face-top"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="cube-face face-bottom"><i class="fa-solid fa-database"></i></div>
+            </div>
+        </div>
+        <div class="loading-text">CARGANDO SISTEMA...</div>
+    </div>
+
+    <!-- Header / Navbar (Oculto por defecto, se muestra al login) -->
+    <header id="main-navbar"
+        class="fixed top-0 left-0 w-full z-50 glass-effect transition-transform duration-500 -translate-y-full"
+        style="display: none;">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 relative">
+
+                <!-- Lado Izquierdo: Logo -->
+                <div class="flex items-center">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center cursor-pointer group"
+                        onclick="window.location.reload()">
+                        <img src="/img/ICON.webp" alt="Tlamatiliz Logo"
+                            class="h-10 w-10 mr-3 rounded-full shadow-lg group-hover:animate-logo-pulse transition-transform">
+                        <span class="text-white font-bold text-xl tracking-tight">Tlamatiliz<span
+                                class="text-tecno-accent">.</span></span>
+                    </div>
+                </div>
+
+                <!-- Navegación Principal (Centrada) -->
+                <nav class="hidden md:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
+                    <a href="index.html" class="nav-link text-gray-300 hover:text-white text-sm">Inicio</a>
+                    <a href="buscador/buscador.html"
+                        class="nav-link text-gray-300 hover:text-white text-sm">Investigar</a>
+                    <a href="cursos/index.html" class="nav-link text-gray-300 hover:text-white text-sm">Cursos</a>
+                    <a href="ia/chat.html" class="nav-link text-gray-300 hover:text-white text-sm">Chat</a>
+                    <a href="legal/about.html" class="nav-link text-gray-300 hover:text-white text-sm">Sobre
+                        Nosotros</a>
+                    <a href="contact/contacto.html" class="nav-link text-gray-300 hover:text-white text-sm">Contacto</a>
+                    <button id="btn-donate"
+                        class="nav-link text-gray-300 hover:text-white text-sm bg-transparent border-none cursor-pointer">Donar</button>
+                </nav>
+
+                <!-- Lado Derecho: Buscador y Usuario -->
+                <div class="flex items-center space-x-6">
+
+                    <!-- Mobile Menu Toggle -->
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+
+                    <!-- Botón de Notificaciones -->
+                    <button id="btn-notifications"
+                        class="hidden md:block relative p-2 text-gray-400 hover:text-white transition-colors">
+                        <i class="fa-solid fa-bell text-xl"></i>
+                        <span id="notif-badge"
+                            class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden animate-pulse">0</span>
+                    </button>
+
+                    <!-- Perfil de Usuario con Dropdown -->
+                    <div class="relative ml-6 border-l border-gray-800 pl-6" id="profile-dropdown-container">
+                        <button id="profile-menu-btn" class="flex items-center focus:outline-none group">
+                            <div class="hidden xl:block mr-3 text-right leading-tight">
+                                <p class="text-white text-sm font-bold group-hover:text-tecno-accent transition-colors"
+                                    id="nav-user-name-display">Usuario</p>
+                                <p class="text-tecno-accent text-[10px] font-medium tracking-wider uppercase"
+                                    id="nav-user-specialty-display">Estudiante</p>
+                            </div>
+                            <div
+                                class="h-10 w-10 rounded-full p-[2px] bg-gradient-to-tr from-tecno-secondary to-tecno-accent cursor-pointer hover:scale-105 transition-transform shadow-lg">
+                                <div class="h-full w-full rounded-full bg-[#101010] flex items-center justify-center overflow-hidden"
+                                    id="nav-user-avatar-display">
+                                    <span class="text-xs font-bold text-white">U</span>
+                                </div>
+                            </div>
+                            <i
+                                class="fa-solid fa-chevron-down text-gray-400 ml-2 text-xs group-hover:text-white transition-colors"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown"
+                            class="absolute right-0 mt-4 w-56 bg-[#1F1F1F] rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden hidden origin-top-right transition-all duration-200 z-50 backdrop-blur-xl">
+                            <div class="py-2">
+                                <button id="btn-create-course-dropdown" style="display: none;"
+                                    onclick="window.location.href='cursos/generador_cursos.html'"
+                                    class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-plus w-4 text-tecno-accent"></i> Crear Curso
+                                </button>
+                                <button id="btn-maintenance-config" style="display: none;"
+                                    class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-lock w-4 text-red-400"></i> Mantenimiento
+                                </button>
+                                <button id="btn-reviews" style="display: none;"
+                                    class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-check-double w-4 text-blue-400"></i> Revisiones
+                                </button>
+                                <button id="btn-add-news" style="display: none;"
+                                    class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-bullhorn w-4 text-green-400"></i> Publicar Novedad
+                                </button>
+                                <button id="btn-add-event" style="display: none;"
+                                    class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-calendar-plus w-4 text-purple-400"></i> Publicar Evento
+                                </button>
+                                <button id="btn-contact-messages" style="display: none;"
+                                    class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-envelope w-4 text-yellow-400"></i> Mensajes
+                                </button>
+                                <div class="border-t border-gray-700/50 my-1"></div>
+                                <button id="btn-open-community"
+                                    class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-people-group w-4 text-tecno-accent"></i> Comunidad
+                                </button>
+                                <button id="btn-notifications-mobile"
+                                    class="md:hidden w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-bell w-4"></i> Notificaciones
+                                    <span id="notif-badge-mobile"
+                                        class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                                </button>
+                                <button id="btn-logout"
+                                    class="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-white/5 hover:text-red-300 flex items-center gap-3 transition-colors">
+                                    <i class="fa-solid fa-right-from-bracket w-4"></i> Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu"
+        class="hidden md:hidden bg-[#101010]/95 border-b border-gray-800 fixed top-20 left-0 w-full z-40 flex flex-col p-4 space-y-4 shadow-2xl backdrop-blur-xl">
+        <a href="index.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Inicio</a>
+        <a href="buscador/buscador.html"
+            class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Investigar</a>
+        <a href="cursos/index.html"
+            class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Cursos</a>
+        <a href="ia/chat.html" class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Chat</a>
+        <a href="legal/about.html"
+            class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Sobre Nosotros</a>
+        <a href="contact/contacto.html"
+            class="text-gray-300 hover:text-white font-medium py-2 border-b border-gray-800">Contacto</a>
+        <button id="mobile-btn-donate" class="text-left text-tecno-accent font-bold py-2">Donar ❤️</button>
+    </div>
+
+    <!-- Background SVG -->
+    <div class="absolute inset-0 z-0 opacity-30 pointer-events-none">
+        <svg class="w-full h-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                    <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#7E00DE" />
+                    <stop offset="100%" stop-color="#00F0B5" />
+                </linearGradient>
+            </defs>
+            <g opacity="0.3">
+                <path d="M-100 400 Q 200 200 500 450 T 900 400" stroke="#4a5568" stroke-width="1" />
+                <path d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#4a5568" stroke-width="1" />
+                <path d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#4a5568" stroke-width="1" />
+            </g>
+            <g filter="url(#glow)">
+                <path class="circuit-line" d="M-100 400 Q 200 200 500 450 T 900 400" stroke="url(#line-gradient)"
+                    stroke-width="1.5" style="animation-delay: -5s;" />
+                <path class="circuit-line" d="M-100 500 Q 300 600 600 400 T 900 500" stroke="#00F0B5" stroke-width="1.5"
+                    style="animation-delay: -2s;" />
+                <path class="circuit-line" d="M-100 200 Q 400 100 700 300 T 900 250" stroke="#7E00DE"
+                    stroke-width="1.5" />
+            </g>
+            <circle class="pulsing-dot" cx="200" cy="287" r="4" fill="#00F0B5" />
+            <circle class="pulsing-dot" cx="500" cy="450" r="4" fill="#7E00DE" style="animation-delay: -1.5s;" />
+            <circle class="pulsing-dot" cx="600" cy="400" r="4" fill="#00F0B5" style="animation-delay: -3s;" />
+        </svg>
+    </div>
+
+    <div class="relative z-10 w-full max-w-4xl px-4 text-center animate-fade-in-up hero-container mt-8 md:mt-16">
+        <div class="mb-10">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 tracking-tight">
+                Tlamatiliz <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-tecno-accent to-tecno-secondary">Search</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+                Tu centro de conocimiento. Democratizando el acceso al aprendizaje personalizado mediante el uso de
+                modelos de lenguaje avanzados.
+            </p>
+            <button id="btn-start-landing"
+                class="mt-8 px-8 py-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent rounded-full font-bold text-white shadow-lg hover:shadow-tecno-accent/50 transition-all hover:-translate-y-1 text-lg group"
+                style="display: none;">
+                <span class="mr-2"> Empezar Ahora </i>
+            </button>
+        </div>
+
+        <!-- Sección de Login -->
+        <div id="login-container" class="w-full flex justify-center" style="display: none;">
+            <div id="modern-login-container">
+                <div class="form-container sign-up">
+                    <form onsubmit="event.preventDefault();">
+                        <h1 class="font-bold text-2xl mb-2 text-white">Crear Cuenta</h1>
+                        <span>o usa tu email para registrarte</span>
+                        <input type="text" id="reg-username" placeholder="Nombre">
+                        <input type="email" id="reg-email" placeholder="Correo">
+                        <div style="position: relative; width: 100%;">
+                            <input type="password" id="reg-password" placeholder="Contraseña"
+                                style="padding-right: 40px;">
+                            <i class="fa-solid fa-eye toggle-password" data-target="reg-password"
+                                style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #a0aec0; z-index: 10;"></i>
+                        </div>
+                        <div
+                            style="display: flex; align-items: flex-start; gap: 8px; width: 100%; margin: 10px 0; text-align: left;">
+                            <input type="checkbox" id="reg-terms"
+                                style="width: auto; margin-top: 3px; cursor: pointer;">
+                            <label for="reg-terms"
+                                style="font-size: 11px; color: #a0aec0; line-height: 1.4; cursor: pointer;">
+                                Acepto la <a id="link-privacy" href="legal/politica_privacidad.html"
+                                    style="color: #00F0B5; margin: 0;">Política de Privacidad</a> y las <a
+                                    id="link-terms" href="legal/condiciones_servicio.html"
+                                    style="color: #00F0B5; margin: 0;">Condiciones del Servicio</a>.
+                            </label>
+                        </div>
+                        <div id="recaptcha-register"
+                            style="margin: 10px 0; transform: scale(0.9); transform-origin: center;"></div>
+                        <button type="button" id="btn-register-action">Registrarse</button>
+
+                        <!-- Divisor -->
+                        <div class="flex items-center w-full my-3">
+                            <div class="h-px bg-gray-600 flex-1"></div>
+                            <span class="px-3 text-gray-400 text-xs">o</span>
+                            <div class="h-px bg-gray-600 flex-1"></div>
+                        </div>
+
+                        <!-- Botón Google -->
+                        <button type="button" id="btn-google-register"
+                            class="flex items-center justify-center gap-2 w-full !bg-white !text-black hover:!bg-gray-100 !border !border-gray-300 !normal-case !py-2.5 !rounded-lg transition-all shadow-sm !mt-0">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                                class="w-5 h-5">
+                            <span class="font-medium text-sm">Registrarse con Google</span>
+                        </button>
+
+                        <button type="button"
+                            class="md:hidden mt-6 text-sm text-tecno-accent hover:underline bg-transparent border-none p-0 cursor-pointer"
+                            id="mobile-to-login">¿Ya tienes cuenta? Inicia Sesión</button>
+                    </form>
+                </div>
+
+                <div class="form-container sign-in">
+                    <form onsubmit="event.preventDefault();">
+                        <h1 class="font-bold text-2xl mb-2 text-white">Iniciar Sesión</h1>
+                        <span>o usa tu cuenta de correo</span>
+                        <input type="email" id="login-email" placeholder="Correo">
+                        <div style="position: relative; width: 100%;">
+                            <input type="password" id="login-password" placeholder="Contraseña"
+                                style="padding-right: 40px;">
+                            <i class="fa-solid fa-eye toggle-password" data-target="login-password"
+                                style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #a0aec0; z-index: 10;"></i>
+                        </div>
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                        <div id="recaptcha-login"
+                            style="margin: 10px 0; transform: scale(0.9); transform-origin: center;"></div>
+                        <button type="button" id="btn-login-action">Iniciar Sesión</button>
+
+                        <!-- Divisor -->
+                        <div class="flex items-center w-full my-3">
+                            <div class="h-px bg-gray-600 flex-1"></div>
+                            <span class="px-3 text-gray-400 text-xs">o</span>
+                            <div class="h-px bg-gray-600 flex-1"></div>
+                        </div>
+
+                        <!-- Botón Google -->
+                        <button type="button" id="btn-google-login"
+                            class="flex items-center justify-center gap-2 w-full !bg-white !text-black hover:!bg-gray-100 !border !border-gray-300 !normal-case !py-2.5 !rounded-lg transition-all shadow-sm !mt-0">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                                class="w-5 h-5">
+                            <span class="font-medium text-sm">Iniciar con Google</span>
+                        </button>
+
+                        <button type="button"
+                            class="md:hidden mt-6 text-sm text-tecno-accent hover:underline bg-transparent border-none p-0 cursor-pointer"
+                            id="mobile-to-register">¿No tienes cuenta? Regístrate</button>
+                    </form>
+                </div>
+
+                <div class="toggle-container">
+                    <div class="toggle">
+                        <div class="toggle-panel toggle-left">
+                            <h1 class="font-bold text-2xl mb-2">¡Bienvenido de nuevo!</h1>
+                            <p>Ingresa tus datos personales para usar todas las funciones</p>
+                            <button class="hidden-btn" id="toggle-login">Iniciar Sesión</button>
+                        </div>
+                        <div class="toggle-panel toggle-right">
+                            <h1 class="font-bold text-2xl mb-2">¡Hola, Amigo!</h1>
+                            <p>Regístrate con tus datos personales para usar todas las funciones</p>
+                            <button class="hidden-btn" id="toggle-register">Registrarse</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sección de Novedades (Visible solo al iniciar sesión) -->
+    <div id="news-section" class="relative z-10 w-full max-w-6xl px-4 mt-32 mb-16 animate-fade-in-up hidden">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-gray-800 pb-4">
+            <div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">👋 Hola, <span id="news-username-display"
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-tecno-accent to-tecno-secondary">Estudiante</span>
+                </h2>
+                <p class="text-gray-400">Aquí tienes las últimas novedades de la plataforma.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Destacado -->
+            <div class="lg:col-span-3 bg-[#1F1F1F] p-6 rounded-3xl border border-gray-800 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days text-tecno-accent"></i> Próximos Eventos
+                    </h3>
+                    <span class="text-xs text-gray-500 bg-black/30 px-3 py-1 rounded-full border border-gray-700">En
+                        Vivo</span>
+                </div>
+
+                <div id="dynamic-events-container"
+                    class="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                    <!-- Los eventos se cargarán aquí dinámicamente -->
+                    <p class="text-center text-gray-500 py-4">Cargando eventos...</p>
+                </div>
+            </div>
+
+            <!-- Update List -->
+            <div id="dynamic-news-container" class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Las noticias se cargarán aquí desde Firebase -->
+                <p class="text-gray-500 col-span-3 text-center">Cargando novedades...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Información / Presentación -->
+    <div class="relative z-10 w-full max-w-6xl px-4 mt-12 mb-16 animate-fade-in-up" id="info-section">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <!-- Card 1 -->
+            <div
+                class="p-8 bg-[#1F1F1F]/80 backdrop-blur-md rounded-3xl border border-white/5 hover:border-tecno-accent/50 transition-all hover:-translate-y-2 shadow-xl group">
+                <div
+                    class="h-14 w-14 rounded-2xl bg-gradient-to-br from-tecno-secondary to-purple-900 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-magnifying-glass text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3">Investigación</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Olvídate de las Fake News. Nuestro motor de búsqueda consulta exclusivamente fuentes académicas y
+                    verificadas, para tus trabajos y tareas.
+                </p>
+            </div>
+            <!-- Card 2 -->
+            <div
+                class="p-8 bg-[#1F1F1F]/80 backdrop-blur-md rounded-3xl border border-white/5 hover:border-tecno-accent/50 transition-all hover:-translate-y-2 shadow-xl group">
+                <div
+                    class="h-14 w-14 rounded-2xl bg-gradient-to-br from-tecno-accent to-green-700 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3">Cursos</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    ¿Quieres aprender algo nuevo? Revisa nuestros cursos y ve que puedes aprender.
+                </p>
+            </div>
+            <!-- Card 3 -->
+            <div
+                class="p-8 bg-[#1F1F1F]/80 backdrop-blur-md rounded-3xl border border-white/5 hover:border-tecno-accent/50 transition-all hover:-translate-y-2 shadow-xl group">
+                <div
+                    class="h-14 w-14 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-900 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-gamepad text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3">Gamificación</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Convierte el aprendizaje en un juego para cualquier curso.
+                </p>
+            </div>
+        </div>
+
+        <div
+            class="mt-20 text-center max-w-4xl mx-auto bg-gradient-to-b from-white/5 to-transparent p-10 rounded-3xl border border-white/5">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Tu Centro de Conocimiento</h2>
+            <p class="text-gray-300 text-lg leading-relaxed mb-8">
+                <strong>Tlamatiliz Search</strong> no es solo un buscador, es tu compañero de aprendizaje.
+                Utilizamos tecnología de vanguardia para democratizar el acceso a la educación de calidad.
+                Regístrate hoy y descubre una nueva forma de aprender.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <span class="px-4 py-2 bg-black/40 rounded-full text-sm text-gray-400 border border-gray-700">🔒
+                    Privacidad Primero</span>
+                <span class="px-4 py-2 bg-black/40 rounded-full text-sm text-gray-400 border border-gray-700">📚 Acceso
+                    Gratuito</span>
+            </div>
+        </div>
+    </div>
+
+    <footer class="relative z-10 w-full py-6 text-center text-gray-500 text-sm">
+        <p>&copy; 2026 Tlamatiliz Search - <a href="legal/politica_privacidad.html"
+                class="hover:text-tecno-accent transition-colors">Política de Privacidad</a></p>
+    </footer>
+
+    <!-- Modal Comunidad -->
+    <div id="community-modal"
+        class="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm transition-opacity duration-300">
+        <div class="relative w-full max-w-4xl px-4 animate-fade-in-up">
+            <div
+                class="bg-[#1F1F1F] p-8 md:p-12 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(126,0,222,0.15)] relative overflow-hidden group text-center">
+
+                <button id="close-community-modal"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-white z-20 transition-colors"><i
+                        class="fa-solid fa-xmark text-2xl"></i></button>
+
+                <!-- Decorative elements -->
+                <div
+                    class="absolute top-0 right-0 -mt-20 -mr-20 w-60 h-60 bg-tecno-secondary/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow">
+                </div>
+                <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-tecno-accent/20 rounded-full blur-[80px] pointer-events-none animate-pulse-slow"
+                    style="animation-delay: 1s;"></div>
+
+                <h2
+                    class="text-3xl md:text-4xl font-bold text-white mb-6 flex items-center justify-center gap-3 relative z-10">
+                    <i class="fa-solid fa-people-group text-tecno-accent animate-bounce"></i> Únete a Nuestra Comunidad
+                </h2>
+                <p class="text-gray-300 text-lg leading-relaxed mb-10 max-w-3xl mx-auto relative z-10">
+                    Conecta con otros estudiantes y aprende juntos. Comparte tus dudas, experiencias y ayuda a otros a
+                    crecer en un entorno colaborativo.
+                </p>
+
+                <button id="btn-community"
+                    class="relative z-10 px-8 py-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent rounded-full font-bold text-white shadow-[0_0_20px_rgba(126,0,222,0.4)] hover:shadow-[0_0_30px_rgba(0,240,181,0.6)] transition-all hover:-translate-y-1 active:translate-y-0 text-lg mb-8 inline-flex items-center gap-2 group/btn">
+                    <i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i>
+                    <span>Ir a la Comunidad</span>
+                </button>
+
+                <!-- Botones de Redes Sociales (Ocultos por defecto) -->
+                <div id="community-buttons"
+                    class="hidden mt-8 flex flex-col sm:flex-row justify-center gap-6 flex-wrap relative z-10">
+                    <button id="btn-discord-community"
+                        class="px-8 py-4 bg-[#5865F2]/20 border border-[#5865F2]/50 hover:bg-[#5865F2] hover:border-[#5865F2] rounded-2xl font-bold text-white shadow-lg transition-all hover:-translate-y-2 hover:shadow-[#5865F2]/50 flex items-center justify-center gap-3 min-w-[200px] group/discord backdrop-blur-sm">
+                        <i class="fa-brands fa-discord text-3xl group-hover/discord:scale-110 transition-transform"></i>
+                        <div class="text-left">
+                            <span class="block text-xs text-gray-300 uppercase tracking-wider">Servidor de</span>
+                            <span class="text-lg">Discord</span>
+                        </div>
+                    </button>
+
+                    <a href="https://whatsapp.com/channel/0029VbCoYkQJP211CDCnik3T" target="_blank"
+                        class="px-8 py-4 bg-[#25D366]/20 border border-[#25D366]/50 hover:bg-[#25D366] hover:border-[#25D366] rounded-2xl font-bold text-white shadow-lg transition-all hover:-translate-y-2 hover:shadow-[#25D366]/50 flex items-center justify-center gap-3 min-w-[200px] group/whatsapp backdrop-blur-sm">
+                        <i
+                            class="fa-brands fa-whatsapp text-3xl group-hover/whatsapp:scale-110 transition-transform"></i>
+                        <div class="text-left">
+                            <span class="block text-xs text-gray-300 uppercase tracking-wider">Grupo de</span>
+                            <span class="text-lg">WhatsApp</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico (Alertas y Confirmaciones) -->
+    <div id="custom-modal"
+        class="fixed inset-0 flex items-center justify-center bg-black/80 z-[9999] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full transform scale-95 transition-all duration-300"
+            id="custom-modal-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gray-800/50 mb-6 border border-gray-700"
+                    id="custom-modal-icon"></div>
+                <h3 class="text-xl font-bold text-white mb-2" id="custom-modal-title"></h3>
+                <p class="text-gray-400 mb-6" id="custom-modal-message"></p>
+                <div class="flex gap-3 justify-center" id="custom-modal-actions">
+                    <!-- Botones se inyectan aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Mantenimiento -->
+    <div id="maintenance-overlay"
+        class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center text-white p-8 hidden">
+        <i class="fa-solid fa-triangle-exclamation text-6xl text-yellow-500 mb-6 animate-pulse"></i>
+        <h2 class="text-4xl font-bold mb-4">Mantenimiento en Curso</h2>
+        <p id="maintenance-message-display" class="text-xl text-gray-300 max-w-2xl text-center">Estamos realizando
+            mejoras. Volveremos pronto.</p>
+    </div>
+
+
+    <!-- Modal Admin Mantenimiento -->
+    <div id="admin-maintenance-modal"
+        class="fixed inset-0 z-[101] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-8 rounded-2xl border border-purple-500/30 w-full max-w-md shadow-2xl">
+            <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2"><i
+                    class="fa-solid fa-screwdriver-wrench"></i> Configurar Mantenimiento</h3>
+            <p class="text-gray-400 text-sm mb-4">Si activas esto, solo los administradores podrán acceder a la
+                plataforma.</p>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Seleccionar Contexto:</label>
+            <select id="maint-scope"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-purple-500 outline-none transition-colors">
+                <option value="global">🌐 Plataforma Completa</option>
+            </select>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Mensaje para usuarios:</label>
+            <textarea id="admin-maint-msg"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-purple-500 outline-none transition-colors"
+                rows="3" placeholder="Ej: Estamos actualizando el servidor..."></textarea>
+
+            <div class="flex items-center gap-3 mb-6 bg-black/30 p-3 rounded-lg border border-gray-800">
+                <input type="checkbox" id="admin-maint-toggle" class="w-5 h-5 accent-purple-500 cursor-pointer">
+                <label for="admin-maint-toggle" class="text-white cursor-pointer select-none">Activar Modo
+                    Mantenimiento</label>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button id="btn-close-maint"
+                    class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
+                <button id="btn-save-maint"
+                    class="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white rounded-lg font-bold shadow-lg transition-transform hover:scale-105">Guardar
+                    Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Crear Novedad -->
+    <div id="admin-news-modal"
+        class="fixed inset-0 z-[103] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-8 rounded-2xl border border-green-500/30 w-full max-w-md shadow-2xl">
+            <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-bullhorn"></i>
+                Publicar Novedad</h3>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Título:</label>
+            <input type="text" id="news-title"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-green-500 outline-none transition-colors"
+                placeholder="Ej: Nueva función disponible">
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Descripción:</label>
+            <textarea id="news-desc"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-green-500 outline-none transition-colors"
+                rows="3" placeholder="Detalles de la actualización..."></textarea>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Tipo de Icono:</label>
+            <select id="news-type"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-green-500 outline-none transition-colors">
+                <option value="update">🚀 Actualización (Azul)</option>
+                <option value="feature">✨ Nueva Función (Verde)</option>
+                <option value="alert">⚠️ Aviso (Amarillo)</option>
+                <option value="mobile">📱 Móvil (Morado)</option>
+            </select>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Estado:</label>
+            <select id="news-status"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-green-500 outline-none transition-colors">
+                <option value="proximamente">Próximamente</option>
+                <option value="en_proceso">En Proceso</option>
+                <option value="con_fecha">Con Fecha de Lanzamiento</option>
+            </select>
+
+            <div id="news-date-container" class="hidden mb-6">
+                <label class="block text-sm font-bold text-gray-300 mb-2">Fecha de Lanzamiento:</label>
+                <input type="date" id="news-date"
+                    class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 focus:border-green-500 outline-none transition-colors">
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button id="btn-close-news"
+                    class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
+                <button id="btn-save-news"
+                    class="px-4 py-2 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white rounded-lg font-bold shadow-lg transition-transform hover:scale-105">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Crear Evento -->
+    <div id="admin-event-modal"
+        class="fixed inset-0 z-[103] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] p-8 rounded-2xl border border-purple-500/30 w-full max-w-md shadow-2xl">
+            <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2"><i
+                    class="fa-solid fa-calendar-plus"></i> Publicar Evento</h3>
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Título del Evento:</label>
+            <input type="text" id="event-title"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-purple-500 outline-none transition-colors"
+                placeholder="Ej: Taller de Python">
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Fecha y Hora:</label>
+            <input type="datetime-local" id="event-date"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-purple-500 outline-none transition-colors">
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Enlace (Link):</label>
+            <input type="text" id="event-link"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-4 focus:border-purple-500 outline-none transition-colors"
+                placeholder="https://meet.google.com/...">
+
+            <label class="block text-sm font-bold text-gray-300 mb-2">Tipo:</label>
+            <select id="event-type"
+                class="w-full bg-black/50 text-white p-3 rounded-lg border border-gray-700 mb-6 focus:border-purple-500 outline-none transition-colors">
+                <option value="live">🔴 En Vivo (Live)</option>
+                <option value="webinar">🎓 Webinar</option>
+                <option value="meet">🤝 Reunión</option>
+            </select>
+
+            <div class="flex justify-end gap-3">
+                <button id="btn-close-event"
+                    class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
+                <button id="btn-save-event"
+                    class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-lg font-bold shadow-lg transition-transform hover:scale-105">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Mensajes de Contacto -->
+    <div id="admin-messages-modal"
+        class="fixed inset-0 z-[104] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div
+            class="bg-[#1F1F1F] p-8 rounded-2xl border border-yellow-500/30 w-full max-w-3xl shadow-2xl max-h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2"><i
+                        class="fa-solid fa-envelope-open-text"></i>
+                    Bandeja de Entrada</h3>
+                <button id="btn-close-messages" class="text-gray-400 hover:text-white"><i
+                        class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div id="messages-list" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                <!-- Lista cargada dinámicamente -->
+                <p class="text-center text-gray-500 py-10">Cargando mensajes...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Revisiones -->
+    <div id="admin-reviews-modal"
+        class="fixed inset-0 z-[102] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div
+            class="bg-[#1F1F1F] p-8 rounded-2xl border border-blue-500/30 w-full max-w-2xl shadow-2xl max-h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-list-check"></i>
+                    Cola de Revisión</h3>
+                <button id="btn-close-reviews" class="text-gray-400 hover:text-white"><i
+                        class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div id="reviews-list" class="flex-1 overflow-y-auto space-y-4 pr-2">
+                <!-- Lista cargada dinámicamente -->
+                <p class="text-center text-gray-500 py-10">Cargando revisiones...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Bandeja de Notificaciones -->
+    <div id="notifications-modal"
+        class="fixed inset-0 z-[110] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div
+            class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-md shadow-2xl max-h-[70vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-bell"></i>
+                    Notificaciones</h3>
+                <button id="close-notif-modal" class="text-gray-400 hover:text-white"><i
+                        class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="notif-list" class="flex-1 overflow-y-auto space-y-3 pr-2">
+                <p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>
+            </div>
+            <div id="notif-permission-prompt"
+                class="hidden mt-4 p-4 bg-black/30 rounded-lg border border-gray-700 text-center">
+                <!-- Content will be injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Permiso Notificaciones (Popup) -->
+    <div id="notif-permission-modal"
+        class="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 hidden backdrop-blur-sm transition-opacity duration-300">
+        <div
+            class="bg-[#1F1F1F] p-8 rounded-2xl border border-blue-500/30 w-full max-w-md shadow-[0_0_30px_rgba(59,130,246,0.2)] text-center transform scale-100 transition-transform duration-300">
+            <div
+                class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-blue-900/20 mb-6 border border-blue-500/20 animate-pulse">
+                <i class="fa-solid fa-bell text-4xl text-blue-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-3">Activar Notificaciones</h3>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+                Para que no te pierdas ninguna actualización sobre tus cursos y revisiones, necesitamos tu permiso para
+                enviarte notificaciones.
+                <br><br>
+                <span class="text-sm text-gray-400">Te avisaremos cuando un instructor revise tu código o haya novedades
+                    importantes.</span>
+            </p>
+            <div class="flex gap-3">
+                <button id="btn-deny-notif"
+                    class="flex-1 py-3 px-4 border border-gray-600 text-gray-300 font-bold rounded-xl hover:bg-gray-800 transition-colors">
+                    Ahora no
+                </button>
+                <button id="btn-accept-notif"
+                    class="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold rounded-xl shadow-lg transform transition hover:scale-[1.02]">
+                    Activar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Notificación -->
+    <div id="notification-detail-modal"
+        class="fixed inset-0 z-[130] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm">
+        <div
+            class="bg-[#1F1F1F] p-6 rounded-2xl border border-gray-700 w-full max-w-md shadow-2xl relative flex flex-col max-h-[80vh]">
+            <button id="close-detail-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i
+                    class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 id="detail-title" class="text-xl font-bold text-white mb-2 pr-8"></h3>
+            <span id="detail-date" class="text-xs text-gray-400 block mb-4"></span>
+            <div id="detail-message" class="text-gray-300 text-sm leading-relaxed overflow-y-auto pr-2"></div>
+            <div class="mt-6 flex justify-end pt-4 border-t border-gray-700">
+                <button id="btn-close-detail"
+                    class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-bold transition-colors">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Donaciones -->
+    <div id="donation-modal"
+        class="fixed inset-0 flex items-center justify-center bg-black/80 z-[150] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm">
+        <div class="bg-[#1F1F1F] border border-pink-500/30 p-8 rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.2)] max-w-md w-full transform scale-95 transition-all duration-300 relative"
+            id="donation-modal-content">
+            <button id="close-donation-modal"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center">
+                <div
+                    class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-pink-900/20 mb-6 border border-pink-500/20 animate-pulse">
+                    <i class="fa-solid fa-heart text-4xl text-pink-500"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">¡Apoya el Proyecto!</h3>
+                <p class="text-gray-300 mb-6">
+                    Gracias por tu interés en ayudarnos a crecer. Tu apoyo nos permite mantener los servidores y seguir
+                    desarrollando cursos gratuitos.
+                </p>
+
+                <div class="space-y-3">
+                    <!--<a href="https://paypal.me/universalProWorks" target="_blank" class="w-full py-3 px-4 bg-[#0070BA] hover:bg-[#005ea6] text-white font-bold rounded-xl shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-paypal"></i> Donar con PayPal
+                    </a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner de Cookies -->
+    <div id="cookie-banner"
+        class="fixed bottom-0 left-0 w-full bg-[#1F1F1F] border-t border-gray-800 p-4 z-[200] hidden flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
+        <p class="text-gray-300 text-sm text-center md:text-left">
+            Utilizamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas nuestra <a
+                href="legal/politica_privacidad.html" class="text-tecno-accent hover:underline">Política de
+                Privacidad</a> y <a href="legal/condiciones_servicio.html"
+                class="text-tecno-accent hover:underline">Condiciones del Servicio</a>.
+        </p>
+        <button id="btn-accept-cookies"
+            class="px-6 py-2 bg-tecno-secondary hover:bg-purple-700 text-white text-sm font-bold rounded-lg transition-colors">Aceptar</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import {
+            getAuth,
+            signOut,
+            onAuthStateChanged,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            updateProfile,
+            signInWithPopup,
+            GoogleAuthProvider
+        } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, getDocs, query, where, addDoc, deleteDoc, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+        import { loadEnv } from './Config/config_loader.js';
+
+        // --- reCAPTCHA Setup ---
+        var recaptchaLoginWidget;
+        var recaptchaRegisterWidget;
+        window.renderRecaptcha = function () {
+            if (document.getElementById('recaptcha-login')) {
+                recaptchaLoginWidget = grecaptcha.enterprise.render('recaptcha-login', {
+                    'sitekey': '6LdIl3wsAAAAAOkol5OOibiXC0Fc4UYm46qL5F8n',
+                    'action': 'LOGIN'
+                });
+            }
+            if (document.getElementById('recaptcha-register')) {
+                recaptchaRegisterWidget = grecaptcha.enterprise.render('recaptcha-register', {
+                    'sitekey': '6LdIl3wsAAAAAOkol5OOibiXC0Fc4UYm46qL5F8n',
+                    'action': 'REGISTER'
+                });
+            }
+        };
+
+        // --- Restore Form State on Page Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const fieldsToRestore = ['reg-username', 'reg-email', 'login-email'];
+            let hasRestoredData = false;
+            fieldsToRestore.forEach(id => {
+                const savedValue = sessionStorage.getItem(id);
+                const el = document.getElementById(id);
+                if (savedValue && el) {
+                    el.value = savedValue;
+                    hasRestoredData = true;
+                }
+            });
+
+            const panelIsActive = sessionStorage.getItem('loginPanelActive') === 'true';
+            const modernContainer = document.getElementById('modern-login-container');
+            if (panelIsActive && modernContainer) {
+                modernContainer.classList.add('active');
+            }
+
+            // If we restored any data, automatically show the login form
+            if (hasRestoredData || panelIsActive) {
+                const btnStartLanding = document.getElementById('btn-start-landing');
+                const loginContainer = document.getElementById('login-container');
+                const infoSection = document.getElementById('info-section');
+
+                if (btnStartLanding) btnStartLanding.style.display = 'none';
+                if (loginContainer) loginContainer.style.display = 'flex';
+                if (infoSection) infoSection.style.display = 'none';
+            }
+        });
+
+
+        const env = await loadEnv();
+
+        const firebaseConfig = {
+            apiKey: env.FIREBASE_API_KEY,
+            authDomain: env.FIREBASE_AUTH_DOMAIN,
+            projectId: env.FIREBASE_PROJECT_ID,
+            storageBucket: env.FIREBASE_STORAGE_BUCKET,
+            messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
+            appId: env.FIREBASE_APP_ID,
+            measurementId: env.FIREBASE_MEASUREMENT_ID
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Lógica Banner Cookies
+        if (!localStorage.getItem('nexus_cookies_accepted')) {
+            const banner = document.getElementById('cookie-banner');
+            if (banner) {
+                banner.classList.remove('hidden');
+                banner.classList.add('flex');
+                document.getElementById('btn-accept-cookies').addEventListener('click', () => {
+                    localStorage.setItem('nexus_cookies_accepted', 'true');
+                    banner.classList.add('hidden');
+                });
+            }
+        }
+
+        // Variables globales para gestión de contenido
+        let newsUnsub = null;
+        let eventsUnsub = null;
+        let loadedNews = {};
+        let loadedEvents = {};
+        let editingId = null; // Controla si estamos creando o editando
+
+        // Ocultar pantalla de carga
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
+        });
+
+        // Elementos UI
+        const heroContainer = document.querySelector('.hero-container');
+
+        // Modern Login Elements
+        const modernContainer = document.getElementById('modern-login-container');
+        const registerBtn = document.getElementById('toggle-register');
+        const loginBtn = document.getElementById('toggle-login');
+        const mobileToRegister = document.getElementById('mobile-to-register');
+        const mobileToLogin = document.getElementById('mobile-to-login');
+        if (mobileToRegister) mobileToRegister.addEventListener('click', () => modernContainer.classList.add("active"));
+
+        // --- Form State Persistence ---
+        const fieldsToSave = ['reg-username', 'reg-email', 'login-email'];
+        fieldsToSave.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', (e) => {
+                    sessionStorage.setItem(id, e.target.value);
+                });
+            }
+        });
+
+        const saveActivePanel = () => {
+            if (modernContainer) {
+                sessionStorage.setItem('loginPanelActive', modernContainer.classList.contains('active') ? 'true' : 'false');
+            }
+        };
+
+        if (registerBtn) registerBtn.addEventListener('click', saveActivePanel);
+        if (loginBtn) loginBtn.addEventListener('click', saveActivePanel);
+        if (mobileToRegister) mobileToRegister.addEventListener('click', saveActivePanel);
+
+        const linkPrivacy = document.getElementById('link-privacy');
+        const linkTerms = document.getElementById('link-terms');
+        if (linkPrivacy) linkPrivacy.addEventListener('click', saveActivePanel);
+        if (linkTerms) linkTerms.addEventListener('click', saveActivePanel);
+
+        if (mobileToLogin) mobileToLogin.addEventListener('click', () => modernContainer.classList.remove("active"));
+
+        if (registerBtn) registerBtn.addEventListener('click', () => modernContainer.classList.add("active"));
+        if (loginBtn) loginBtn.addEventListener('click', () => modernContainer.classList.remove("active"));
+
+        // Auth Buttons
+        const btnLoginAction = document.getElementById('btn-login-action');
+        const btnRegisterAction = document.getElementById('btn-register-action');
+
+        const loginContainer = document.getElementById('login-container');
+        const btnStartLanding = document.getElementById('btn-start-landing');
+
+        if (btnStartLanding) {
+            btnStartLanding.addEventListener('click', () => {
+                btnStartLanding.style.display = 'none';
+                loginContainer.style.display = 'flex';
+                document.getElementById('info-section').style.display = 'none';
+            });
+        }
+
+        // Botón de Discord en comunidad
+        const btnDiscordCommunity = document.getElementById('btn-discord-community');
+        if (btnDiscordCommunity) {
+            btnDiscordCommunity.addEventListener('click', () => {
+                showModal(
+                    "Actualmente nuestro servidor de Discord está en desarrollo. Pronto estará disponible para todos los usuarios y se activará el acceso. ¡Gracias por tu paciencia!",
+                    "Próximamente",
+                    "info"
+                );
+            });
+        }
+
+        // Funcionalidad del botón Ir a la Comunidad
+        const btnCommunity = document.getElementById('btn-community');
+        const communityButtons = document.getElementById('community-buttons');
+
+        if (btnCommunity) {
+            btnCommunity.addEventListener('click', () => {
+                if (communityButtons.classList.contains('hidden')) {
+                    communityButtons.classList.remove('hidden');
+                    communityButtons.classList.add('flex');
+                    btnCommunity.innerHTML = '<i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> <span>Cerrar</span>';
+                } else {
+                    communityButtons.classList.add('hidden');
+                    communityButtons.classList.remove('flex');
+                    btnCommunity.innerHTML = '<i class="fa-solid fa-door-open group-hover/btn:rotate-12 transition-transform"></i> <span>Ir a la Comunidad</span>';
+                }
+            });
+        }
+
+        // --- Función para cargar contenido dinámico según rol ---
+        function setupContentListeners(isAdmin) {
+            // Limpiar listeners anteriores
+            if (newsUnsub) newsUnsub();
+            if (eventsUnsub) eventsUnsub();
+
+            const newsContainer = document.getElementById('dynamic-news-container');
+            const eventsContainer = document.getElementById('dynamic-events-container');
+
+            // 1. NOVEDADES
+            const newsQuery = query(collection(db, "novedades"), orderBy("timestamp", "desc"), limit(10));
+            newsUnsub = onSnapshot(newsQuery, (snapshot) => {
+                newsContainer.innerHTML = '';
+                loadedNews = {};
+
+                if (snapshot.empty) {
+                    newsContainer.innerHTML = '<p class="text-gray-500 col-span-3 text-center">No hay novedades recientes.</p>';
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    loadedNews[doc.id] = data; // Guardar referencia para edición
+
+                    let iconClass = "fa-rocket";
+                    let colorClass = "text-blue-400 bg-blue-500/20";
+                    if (data.type === 'feature') { iconClass = "fa-code"; colorClass = "text-green-400 bg-green-500/20"; }
+                    else if (data.type === 'alert') { iconClass = "fa-triangle-exclamation"; colorClass = "text-yellow-400 bg-yellow-500/20"; }
+                    else if (data.type === 'mobile') { iconClass = "fa-mobile-screen"; colorClass = "text-purple-400 bg-purple-500/20"; }
+
+                    let statusText = new Date(data.timestamp).toLocaleDateString();
+                    let statusColor = 'text-gray-500';
+                    if (data.status === 'en_proceso') { statusText = 'En Proceso'; statusColor = 'text-yellow-400'; }
+                    else if (data.status === 'proximamente') { statusText = 'Próximamente'; statusColor = 'text-purple-400'; }
+                    else if (data.status === 'con_fecha' && data.releaseDate) {
+                        statusText = `Lanzamiento: ${new Date(data.releaseDate + 'T00:00:00').toLocaleDateString()}`;
+                        statusColor = 'text-green-400';
+                    }
+
+                    const adminControls = isAdmin ? `
+                        <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                            <button onclick="window.openEditNews('${doc.id}')" class="p-2 bg-black/60 hover:bg-blue-600 text-white rounded-lg transition-colors shadow-lg"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="window.deleteNews('${doc.id}')" class="p-2 bg-black/60 hover:bg-red-600 text-white rounded-lg transition-colors shadow-lg"><i class="fa-solid fa-trash"></i></button>
+                        </div>` : '';
+
+                    newsContainer.innerHTML += `
+                    <div class="bg-[#1F1F1F]/50 p-5 rounded-2xl border border-gray-800 hover:border-gray-700 transition-colors relative group">
+                        ${adminControls}
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="h-8 w-8 rounded-lg ${colorClass} flex items-center justify-center">
+                                <i class="fa-solid ${iconClass}"></i>
+                            </div>
+                            <span class="text-xs font-bold ${statusColor}">${statusText}</span>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">${data.title}</h4>
+                        <p class="text-sm text-gray-400">${data.description}</p>
+                    </div>`;
+                });
+            });
+
+            // 2. EVENTOS
+            const eventsQuery = query(collection(db, "events"), orderBy("date", "asc"));
+            eventsUnsub = onSnapshot(eventsQuery, (snapshot) => {
+                eventsContainer.innerHTML = '';
+                loadedEvents = {};
+
+                const now = new Date();
+                const upcomingEvents = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    loadedEvents[doc.id] = data;
+                    if (new Date(data.date) > new Date(now.getTime() - 86400000)) {
+                        upcomingEvents.push({ id: doc.id, ...data });
+                    }
+                });
+
+                if (upcomingEvents.length === 0) {
+                    eventsContainer.innerHTML = `<div class="text-center py-8"><p class="text-gray-500">Sin eventos próximos.</p></div>`;
+                    return;
+                }
+
+                upcomingEvents.forEach(data => {
+                    const dateObj = new Date(data.date);
+                    const dateStr = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+                    const timeStr = dateObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+                    let icon = "fa-video";
+                    let color = "text-red-400 bg-red-500/20";
+                    if (data.type === 'webinar') { icon = "fa-graduation-cap"; color = "text-blue-400 bg-blue-500/20"; }
+                    if (data.type === 'meet') { icon = "fa-users"; color = "text-green-400 bg-green-500/20"; }
+
+                    const adminControls = isAdmin ? `
+                        <div class="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                            <button onclick="window.openEditEvent('${data.id}')" class="p-1.5 bg-black/60 hover:bg-blue-600 text-white rounded-lg transition-colors text-xs"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="window.deleteEvent('${data.id}')" class="p-1.5 bg-black/60 hover:bg-red-600 text-white rounded-lg transition-colors text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>` : '';
+
+                    eventsContainer.innerHTML += `
+                    <div class="flex items-center gap-4 p-4 bg-black/20 rounded-xl border border-gray-700/50 hover:bg-white/5 transition-colors group relative">
+                        ${adminControls}
+                        <div class="h-12 w-12 rounded-lg ${color} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid ${icon}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-white text-sm truncate">${data.title}</h4>
+                            <p class="text-xs text-gray-400 flex items-center gap-1"><i class="fa-regular fa-clock text-[10px]"></i> ${dateStr} • ${timeStr}</p>
+                        </div>
+                        <a href="${data.link}" target="_blank" class="px-3 py-1.5 text-xs font-bold bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors border border-white/10">Unirse</a>
+                    </div>`;
+                });
+            });
+        }
+
+        // Toggle Password Visibility
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    this.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            });
+        });
+
+        // --- Sistema de Modales Personalizados ---
+        window.showModal = (message, title = "Aviso", type = "info", onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            const titleEl = document.getElementById('custom-modal-title');
+            const msgEl = document.getElementById('custom-modal-message');
+            const iconEl = document.getElementById('custom-modal-icon');
+            const actionsEl = document.getElementById('custom-modal-actions');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            // Icono según tipo
+            let iconHtml = '';
+            if (type === 'error') iconHtml = '<i class="fa-solid fa-circle-exclamation text-3xl text-red-500"></i>';
+            else if (type === 'success') iconHtml = '<i class="fa-solid fa-circle-check text-3xl text-green-500"></i>';
+            else if (type === 'confirm') iconHtml = '<i class="fa-solid fa-circle-question text-3xl text-yellow-500"></i>';
+            else iconHtml = '<i class="fa-solid fa-circle-info text-3xl text-blue-500"></i>';
+            iconEl.innerHTML = iconHtml;
+
+            // Botones
+            actionsEl.innerHTML = '';
+            if (type === 'confirm') {
+                const btnCancel = document.createElement('button');
+                btnCancel.className = "px-4 py-2 rounded-xl border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors font-bold";
+                btnCancel.textContent = "Cancelar";
+                btnCancel.onclick = closeModal;
+
+                const btnConfirm = document.createElement('button');
+                btnConfirm.className = "px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold shadow-lg";
+                btnConfirm.textContent = "Confirmar";
+                btnConfirm.onclick = () => {
+                    if (onConfirm) onConfirm();
+                    closeModal();
+                };
+
+                actionsEl.appendChild(btnCancel);
+                actionsEl.appendChild(btnConfirm);
+            } else {
+                const btnOk = document.createElement('button');
+                btnOk.className = "w-full py-2 px-4 bg-gradient-to-r from-tecno-secondary to-tecno-accent text-white font-bold rounded-xl shadow-lg";
+                btnOk.textContent = "Entendido";
+                btnOk.onclick = closeModal;
+                actionsEl.appendChild(btnOk);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        };
+
+        window.closeModal = () => {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('custom-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('custom-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'custom-modal') closeModal();
+        });
+
+        // Lógica Modal Donaciones
+        const donationModal = document.getElementById('donation-modal');
+        const donationContent = document.getElementById('donation-modal-content');
+
+        document.getElementById('btn-donate').addEventListener('click', () => {
+            donationModal.classList.remove('hidden');
+            setTimeout(() => {
+                donationModal.classList.remove('opacity-0');
+                donationContent.classList.remove('scale-95');
+                donationContent.classList.add('scale-100');
+            }, 10);
+        });
+
+        const closeDonation = () => {
+            donationModal.classList.add('opacity-0');
+            donationContent.classList.remove('scale-100');
+            donationContent.classList.add('scale-95');
+            setTimeout(() => donationModal.classList.add('hidden'), 300);
+        };
+
+        document.getElementById('close-donation-modal').addEventListener('click', closeDonation);
+        donationModal.addEventListener('click', (e) => {
+            if (e.target === donationModal) closeDonation();
+        });
+
+        // Lógica del Modal de Mantenimiento (Admin)
+        document.getElementById('btn-close-maint').addEventListener('click', () => {
+            document.getElementById('admin-maintenance-modal').classList.add('hidden');
+        });
+
+        document.getElementById('btn-save-maint').addEventListener('click', async () => {
+            const scope = document.getElementById('maint-scope').value;
+            const msg = document.getElementById('admin-maint-msg').value;
+            const active = document.getElementById('admin-maint-toggle').checked;
+            const config = { active: active, message: msg, updatedAt: new Date().toISOString() };
+
+            try {
+                if (scope === 'global') {
+                    await setDoc(doc(db, "system_config", "maintenance"), config);
+                } else {
+                    // Es un curso dinámico, actualizamos su documento
+                    await updateDoc(doc(db, "cursos", scope), { maintenance: config });
+                }
+
+                document.getElementById('admin-maintenance-modal').classList.add('hidden');
+                showModal("Configuración de mantenimiento actualizada.", "Éxito", "success");
+            } catch (e) {
+                console.error(e);
+                showModal("No se pudo guardar la configuración. Verifica tus permisos.", "Error", "error");
+            }
+        });
+
+        // Cargar configuración al cambiar el select
+        document.getElementById('maint-scope').addEventListener('change', async (e) => {
+            const scope = e.target.value;
+            let data = { active: false, message: '' };
+
+            try {
+                if (scope === 'global') {
+                    const snap = await getDoc(doc(db, "system_config", "maintenance"));
+                    if (snap.exists()) data = snap.data();
+                } else {
+                    const snap = await getDoc(doc(db, "cursos", scope));
+                    if (snap.exists() && snap.data().maintenance) data = snap.data().maintenance;
+                }
+
+                document.getElementById('admin-maint-msg').value = data.message || '';
+                document.getElementById('admin-maint-toggle').checked = data.active || false;
+            } catch (e) { console.error(e); }
+        });
+
+        // --- Lógica de Novedades (Admin) ---
+        const btnAddNews = document.getElementById('btn-add-news');
+        const newsModal = document.getElementById('admin-news-modal');
+        const btnCloseNews = document.getElementById('btn-close-news');
+        const btnSaveNews = document.getElementById('btn-save-news');
+        const newsStatusSelect = document.getElementById('news-status');
+        const newsDateContainer = document.getElementById('news-date-container');
+
+        if (newsStatusSelect) {
+            newsStatusSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'con_fecha') {
+                    newsDateContainer.classList.remove('hidden');
+                } else {
+                    newsDateContainer.classList.add('hidden');
+                }
+            });
+        }
+
+        if (btnCloseNews) btnCloseNews.addEventListener('click', () => newsModal.classList.add('hidden'));
+
+        if (btnSaveNews) btnSaveNews.addEventListener('click', async () => {
+            const title = document.getElementById('news-title').value;
+            const desc = document.getElementById('news-desc').value;
+            const type = document.getElementById('news-type').value;
+            const status = document.getElementById('news-status').value;
+            const releaseDate = document.getElementById('news-date').value;
+
+            if (!title || !desc) return showModal("Por favor completa todos los campos", "Faltan Datos", "error");
+
+            const newsData = {
+                title,
+                description: desc,
+                type,
+                status,
+                timestamp: new Date().toISOString() // Actualiza timestamp al editar para subirlo arriba, o quitar si se quiere mantener orden original
+            };
+
+            if (status === 'con_fecha') {
+                if (!releaseDate) return showModal("Por favor, selecciona una fecha de lanzamiento.", "Faltan Datos", "error");
+                newsData.releaseDate = releaseDate;
+            }
+
+            try {
+                if (editingId) {
+                    await updateDoc(doc(db, "novedades", editingId), newsData);
+                    showModal("Novedad actualizada con éxito", "Actualizado", "success");
+                } else {
+                    await addDoc(collection(db, "novedades"), newsData);
+                    showModal("Novedad publicada con éxito", "Publicado", "success");
+                }
+                newsModal.classList.add('hidden');
+                // Limpiar campos
+                document.getElementById('news-title').value = '';
+                document.getElementById('news-desc').value = '';
+                document.getElementById('news-date').value = '';
+                newsStatusSelect.value = 'proximamente';
+                newsDateContainer.classList.add('hidden');
+                editingId = null;
+            } catch (e) {
+                console.error(e);
+                showModal("Error al publicar: " + e.message, "Error", "error");
+            }
+        });
+
+        // --- Lógica de Eventos (Admin) ---
+        const btnAddEvent = document.getElementById('btn-add-event');
+        const eventModal = document.getElementById('admin-event-modal');
+        const btnCloseEvent = document.getElementById('btn-close-event');
+        const btnSaveEvent = document.getElementById('btn-save-event');
+
+        if (btnCloseEvent) btnCloseEvent.addEventListener('click', () => eventModal.classList.add('hidden'));
+
+        if (btnSaveEvent) btnSaveEvent.addEventListener('click', async () => {
+            const title = document.getElementById('event-title').value;
+            const dateVal = document.getElementById('event-date').value;
+            const link = document.getElementById('event-link').value;
+            const type = document.getElementById('event-type').value;
+
+            if (!title || !dateVal) return showModal("El título y la fecha son obligatorios.", "Faltan Datos", "error");
+
+            try {
+                const eventData = { title, date: dateVal, link: link || '#', type, timestamp: new Date().toISOString() };
+
+                if (editingId) {
+                    await updateDoc(doc(db, "events", editingId), eventData);
+                    showModal("Evento actualizado", "Éxito", "success");
+                } else {
+                    await addDoc(collection(db, "events"), eventData);
+                    showModal("Evento publicado", "Éxito", "success");
+                }
+                eventModal.classList.add('hidden');
+                // Limpiar campos
+                document.getElementById('event-title').value = '';
+                document.getElementById('event-date').value = '';
+                document.getElementById('event-link').value = '';
+                editingId = null;
+            } catch (e) {
+                console.error(e);
+                showModal("Error al publicar evento: " + e.message, "Error", "error");
+            }
+        });
+
+        // --- Funciones Globales para Edición/Eliminación ---
+        window.deleteNews = (id) => {
+            showModal("¿Eliminar esta novedad?", "Confirmar", "confirm", async () => {
+                try { await deleteDoc(doc(db, "novedades", id)); showModal("Eliminado", "Éxito", "success"); }
+                catch (e) { showModal(e.message, "Error", "error"); }
+            });
+        };
+
+        window.deleteEvent = (id) => {
+            showModal("¿Eliminar este evento?", "Confirmar", "confirm", async () => {
+                try { await deleteDoc(doc(db, "events", id)); showModal("Eliminado", "Éxito", "success"); }
+                catch (e) { showModal(e.message, "Error", "error"); }
+            });
+        };
+
+        window.openEditNews = (id) => {
+            const data = loadedNews[id];
+            if (!data) return;
+            editingId = id;
+            document.getElementById('news-title').value = data.title;
+            document.getElementById('news-desc').value = data.description;
+            document.getElementById('news-type').value = data.type;
+            document.getElementById('news-status').value = data.status;
+            if (data.releaseDate) {
+                document.getElementById('news-date').value = data.releaseDate;
+                document.getElementById('news-date-container').classList.remove('hidden');
+            } else {
+                document.getElementById('news-date-container').classList.add('hidden');
+            }
+            document.getElementById('admin-news-modal').classList.remove('hidden');
+        };
+
+        window.openEditEvent = (id) => {
+            const data = loadedEvents[id];
+            if (!data) return;
+            editingId = id;
+            document.getElementById('event-title').value = data.title;
+            document.getElementById('event-date').value = data.date;
+            document.getElementById('event-link').value = data.link;
+            document.getElementById('event-type').value = data.type;
+            document.getElementById('admin-event-modal').classList.remove('hidden');
+        };
+
+        // --- Lógica de Mensajes de Contacto (Admin) ---
+        const btnContactMessages = document.getElementById('btn-contact-messages');
+        const messagesModal = document.getElementById('admin-messages-modal');
+        const btnCloseMessages = document.getElementById('btn-close-messages');
+        const messagesList = document.getElementById('messages-list');
+
+        if (btnCloseMessages) btnCloseMessages.addEventListener('click', () => messagesModal.classList.add('hidden'));
+
+        async function loadContactMessages() {
+            messagesList.innerHTML = '<p class="text-center text-gray-500 py-10">Cargando mensajes...</p>';
+            try {
+                // Consultar mensajes ordenados por fecha (requiere índice o ordenamiento manual en cliente si es poco volumen)
+                const q = query(collection(db, "contact_messages"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                messagesList.innerHTML = '';
+                if (querySnapshot.empty) {
+                    messagesList.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-inbox text-4xl text-gray-700 mb-3"></i><p class="text-gray-500">No hay mensajes nuevos.</p></div>';
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    const msg = docSnap.data();
+                    const date = new Date(msg.timestamp).toLocaleString();
+
+                    const item = document.createElement('div');
+                    item.className = 'bg-black/40 p-5 rounded-xl border border-gray-700 hover:border-yellow-500/50 transition-colors relative group';
+                    item.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h4 class="font-bold text-white text-lg">${msg.subject || 'Sin Asunto'}</h4>
+                                <p class="text-xs text-tecno-accent font-mono mb-1">${msg.name} &lt;${msg.email}&gt;</p>
+                                <p class="text-xs text-gray-500"><i class="fa-regular fa-clock"></i> ${date}</p>
+                            </div>
+                            <button onclick="deleteContactMessage('${docSnap.id}')" class="text-gray-600 hover:text-red-500 transition-colors p-2" title="Eliminar Mensaje">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="bg-[#151515] p-3 rounded-lg text-gray-300 text-sm leading-relaxed border border-gray-800/50">
+                            ${msg.message}
+                        </div>
+                    `;
+                    messagesList.appendChild(item);
+                });
+            } catch (e) {
+                console.error(e);
+                messagesList.innerHTML = '<p class="text-center text-red-500 py-4">Error cargando mensajes. Verifica tus permisos.</p>';
+            }
+        }
+
+        window.deleteContactMessage = (id) => {
+            showModal("¿Estás seguro de eliminar este mensaje permanentemente?", "Confirmar Eliminación", "confirm", async () => {
+                try {
+                    await deleteDoc(doc(db, "contact_messages", id));
+                    loadContactMessages(); // Recargar lista
+                    showModal("Mensaje eliminado.", "Éxito", "success");
+                } catch (e) {
+                    showModal("Error al eliminar: " + e.message, "Error", "error");
+                }
+            });
+        };
+
+        // Lógica Modal Revisiones (Admin)
+        document.getElementById('btn-close-reviews').addEventListener('click', () => {
+            document.getElementById('admin-reviews-modal').classList.add('hidden');
+        });
+
+        async function loadReviews() {
+            const list = document.getElementById('reviews-list');
+            list.innerHTML = '<p class="text-center text-gray-500 py-10">Cargando...</p>';
+
+            try {
+                // Eliminamos orderBy para evitar el error de "Missing Index" en Firebase
+                const q = query(collection(db, "admin_reviews"), where("status", "==", "pending"));
+                const querySnapshot = await getDocs(q);
+
+                // Convertimos a array y ordenamos manualmente por fecha (más reciente primero)
+                const reviews = [];
+                querySnapshot.forEach(doc => reviews.push({ id: doc.id, ...doc.data() }));
+                reviews.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+                list.innerHTML = '';
+                if (reviews.length === 0) {
+                    list.innerHTML = '<p class="text-center text-gray-400 py-10">🎉 No hay prácticas pendientes de revisión.</p>';
+                    return;
+                }
+
+                reviews.forEach((data) => {
+                    const item = document.createElement('div');
+                    item.className = 'bg-black/40 p-4 rounded-xl border border-gray-700';
+                    item.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h4 class="font-bold text-white">${data.username}</h4>
+                                <p class="text-xs text-gray-400">${data.courseType} - ${data.topicName}</p>
+                            </div>
+                            <span class="text-xs bg-yellow-900/50 text-yellow-500 px-2 py-1 rounded border border-yellow-500/30">Pendiente</span>
+                        </div>
+                        <pre class="bg-[#101010] p-3 rounded text-xs text-gray-300 overflow-x-auto font-mono mb-3 border border-gray-800">${data.code.replace(/</g, '&lt;')}</pre>
+                        
+                        <textarea id="feedback-${data.id}" class="w-full bg-black/30 text-white text-sm p-2 rounded border border-gray-700 mb-2 focus:border-blue-500 outline-none" rows="2" placeholder="Escribe un mensaje para el estudiante (opcional)..."></textarea>
+                        
+                        <button class="w-full py-2 bg-green-700 hover:bg-green-600 text-white rounded-lg text-sm font-bold transition-colors" onclick="markReviewed('${data.id}', '${data.userId}')">
+                            <i class="fa-solid fa-paper-plane"></i> Aprobar y Notificar
+                        </button>
+                    `;
+                    list.appendChild(item);
+                });
+            } catch (e) {
+                console.error(e);
+                list.innerHTML = '<p class="text-center text-red-500">Error cargando revisiones.</p>';
+            }
+        }
+
+        window.markReviewed = async (docId, studentId) => {
+            const feedback = document.getElementById(`feedback-${docId}`).value;
+            try {
+                // 1. Actualizar estado de la revisión
+                await updateDoc(doc(db, "admin_reviews", docId), { status: 'reviewed' });
+
+                // 2. Crear notificación para el estudiante
+                await addDoc(collection(db, "notifications"), {
+                    userId: studentId,
+                    title: "✅ Práctica Revisada",
+                    message: feedback || "Tu práctica ha sido aprobada por un instructor. ¡Buen trabajo!",
+                    read: false,
+                    timestamp: new Date().toISOString(),
+                    type: "review_approved"
+                });
+
+                loadReviews(); // Recargar lista
+                showModal("Revisión guardada y notificación enviada.", "Éxito", "success");
+            } catch (e) {
+                showModal("Error actualizando estado: " + e.message, "Error", "error");
+            }
+        };
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                showModal("Este navegador no soporta notificaciones de escritorio.", "Incompatible", "error");
+                return;
+            }
+
+            try {
+                const permission = await Notification.requestPermission();
+
+                if (permission === 'granted') {
+                    console.log("Permiso concedido. Aquí se obtendría el token de FCM y se guardaría en Firestore.");
+                    // Aquí iría la lógica para obtener el token de FCM y guardarlo.
+                } else {
+                    console.log("Permiso denegado.");
+                }
+            } catch (error) {
+                console.error("Error solicitando permiso de notificación:", error);
+                showModal("Ocurrió un error al solicitar el permiso de notificaciones.", "Error", "error");
+            }
+        }
+
+        // Lógica de Notificaciones (Usuario)
+        const notifModal = document.getElementById('notifications-modal');
+        const btnNotif = document.getElementById('btn-notifications');
+        const btnNotifMobile = document.getElementById('btn-notifications-mobile');
+        const badge = document.getElementById('notif-badge');
+        const badgeMobile = document.getElementById('notif-badge-mobile');
+        const notifList = document.getElementById('notif-list');
+
+        // Nuevos elementos para el popup de permiso
+        const notifPermissionModal = document.getElementById('notif-permission-modal');
+        const btnAcceptNotif = document.getElementById('btn-accept-notif');
+        const btnDenyNotif = document.getElementById('btn-deny-notif');
+
+        const openNotifModal = () => {
+            if ('Notification' in window && Notification.permission !== 'granted') {
+                notifPermissionModal.classList.remove('hidden');
+            } else {
+                notifModal.classList.remove('hidden');
+                badge.classList.add('hidden');
+                if (badgeMobile) badgeMobile.classList.add('hidden');
+            }
+        };
+
+        btnNotif.addEventListener('click', openNotifModal);
+        if (btnNotifMobile) btnNotifMobile.addEventListener('click', openNotifModal);
+
+        btnAcceptNotif.addEventListener('click', async () => {
+            notifPermissionModal.classList.add('hidden');
+            await requestNotificationPermission();
+        });
+
+        btnDenyNotif.addEventListener('click', () => {
+            notifPermissionModal.classList.add('hidden');
+        });
+
+        document.getElementById('close-notif-modal').addEventListener('click', () => {
+            notifModal.classList.add('hidden');
+        });
+
+        let currentNotifications = [];
+
+        function renderNotifications(notifs) {
+            currentNotifications = notifs;
+            notifList.innerHTML = '';
+            if (notifs.length === 0) {
+                notifList.innerHTML = '<p class="text-center text-gray-500 py-4">No tienes notificaciones nuevas.</p>';
+                badge.classList.add('hidden');
+                return;
+            }
+
+            let unreadCount = 0;
+            notifs.forEach(n => {
+                if (!n.read) unreadCount++;
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border ${n.read ? 'bg-black/20 border-gray-800' : 'bg-blue-900/20 border-blue-500/50'} relative group transition-all hover:bg-white/5`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-start pr-14">
+                        <h4 class="font-bold text-sm text-white line-clamp-1">${n.title}</h4>
+                    </div>
+                    <span class="text-[10px] text-gray-400 block mb-1">${new Date(n.timestamp).toLocaleDateString()}</span>
+                    <p class="text-xs text-gray-300 line-clamp-2 mt-1">${n.message}</p>
+                    
+                    <div class="absolute top-3 right-3 flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                        <button onclick="window.viewNotification('${n.id}')" class="text-blue-400 hover:text-blue-300 p-1" title="Ver"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="window.deleteNotification('${n.id}')" class="text-red-400 hover:text-red-300 p-1" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                notifList.appendChild(item);
+            });
+
+            if (unreadCount > 0) {
+                badge.innerText = unreadCount;
+                badge.classList.remove('hidden');
+                if (badgeMobile) {
+                    badgeMobile.innerText = unreadCount;
+                    badgeMobile.classList.remove('hidden');
+                }
+            } else {
+                badge.classList.add('hidden');
+                if (badgeMobile) badgeMobile.classList.add('hidden');
+            }
+        }
+
+        window.viewNotification = async (id) => {
+            const notif = currentNotifications.find(n => n.id === id);
+            if (!notif) return;
+
+            document.getElementById('detail-title').textContent = notif.title;
+            document.getElementById('detail-date').textContent = new Date(notif.timestamp).toLocaleString();
+            document.getElementById('detail-message').textContent = notif.message;
+
+            document.getElementById('notification-detail-modal').classList.remove('hidden');
+
+            if (!notif.read) {
+                try {
+                    await updateDoc(doc(db, "notifications", id), { read: true });
+                } catch (e) { console.error("Error marking read:", e); }
+            }
+        };
+
+        window.deleteNotification = (id) => {
+            showModal("¿Estás seguro de que quieres eliminar esta notificación?", "Confirmar Eliminación", "confirm", async () => {
+                try {
+                    await deleteDoc(doc(db, "notifications", id));
+                } catch (e) { console.error("Error deleting:", e); }
+            });
+        };
+
+        const closeDetailBtn = document.getElementById('btn-close-detail');
+        const closeDetailX = document.getElementById('close-detail-modal');
+        const detailModal = document.getElementById('notification-detail-modal');
+        const closeDetail = () => detailModal.classList.add('hidden');
+        if (closeDetailBtn) closeDetailBtn.addEventListener('click', closeDetail);
+        if (closeDetailX) closeDetailX.addEventListener('click', closeDetail);
+        if (detailModal) detailModal.addEventListener('click', (e) => { if (e.target === detailModal) closeDetail(); });
+
+        // 2. Login Email (Updated)
+        if (btnLoginAction) btnLoginAction.addEventListener('click', async () => {
+            const recaptchaResponse = grecaptcha.enterprise.getResponse(recaptchaLoginWidget);
+            if (!recaptchaResponse) {
+                return showModal("Por favor, verifica que no eres un robot.", "Verificación Requerida", "error");
+            }
+
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            try { await signInWithEmailAndPassword(auth, email, pass); }
+            catch (e) {
+                grecaptcha.enterprise.reset(recaptchaLoginWidget);
+                if (e.code === 'auth/user-not-found') {
+                    showModal("No existe una cuenta con este correo.\n\nPor favor, regístrate para continuar.", "Cuenta no encontrada", "error");
+                    if (modernContainer) modernContainer.classList.add("active"); // Cambia al panel de Registro automáticamente
+                } else if (e.code === 'auth/wrong-password') {
+                    showModal("La contraseña es incorrecta. Inténtalo de nuevo.", "Error de Credenciales", "error");
+                } else if (e.code === 'auth/invalid-credential') {
+                    showModal("Correo o contraseña incorrectos.\nSi no tienes cuenta, por favor regístrate.", "Error de Acceso", "error");
+                } else {
+                    showModal(e.message, "Error de Inicio de Sesión", "error");
+                }
+            }
+        });
+
+        // 3. Registro Email (Updated)
+        if (btnRegisterAction) btnRegisterAction.addEventListener('click', async () => {
+            const recaptchaResponse = grecaptcha.enterprise.getResponse(recaptchaRegisterWidget);
+            if (!recaptchaResponse) {
+                return showModal("Por favor, verifica que no eres un robot.", "Verificación Requerida", "error");
+            }
+
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-password').value;
+            const termsAccepted = document.getElementById('reg-terms').checked;
+
+            if (!username) return showModal("Por favor, ingresa un nombre de usuario para registrarte.", "Faltan datos", "error");
+            if (!termsAccepted) return showModal("Debes aceptar la Política de Privacidad y las Condiciones del Servicio para registrarte.", "Aceptación Requerida", "error");
+
+            try {
+                const result = await createUserWithEmailAndPassword(auth, email, pass);
+                await updateProfile(result.user, { displayName: username });
+
+                // Guardar datos del usuario en Firestore con rol y especialidad por defecto
+                await setDoc(doc(db, "users", result.user.uid, "informacion", "datos"), {
+                    username: username,
+                    email: email,
+                    role: 'user',
+                    specialty: 'estudiante'
+                });
+
+                window.location.reload();
+            }
+            catch (e) {
+                grecaptcha.enterprise.reset(recaptchaRegisterWidget);
+                if (e.code === 'auth/email-already-in-use') {
+                    showModal("Este correo ya está registrado. Por favor, inicia sesión con tu cuenta existente.", "Cuenta Existente", "error");
+                    if (modernContainer) modernContainer.classList.remove("active"); // Cambia al panel de Login
+                } else {
+                    showModal(e.message, "Error de Registro", "error");
+                }
+            }
+        });
+
+        // --- Lógica de Google Sign-In ---
+        const googleProvider = new GoogleAuthProvider();
+        const handleGoogleAuth = async (checkTerms = false) => {
+            if (checkTerms) {
+                const termsAccepted = document.getElementById('reg-terms').checked;
+                if (!termsAccepted) return showModal("Debes aceptar la Política de Privacidad y las Condiciones del Servicio para registrarte.", "Aceptación Requerida", "error");
+            }
+
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+
+                // Verificar si el usuario ya existe en Firestore, si no, crearlo
+                const userDocRef = doc(db, "users", user.uid, "informacion", "datos");
+                const userDoc = await getDoc(userDocRef);
+
+                if (!userDoc.exists()) {
+                    await setDoc(userDocRef, {
+                        username: user.displayName || "Usuario Google",
+                        email: user.email,
+                        role: 'user',
+                        specialty: 'estudiante',
+                        photoURL: user.photoURL
+                    });
+                }
+
+                // onAuthStateChanged se encargará de actualizar la UI
+            } catch (e) {
+                console.error(e);
+                showModal("Error al iniciar con Google");
+            }
+        };
+
+        const btnGoogleLogin = document.getElementById('btn-google-login');
+        const btnGoogleRegister = document.getElementById('btn-google-register');
+        if (btnGoogleLogin) btnGoogleLogin.addEventListener('click', () => handleGoogleAuth(false));
+        if (btnGoogleRegister) btnGoogleRegister.addEventListener('click', () => handleGoogleAuth(true));
+
+        // Dropdown Logic
+        const profileBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        // Logout Logic
+        const logoutBtn = document.getElementById('btn-logout');
+        if (logoutBtn) logoutBtn.addEventListener('click', () => signOut(auth));
+
+        let maintenanceUnsub = null;
+        let notifUnsub = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (maintenanceUnsub) maintenanceUnsub(); // Limpiar listener anterior
+            if (notifUnsub) notifUnsub(); // Limpiar listener de notificaciones
+
+            if (user) {
+                // Clear saved form state on successful login/registration
+                sessionStorage.removeItem('reg-username');
+                sessionStorage.removeItem('reg-email');
+                sessionStorage.removeItem('login-email');
+                sessionStorage.removeItem('loginPanelActive');
+
+
+                if (heroContainer) heroContainer.classList.add('logged-in');
+                if (heroContainer) heroContainer.style.display = 'none'; // Ocultar hero landing
+                if (loginContainer) loginContainer.style.display = 'none';
+                if (btnStartLanding) btnStartLanding.style.display = 'none';
+                const infoSection = document.getElementById('info-section');
+                if (infoSection) { infoSection.style.display = 'none'; }
+
+                const newsSection = document.getElementById('news-section');
+                if (newsSection) newsSection.classList.remove('hidden');
+
+                // Mostrar Navbar Superior
+                const navbar = document.getElementById('main-navbar');
+                navbar.style.display = 'block';
+                setTimeout(() => navbar.classList.remove('-translate-y-full'), 100); // Animación de entrada
+
+                let userRole = 'user';
+                let displayUsername = user.displayName || 'Usuario';
+
+                // Verificar rol de admin
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid, "informacion", "datos"));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        console.log("Datos Firebase cargados:", userData); // Para depuración
+                        userRole = userData.role || 'user';
+
+                        // Prioridad absoluta al nombre en base de datos
+                        if (userData.username) {
+                            displayUsername = userData.username;
+                        }
+
+                        // Actualizar nombre en sección de noticias
+                        const newsNameEl = document.getElementById('news-username-display');
+                        if (newsNameEl) newsNameEl.textContent = displayUsername;
+
+                        // Actualizar especialidad desde Firebase
+                        if (userData.specialty) {
+                            const specialtyEl = document.getElementById('nav-user-specialty-display');
+                            if (specialtyEl) specialtyEl.textContent = userData.specialty;
+                        }
+
+                        if (userRole === 'admin') {
+                            const btnCreateDropdown = document.getElementById('btn-create-course-dropdown');
+                            if (btnCreateDropdown) btnCreateDropdown.style.display = 'flex';
+
+                            const btnMaint = document.getElementById('btn-maintenance-config');
+                            if (btnMaint) {
+                                btnMaint.style.display = 'flex';
+                                btnMaint.onclick = () => {
+                                    // Resetear y cargar cursos en el select
+                                    const select = document.getElementById('maint-scope');
+                                    // Mantener opciones estáticas y limpiar dinámicas
+                                    select.innerHTML = `
+                                        <option value="global">🌐 Plataforma Completa</option>
+                                    `;
+
+                                    getDocs(collection(db, "cursos")).then(snapshot => {
+                                        snapshot.forEach(doc => {
+                                            const opt = document.createElement('option');
+                                            opt.value = doc.id;
+                                            opt.textContent = `📘 ${doc.data().title}`;
+                                            select.appendChild(opt);
+                                        });
+                                    });
+
+                                    // Disparar evento change para cargar global por defecto
+                                    select.value = 'global';
+                                    select.dispatchEvent(new Event('change'));
+
+                                    document.getElementById('admin-maintenance-modal').classList.remove('hidden');
+                                };
+                            }
+
+                            const btnReviews = document.getElementById('btn-reviews');
+                            if (btnReviews) {
+                                btnReviews.style.display = 'flex';
+                                btnReviews.onclick = () => {
+                                    document.getElementById('admin-reviews-modal').classList.remove('hidden');
+                                    loadReviews();
+                                };
+                            }
+
+                            if (btnAddNews) {
+                                btnAddNews.style.display = 'flex';
+                                btnAddNews.onclick = () => {
+                                    editingId = null; // Resetear para crear
+                                    document.getElementById('news-title').value = '';
+                                    document.getElementById('news-desc').value = '';
+                                    document.getElementById('admin-news-modal').classList.remove('hidden');
+                                };
+                            }
+
+                            if (btnAddEvent) {
+                                btnAddEvent.style.display = 'flex';
+                                btnAddEvent.onclick = () => {
+                                    editingId = null; // Resetear para crear
+                                    document.getElementById('event-title').value = '';
+                                    document.getElementById('event-link').value = '';
+                                    document.getElementById('admin-event-modal').classList.remove('hidden');
+                                };
+                            }
+
+                            if (btnContactMessages) {
+                                btnContactMessages.style.display = 'flex';
+                                btnContactMessages.onclick = () => {
+                                    document.getElementById('admin-messages-modal').classList.remove('hidden');
+                                    loadContactMessages();
+                                };
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error verificando permisos:", e);
+                }
+
+                // Actualizar datos en la Navbar
+                document.getElementById('nav-user-name-display').textContent = displayUsername;
+                if (user.photoURL) {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<img src="${user.photoURL}" class="w-full h-full object-cover">`;
+                } else {
+                    document.getElementById('nav-user-avatar-display').innerHTML = `<span class="text-xs font-bold text-white">${displayUsername.charAt(0).toUpperCase()}</span>`;
+                }
+
+                // Cargar contenido dinámico (Novedades y Eventos) pasando el rol
+                setupContentListeners(userRole === 'admin');
+
+                if (window.lucide) lucide.createIcons();
+
+                // Listener de Mantenimiento
+                maintenanceUnsub = onSnapshot(doc(db, "system_config", "maintenance"), (snap) => {
+                    const overlay = document.getElementById('maintenance-overlay');
+                    if (snap.exists() && snap.data().active && userRole !== 'admin') {
+                        document.getElementById('maintenance-message-display').innerText = snap.data().message || "Mantenimiento en curso.";
+                        overlay.classList.remove('hidden');
+                        heroContainer.style.display = 'none';
+                    } else {
+                        overlay.classList.add('hidden');
+                        heroContainer.style.display = 'none';
+                    }
+                });
+
+                // Listener de Notificaciones Personales
+                let notifQuery;
+                if (userRole === 'admin') {
+                    notifQuery = query(collection(db, "notifications"), where("userId", "in", [user.uid, "ADMIN"]));
+                } else {
+                    notifQuery = query(collection(db, "notifications"), where("userId", "==", user.uid));
+                }
+                notifUnsub = onSnapshot(notifQuery, (snapshot) => {
+                    const notifs = [];
+                    snapshot.forEach(doc => notifs.push({ id: doc.id, ...doc.data() }));
+
+                    // Detectar nuevas notificaciones para mostrar alerta del navegador
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === "added") {
+                            const data = change.doc.data();
+                            // Verificar si es reciente (últimos 10 seg) para evitar spam al recargar
+                            const notifTime = new Date(data.timestamp).getTime();
+                            if (Date.now() - notifTime < 30000 && !data.read) {
+                                if (window.Notification && Notification.permission === "granted") {
+                                    const notification = new Notification(data.title, { body: data.message, icon: '/img/ICON.png' });
+                                    notification.onclick = () => {
+                                        window.focus();
+                                        notification.close();
+                                    };
+                                }
+                            }
+                        }
+                    });
+
+                    // Ordenar por fecha (más reciente primero)
+                    notifs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+                    renderNotifications(notifs);
+                });
+
+                // Lógica Modal Comunidad (Solo una vez o manual)
+                const communityModal = document.getElementById('community-modal');
+                const closeCommunityBtn = document.getElementById('close-community-modal');
+                const openCommunityBtn = document.getElementById('btn-open-community');
+
+                // Mostrar automáticamente si es la primera vez
+                if (!localStorage.getItem('nexus_community_seen_v1')) {
+                    setTimeout(() => {
+                        if (communityModal) communityModal.classList.remove('hidden');
+                    }, 1500);
+                }
+
+                if (closeCommunityBtn) {
+                    closeCommunityBtn.addEventListener('click', () => {
+                        communityModal.classList.add('hidden');
+                        localStorage.setItem('nexus_community_seen_v1', 'true');
+                    });
+                }
+
+                if (openCommunityBtn) {
+                    openCommunityBtn.addEventListener('click', () => communityModal.classList.remove('hidden'));
+                }
+
+            } else {
+                if (heroContainer) heroContainer.classList.remove('logged-in');
+                if (heroContainer) heroContainer.style.display = 'block'; // Mostrar hero landing
+                if (loginContainer) loginContainer.style.display = 'none';
+                if (btnStartLanding) btnStartLanding.style.display = 'inline-flex';
+                const infoSection = document.getElementById('info-section');
+                if (infoSection) infoSection.style.display = 'block';
+
+                const newsSection = document.getElementById('news-section');
+                if (newsSection) newsSection.classList.add('hidden');
+
+                // Ocultar Navbar
+                const navbar = document.getElementById('main-navbar');
+                navbar.classList.add('-translate-y-full');
+                setTimeout(() => navbar.style.display = 'none', 500);
+            }
+        });
+
+        // Función de búsqueda en el dashboard
+        window.filterDashboard = () => {
+            const input = document.getElementById('dashboard-search');
+            const filter = input.value.toLowerCase();
+            const container = document.getElementById('main-buttons');
+            if (!container) return;
+            const items = container.children;
+
+            for (let item of items) {
+                const text = item.textContent || item.innerText;
+                if (text.toLowerCase().includes(filter)) {
+                    item.classList.remove('search-hidden');
+                } else {
+                    item.classList.add('search-hidden');
+                }
+            }
+        };
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.getElementById('mobile-btn-donate').addEventListener('click', () => document.getElementById('btn-donate').click());
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,2 @@
+# Ignorar el archivo de configuración que contiene las claves de API
+Config/Config.env

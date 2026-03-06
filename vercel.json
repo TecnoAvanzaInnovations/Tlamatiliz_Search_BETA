@@ -1,0 +1,17 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/inicio", "destination": "/index.html" },
+    { "source": "/investigar", "destination": "/buscador/buscador.html" },
+    { "source": "/chat", "destination": "/IA/chat.html" },
+    { "source": "/crear", "destination": "/cursos/generador_cursos.html" },
+    { "source": "/curso-pseint", "destination": "/cursos/curso_pseint.html" },
+    { "source": "/curso", "destination": "/cursos/curso_dinamico.html" },
+    { "source": "/cursos", "destination": "/cursos/index.html" },
+    { "source": "/contacto", "destination": "/contact/contacto.html" },
+    { "source": "/about", "destination": "/legal/about.html" },
+    { "source": "/politica_privacidad", "destination": "/legal/politica_privacidad.html" },
+    { "source": "/condiciones", "destination": "/legal/condiciones.html" }
+  ]
+}
